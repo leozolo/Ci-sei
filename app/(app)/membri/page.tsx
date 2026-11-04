@@ -1,0 +1,46 @@
+'use client'
+
+import Link from 'next/link'
+import { LuChevronRight } from 'react-icons/lu'
+import { useApp } from '@/components/app-context'
+import { Avatar } from '@/components/avatar'
+import { PageBody, PageHeader } from '@/components/page-header'
+
+export default function MembersPage() {
+  const { members, me } = useApp()
+  const active = members.filter((m) => m.status === 'active')
+
+  return (
+    <main>
+      <PageHeader back title={`Membri (${active.length})`} />
+      <PageBody>
+        <ul className="divide-y divide-line rounded-[20px] bg-elev px-4">
+          {active.map((m) => (
+            <li key={m.id}>
+              <Link href={`/u/${m.id}`} className="flex items-center gap-3 py-3">
+                <Avatar person={m} size={42} />
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[15px] font-semibold">
+                    {m.display_name}
+                    {m.id === me.id ? <span className="font-normal text-muted"> (tu)</span> : null}
+                  </span>
+                  {m.role === 'admin' ? <span className="block text-[12.5px] text-muted">Amministratore</span> : null}
+                </span>
+                <LuChevronRight className="size-5 text-faint" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+        {me.role === 'admin' ? (
+          <p className="mt-4 text-center text-[14px] text-muted">
+            Per invitare qualcuno vai su{' '}
+            <Link href="/admin" className="font-semibold text-fg underline underline-offset-4">
+              Inviti e membri
+            </Link>
+            .
+          </p>
+        ) : null}
+      </PageBody>
+    </main>
+  )
+}

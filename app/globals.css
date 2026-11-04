@@ -1,0 +1,170 @@
+@import "tailwindcss";
+
+/*
+ * Ci sei? — design system
+ * L'interfaccia è in bianco e nero: il colore compare solo nelle locandine
+ * e nel "semaforo" della partecipazione (verde / giallo / rosso).
+ */
+
+:root {
+  --c-bg: #000000;
+  --c-elev: #121214;
+  --c-elev-2: #1d1d20;
+  --c-elev-3: #2a2a2e;
+  --c-line: rgba(255, 255, 255, 0.09);
+  --c-line-strong: rgba(255, 255, 255, 0.18);
+  --c-fg: #f4f3ef;
+  --c-muted: #a8a7ad;
+  --c-faint: #6f6e74;
+  --c-invert: #f4f3ef;
+  --c-invert-fg: #000000;
+  --c-going: #30d158;
+  --c-maybe: #ffd60a;
+  --c-no: #ff453a;
+  --c-scrim: rgba(0, 0, 0, 0.62);
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --c-bg: #f2f2f4;
+  --c-elev: #ffffff;
+  --c-elev-2: #e9e9ed;
+  --c-elev-3: #dcdce1;
+  --c-line: rgba(0, 0, 0, 0.08);
+  --c-line-strong: rgba(0, 0, 0, 0.18);
+  --c-fg: #121214;
+  --c-muted: #5c5b63;
+  --c-faint: #8d8c94;
+  --c-invert: #121214;
+  --c-invert-fg: #ffffff;
+  --c-going: #1fa64a;
+  --c-maybe: #d4a000;
+  --c-no: #e5372b;
+  --c-scrim: rgba(0, 0, 0, 0.36);
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-elev: var(--c-elev);
+  --color-elev-2: var(--c-elev-2);
+  --color-elev-3: var(--c-elev-3);
+  --color-line: var(--c-line);
+  --color-line-strong: var(--c-line-strong);
+  --color-fg: var(--c-fg);
+  --color-muted: var(--c-muted);
+  --color-faint: var(--c-faint);
+  --color-invert: var(--c-invert);
+  --color-invert-fg: var(--c-invert-fg);
+  --color-going: var(--c-going);
+  --color-maybe: var(--c-maybe);
+  --color-no: var(--c-no);
+  --color-scrim: var(--c-scrim);
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-heading), var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+@theme {
+  --animate-sheet-in: sheet-in 0.32s cubic-bezier(0.22, 0.9, 0.24, 1);
+  --animate-fade-in: fade-in 0.2s ease-out;
+  --animate-pop: pop 0.34s cubic-bezier(0.3, 1.6, 0.5, 1);
+  --animate-toast-in: toast-in 0.24s cubic-bezier(0.22, 0.9, 0.24, 1);
+
+  @keyframes sheet-in {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes pop {
+    0% { transform: scale(0.6); }
+    100% { transform: scale(1); }
+  }
+  @keyframes toast-in {
+    from { transform: translateY(-14px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+}
+
+@layer base {
+  html {
+    background: var(--c-bg);
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--c-bg);
+    color: var(--c-fg);
+    font-family: var(--font-body), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--c-fg);
+    color: var(--c-bg);
+  }
+  :focus-visible {
+    outline: 2px solid var(--c-fg);
+    outline-offset: 2px;
+  }
+  button,
+  [role="button"] {
+    cursor: pointer;
+  }
+  input[type="date"],
+  input[type="time"] {
+    min-height: 3rem;
+  }
+  input::-webkit-date-and-time-value {
+    text-align: left;
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@utility press {
+  transition: transform 0.14s ease, background-color 0.15s ease, opacity 0.15s ease;
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+@utility skeleton {
+  background: linear-gradient(90deg, var(--c-elev) 25%, var(--c-elev-2) 40%, var(--c-elev) 60%);
+  background-size: 300% 100%;
+  animation: shimmer 1.3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
