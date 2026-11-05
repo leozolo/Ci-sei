@@ -1,62 +1,70 @@
+import { fmt, getLocale, listJoin, messagesFor } from '@/lib/i18n/core'
+import type { Locale } from '@/lib/i18n/locales'
 import type { NotificationData, NotificationType } from '@/lib/types'
 
-const CHANGE_LABELS: Record<string, string> = {
-  starts_at: 'data e ora',
-  ends_at: 'orario di fine',
-  location: 'luogo',
-}
+const CHANGE_KEYS = ['starts_at', 'ends_at', 'location'] as const
+type ChangeKey = (typeof CHANGE_KEYS)[number]
+const isChangeKey = (c: string): c is ChangeKey => (CHANGE_KEYS as readonly string[]).includes(c)
 
-function changesText(changes: string[] = []): string {
-  const labels = changes.map((c) => CHANGE_LABELS[c]).filter(Boolean)
-  if (labels.length === 0) return 'i dettagli'
-  if (labels.length === 1) return labels[0]
-  return `${labels.slice(0, -1).join(', ')} e ${labels[labels.length - 1]}`
+function changesText(changes: string[] = [], locale: Locale): string {
+  const t = messagesFor(locale).notifications.changes
+  const labels = changes.filter(isChangeKey).map((c) => t[c])
+  return labels.length ? listJoin(labels, locale) : t.details
 }
 
 /** Frase per la lista notifiche: «{nome} {azione}», con eventuale citazione. */
 export function describeNotification(
   type: NotificationType,
   data: NotificationData,
+  locale: Locale = getLocale(),
 ): { action: string; quote?: string } {
-  const title = data.title ? `«${data.title}»` : 'un evento'
+  const t = messagesFor(locale).notifications
+  const title = data.title ? fmt(t.quoted, { title: data.title }) : t.anEvent
   switch (type) {
     case 'new_event':
-      return { action: `ha proposto ${title}` }
+      return { action: fmt(t.newEvent, { title }) }
     case 'event_updated':
       return data.changes?.includes('restored')
-        ? { action: `ha ripristinato ${title}` }
-        : { action: `ha cambiato ${changesText(data.changes)} di ${title}` }
+        ? { action: fmt(t.restored, { title }) }
+        : { action: fmt(t.changed, { changes: changesText(data.changes, locale), title }) }
     case 'event_cancelled':
-      return { action: `ha annullato ${title}` }
+      return { action: fmt(t.cancelled, { title }) }
     case 'new_comment':
-      return { action: `ha commentato ${title}`, quote: data.snippet }
+      return { action: fmt(t.commented, { title }), quote: data.snippet }
     case 'comment_reply':
-      return { action: `ha risposto al tuo commento su ${title}`, quote: data.snippet }
+      return { action: fmt(t.replied, { title }), quote: data.snippet }
     case 'friend_going':
-      return { action: `partecipa a ${title}` }
+      return { action: fmt(t.going, { title }) }
     default:
-      return { action: 'ha aggiornato un evento' }
+      return { action: t.updated }
   }
 }
 
-/** Titolo e testo della notifica push sul telefono. */
-export function pushContent(type: NotificationType, data: NotificationData, actor: string): { title: string; body: string } {
-  const title = data.title ?? 'Evento'
+/** Titolo e testo della notifica push sul telefono, nella lingua di chi la riceve. */
+export function pushContent(
+  type: NotificationType,
+  data: NotificationData,
+  actor: string,
+  locale: Locale = getLocale(),
+): { title: string; body: string } {
+  const t = messagesFor(locale).notifications
+  const p = t.push
+  const title = data.title ?? t.eventFallback
   switch (type) {
     case 'new_event':
-      return { title: 'Nuovo evento', body: `${actor} ha proposto «${title}»` }
+      return { title: p.newEventTitle, body: fmt(p.newEventBody, { actor, title }) }
     case 'event_updated':
       return data.changes?.includes('restored')
-        ? { title: 'Evento di nuovo in programma', body: `${actor} ha ripristinato «${title}»` }
-        : { title: 'Cambio di programma', body: `${actor} ha cambiato ${changesText(data.changes)} di «${title}»` }
+        ? { title: p.restoredTitle, body: fmt(p.restoredBody, { actor, title }) }
+        : { title: p.changedTitle, body: fmt(p.changedBody, { actor, changes: changesText(data.changes, locale), title }) }
     case 'event_cancelled':
-      return { title: 'Evento annullato', body: `«${title}» è stato annullato` }
+      return { title: p.cancelledTitle, body: fmt(p.cancelledBody, { title }) }
     case 'new_comment':
       return { title, body: `${actor}: ${data.snippet ?? ''}`.trim() }
     case 'comment_reply':
-      return { title: `${actor} ti ha risposto`, body: data.snippet ?? title }
+      return { title: fmt(p.replyTitle, { actor }), body: data.snippet ?? title }
     case 'friend_going':
-      return { title, body: `${actor} partecipa 🟢` }
+      return { title, body: fmt(p.goingBody, { actor }) }
     default:
       return { title, body: actor }
   }

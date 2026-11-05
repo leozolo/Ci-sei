@@ -11,20 +11,23 @@ import { EmptyState, ListSkeleton } from '@/components/page-header'
 import { InstallHint } from '@/components/pwa'
 import { Button, buttonClass } from '@/components/ui/button'
 import { toast } from '@/components/ui/feedback'
-import { ALL_CITIES, useCityFilter } from '@/lib/city'
+import { ALL_CITIES, cityLabel, useCityFilter } from '@/lib/city'
 import { buildSections, fetchUpcoming, groupByDay, happensIn, whenRange, type WhenFilter } from '@/lib/events'
 import { dayHeading } from '@/lib/format'
+import { fmt, msgs, plural } from '@/lib/i18n/core'
+import { useI18n } from '@/lib/i18n/react'
 import { useQuery } from '@/lib/query'
 import type { EventView } from '@/lib/types'
 
 function DayList({ events, showCity }: { events: EventView[]; showCity?: boolean }) {
+  const { m } = useI18n()
   const groups = groupByDay(events)
   return (
     <div className="space-y-5">
       {groups.map((g) => (
-        <section key={g.key} aria-label={g.date ? dayHeading(g.date) : 'In corso'}>
+        <section key={g.key} aria-label={g.date ? dayHeading(g.date) : m.board.ongoing}>
           <h3 className="sticky top-[calc(env(safe-area-inset-top)+3.5rem)] z-10 -mx-4 border-b border-line bg-bg px-4 py-2 font-list text-[14px] font-bold uppercase tracking-[0.05em] text-muted">
-            {g.date ? dayHeading(g.date) : 'In corso'}
+            {g.date ? dayHeading(g.date) : m.board.ongoing}
           </h3>
           <div className="mt-1">
             {g.events.map((e) => (
@@ -38,18 +41,20 @@ function DayList({ events, showCity }: { events: EventView[]; showCity?: boolean
 }
 
 function summary(name: string, s: ReturnType<typeof buildSections>, city: string): string {
+  const t = msgs().board
   const first = name.split(/\s+/)[0]
-  const where = city === ALL_CITIES ? '' : ` a ${city}`
-  if (s.all.length === 0) return `Ciao ${first}.`
+  const where = city === ALL_CITIES ? '' : fmt(t.inCity, { city: cityLabel(city) })
+  if (s.all.length === 0) return fmt(t.hello, { name: first })
   const weekend = s.weekend.length
   const mine = s.weekend.filter((e) => e.myStatus === 'going').length
-  if (weekend === 0) return `Ciao ${first}. Questo weekend${where} non c’è ancora niente: proponi qualcosa.`
-  const base = `Ciao ${first}. Questo weekend${where}: ${weekend === 1 ? '1 serata' : `${weekend} serate`}`
-  return mine ? `${base}, sei in lista per ${mine}.` : `${base}.`
+  if (weekend === 0) return fmt(t.weekendEmpty, { name: first, where })
+  const base = plural(t.weekendCount, weekend, { name: first, where })
+  return fmt(mine ? t.youreIn : t.end, { base, mine })
 }
 
 export default function HomePage() {
   const { me } = useApp()
+  const { m } = useI18n()
   const { data: events, isLoading, error, refresh } = useQuery(['events', 'upcoming', me.id], () => fetchUpcoming(me.id))
   const { city, cities, setCity, matches, multi } = useCityFilter(events)
   const [when, setWhen] = useState<WhenFilter>('all')
@@ -58,7 +63,7 @@ export default function HomePage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     if (params.has('benvenuto')) {
-      toast.success('Sei nel club! Ecco cosa c’è in programma.')
+      toast.success(msgs().board.welcomeToast)
       window.history.replaceState(null, '', '/')
     }
   }, [])
@@ -81,7 +86,7 @@ export default function HomePage() {
           <Wordmark className="text-[23px]" />
           <Link
             href="/cerca"
-            aria-label="Cerca eventi"
+            aria-label={m.board.searchAria}
             className="press inline-flex size-10 items-center justify-center rounded-full hover:bg-elev"
           >
             <LuSearch className="size-[22px]" />
@@ -107,37 +112,37 @@ export default function HomePage() {
         </div>
       ) : error && !events ? (
         <EmptyState
-          title="Non riesco a caricare gli eventi"
+          title={m.board.loadError}
           action={
             <Button variant="secondary" onClick={() => void refresh()}>
-              Riprova
+              {m.common.retry}
             </Button>
           }
         >
-          Controlla la connessione.
+          {m.board.checkConnection}
         </EmptyState>
       ) : sections.all.length === 0 ? (
         <EmptyState
-          title="Nessun evento in programma"
+          title={m.board.emptyTitle}
           action={
             <div className="flex flex-col items-center gap-3">
               <Link href="/eventi/nuovo" className={buttonClass('primary', 'lg')}>
-                Proponi un evento
+                {m.nav.propose}
               </Link>
               <Link href="/archivio" className="text-[14px] text-muted underline-offset-4 hover:underline">
-                Guarda gli eventi passati
+                {m.board.seePast}
               </Link>
             </div>
           }
         >
-          Hai visto qualcosa di bello in città? Proponilo al gruppo.
+          {m.board.emptyBody}
         </EmptyState>
       ) : (
         <>
           {sections.mine.length ? (
             <section className="mx-auto mt-8 max-w-2xl px-4" aria-labelledby="sei-in-lista">
               <SectionTitle aside={sections.mine.length}>
-                <span id="sei-in-lista">Sei in lista</span>
+                <span id="sei-in-lista">{m.board.mine}</span>
               </SectionTitle>
               <div className="mt-2 divide-y divide-line border-y border-line">
                 {sections.mine.map((e) => (
@@ -148,7 +153,7 @@ export default function HomePage() {
           ) : null}
 
           {sections.weekend.length ? (
-            <Rail title="Questo weekend" aside={sections.weekend.length}>
+            <Rail title={m.board.weekend} aside={sections.weekend.length}>
               {sections.weekend.map((e) => (
                 <DoorCard key={e.id} event={e} showCity={showCity} />
               ))}
@@ -157,8 +162,8 @@ export default function HomePage() {
 
           {many && sections.popular.length >= 2 ? (
             <section className="mx-auto mt-10 max-w-2xl px-4" aria-labelledby="dove-vanno-tutti">
-              <SectionTitle aside="per lunghezza della lista">
-                <span id="dove-vanno-tutti">Dove vanno tutti</span>
+              <SectionTitle aside={m.board.popularAside}>
+                <span id="dove-vanno-tutti">{m.board.popular}</span>
               </SectionTitle>
               <div className="mt-2 divide-y divide-line border-y border-line">
                 {sections.popular.slice(0, 5).map((e) => (
@@ -169,7 +174,7 @@ export default function HomePage() {
           ) : null}
 
           {many && sections.recent.length ? (
-            <Rail title="Appena proposti" aside={sections.recent.length}>
+            <Rail title={m.board.recent} aside={sections.recent.length}>
               {sections.recent.map((e) => (
                 <DoorCard key={e.id} event={e} showCity={showCity} />
               ))}
@@ -177,8 +182,8 @@ export default function HomePage() {
           ) : null}
 
           <section className="mx-auto mt-10 max-w-2xl px-4" aria-labelledby="in-programma">
-            <SectionTitle aside={filtering ? `${program.length} su ${sections.all.length}` : sections.all.length}>
-              <span id="in-programma">In programma</span>
+            <SectionTitle aside={filtering ? fmt(m.board.filteredCount, { n: program.length, total: sections.all.length }) : sections.all.length}>
+              <span id="in-programma">{m.board.program}</span>
             </SectionTitle>
             <div className="mt-4">
               <FilterBar when={when} onWhen={setWhen} category={category} onCategory={setCategory} />
@@ -188,7 +193,7 @@ export default function HomePage() {
                 <DayList events={program} showCity={showCity} />
               ) : (
                 <EmptyState
-                  title="Nessun evento con questi filtri"
+                  title={m.board.noMatch}
                   action={
                     <Button
                       variant="secondary"
@@ -197,7 +202,7 @@ export default function HomePage() {
                         setCategory(null)
                       }}
                     >
-                      Togli i filtri
+                      {m.board.clearFilters}
                     </Button>
                   }
                 />
@@ -207,7 +212,7 @@ export default function HomePage() {
               href="/archivio"
               className="press mt-8 flex items-center justify-center gap-2 rounded-[12px] border border-line py-3 text-[14px] font-semibold text-muted hover:text-fg"
             >
-              <LuArchive className="size-4" /> Eventi passati
+              <LuArchive className="size-4" /> {m.board.pastEvents}
             </Link>
           </section>
         </>

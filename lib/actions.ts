@@ -1,15 +1,22 @@
 import { sb } from '@/lib/supabase/client'
 import { removeImage, uploadImage } from '@/lib/storage'
 import { pingPush } from '@/lib/push-client'
+import { msgs } from '@/lib/i18n/core'
+import type { Locale } from '@/lib/i18n/locales'
 import type { CommentRow, EventInput, EventRow, InviteRow, NotifyPrefKey, Profile, Role, RsvpStatus } from '@/lib/types'
 
 /** Messaggio leggibile per gli errori più comuni. */
-export function errorMessage(err: unknown, fallback = 'Qualcosa non ha funzionato. Riprova.'): string {
+export function errorMessage(err: unknown, fallback = msgs().errors.generic): string {
+  const t = msgs().errors
   const msg = typeof err === 'object' && err && 'message' in err ? String((err as { message: unknown }).message) : ''
   if (!msg) return fallback
-  if (/failed to fetch|networkerror|load failed/i.test(msg)) return 'Sei offline o la connessione è instabile. Riprova.'
-  if (/row-level security|permission denied|42501/i.test(msg)) return 'Non hai i permessi per questa operazione.'
-  if (/jwt|session/i.test(msg)) return 'La sessione è scaduta: accedi di nuovo.'
+  if (/failed to fetch|networkerror|load failed/i.test(msg)) return t.offline
+  if (/row-level security|permission denied|42501/i.test(msg)) return t.forbidden
+  if (/jwt|session/i.test(msg)) return t.session
+  // messaggi che arrivano in italiano dal database
+  if (msg.includes('almeno un amministratore')) return t.lastAdmin
+  if (msg.includes('Solo un amministratore')) return t.adminOnly
+  if (msg.includes('stesso evento')) return fallback
   if (/^[A-ZÀ-Ú][^_]*$/.test(msg) && msg.length < 140) return msg
   return fallback
 }
@@ -155,6 +162,12 @@ export async function updateProfile(
   }
 }
 
+/** Lingua dell'app salvata nel profilo: vale su ogni telefono e per le notifiche. */
+export async function updateLocale(meId: string, locale: Locale) {
+  const { error } = await sb().from('profiles').update({ locale }).eq('id', meId)
+  if (error) throw error
+}
+
 export async function updateNotifyPrefs(meId: string, prefs: Partial<Record<NotifyPrefKey, boolean>>) {
   const { error } = await sb().from('profiles').update({ notify_prefs: prefs }).eq('id', meId)
   if (error) throw error
@@ -171,9 +184,9 @@ export async function joinGroup(code: string | null, displayName: string | null)
 
 export function inviteErrorMessage(err: unknown): string {
   const msg = typeof err === 'object' && err && 'message' in err ? String((err as { message: unknown }).message) : ''
-  if (msg.includes('invalid_invite')) return 'Questo invito non è più valido: chiedine uno nuovo a chi ti ha invitato.'
-  if (msg.includes('invite_required')) return 'Per entrare nel gruppo serve un link d’invito.'
-  if (msg.includes('removed')) return 'Il tuo accesso al gruppo è stato rimosso da un amministratore.'
+  if (msg.includes('invalid_invite')) return msgs().errors.invalidInvite
+  if (msg.includes('invite_required')) return msgs().errors.inviteRequired
+  if (msg.includes('removed')) return msgs().errors.removed
   return errorMessage(err)
 }
 

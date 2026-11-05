@@ -11,23 +11,24 @@ import { EmptyState, ListSkeleton, PageBody, PageHeader } from '@/components/pag
 import { buttonClass } from '@/components/ui/button'
 import { cn } from '@/lib/cn'
 import { fetchCreatedBy, fetchGoingFor, fetchSaved, isUpcoming } from '@/lib/events'
-import { capitalize } from '@/lib/format'
+import { capitalize, sinceDate } from '@/lib/format'
+import { fmt, plural } from '@/lib/i18n/core'
+import { useI18n } from '@/lib/i18n/react'
 import { useQuery } from '@/lib/query'
 import type { EventView } from '@/lib/types'
 
 type Tab = 'partecipa' | 'proposti' | 'salvati'
 
-const monthYear = new Intl.DateTimeFormat('it-IT', { month: 'long', year: 'numeric' })
-
 function SplitList({ events, emptyTitle, emptyText }: { events: EventView[]; emptyTitle: string; emptyText?: string }) {
   const upcoming = events.filter((e) => isUpcoming(e)).sort((a, b) => a.starts_at.localeCompare(b.starts_at))
   const past = events.filter((e) => !isUpcoming(e)).sort((a, b) => b.starts_at.localeCompare(a.starts_at))
+  const { m } = useI18n()
   if (events.length === 0) return <EmptyState title={emptyTitle}>{emptyText}</EmptyState>
   return (
     <div className="space-y-6">
       {upcoming.length ? (
         <section>
-          <h2 className="mb-1 text-[14px] font-semibold text-muted">In arrivo</h2>
+          <h2 className="mb-1 text-[14px] font-semibold text-muted">{m.profile.upcoming}</h2>
           <div className="space-y-1">
             {upcoming.map((e) => (
               <EventRow key={e.id} event={e} />
@@ -37,7 +38,7 @@ function SplitList({ events, emptyTitle, emptyText }: { events: EventView[]; emp
       ) : null}
       {past.length ? (
         <section>
-          <h2 className="mb-1 text-[14px] font-semibold text-muted">Passati</h2>
+          <h2 className="mb-1 text-[14px] font-semibold text-muted">{m.profile.past}</h2>
           <div className="space-y-1">
             {past.map((e) => (
               <EventRow key={e.id} event={e} />
@@ -54,6 +55,7 @@ export default function ProfilePage() {
   const { me, memberMap, members } = useApp()
   const isMe = id === me.id
   const person = memberMap.get(id)
+  const { m } = useI18n()
   const [tab, setTab] = useState<Tab>('partecipa')
 
   useEffect(() => {
@@ -78,15 +80,15 @@ export default function ProfilePage() {
     return (
       <main>
         <PageHeader back />
-        <EmptyState title="Profilo non trovato" />
+        <EmptyState title={m.profile.notFound} />
       </main>
     )
   }
 
   const tabs: { id: Tab; label: string }[] = [
-    { id: 'partecipa', label: isMe ? 'Ci vado' : 'Partecipa' },
-    { id: 'proposti', label: 'Proposti' },
-    ...(isMe ? [{ id: 'salvati' as Tab, label: 'Salvati' }] : []),
+    { id: 'partecipa', label: isMe ? m.profile.tabGoingMe : m.profile.tabGoing },
+    { id: 'proposti', label: m.profile.tabProposed },
+    ...(isMe ? [{ id: 'salvati' as Tab, label: m.profile.tabSaved }] : []),
   ]
 
   const current = tab === 'salvati' && !isMe ? 'partecipa' : tab
@@ -96,10 +98,10 @@ export default function ProfilePage() {
     <main>
       <PageHeader
         back={!isMe}
-        title={isMe ? 'Il tuo profilo' : ''}
+        title={isMe ? m.profile.yours : ''}
         actions={
           isMe ? (
-            <Link href="/impostazioni" aria-label="Impostazioni" className="press inline-flex size-10 items-center justify-center rounded-full hover:bg-elev-2">
+            <Link href="/impostazioni" aria-label={m.settings.title} className="press inline-flex size-10 items-center justify-center rounded-full hover:bg-elev-2">
               <LuSettings className="size-[22px]" />
             </Link>
           ) : null
@@ -110,23 +112,24 @@ export default function ProfilePage() {
           <Avatar id={id} person={person} size={96} />
           <h1 className="mt-4 font-list text-[32px] font-extrabold uppercase leading-none">{person?.display_name ?? '…'}</h1>
           <p className="mt-1 text-[14px] text-muted">
-            {person?.role === 'admin' ? 'Amministratore, ' : ''}
-            {person ? `nel gruppo da ${monthYear.format(new Date(person.created_at))}` : ''}
+            {person
+              ? fmt(person.role === 'admin' ? m.profile.adminSince : m.profile.memberSince, { date: sinceDate(person.created_at) })
+              : ''}
           </p>
           {isMe ? (
             <Link href="/profilo/modifica" className={cn(buttonClass('secondary', 'sm'), 'mt-4')}>
-              <LuPencil className="size-4" /> Modifica profilo
+              <LuPencil className="size-4" /> {m.profile.edit}
             </Link>
           ) : null}
         </div>
 
         <dl className="mt-6 grid grid-cols-3 gap-2 text-center">
           {[
-            { n: stats.created, l: stats.created === 1 ? 'evento proposto' : 'eventi proposti' },
-            { n: stats.going, l: stats.going === 1 ? 'partecipazione' : 'partecipazioni' },
-            { n: stats.upcoming, l: 'in arrivo' },
+            { k: 'created', n: stats.created, l: plural(m.profile.statCreated, stats.created) },
+            { k: 'going', n: stats.going, l: plural(m.profile.statGoing, stats.going) },
+            { k: 'upcoming', n: stats.upcoming, l: m.profile.statUpcoming },
           ].map((s) => (
-            <div key={s.l} className="rounded-[14px] border border-line bg-elev px-2 py-3">
+            <div key={s.k} className="rounded-[14px] border border-line bg-elev px-2 py-3">
               <dd className="font-poster text-[32px] font-extrabold leading-none tabular-nums">{s.n}</dd>
               <dt className="mt-0.5 text-[12px] text-muted">{capitalize(s.l)}</dt>
             </div>
@@ -155,15 +158,15 @@ export default function ProfilePage() {
           {query.isLoading ? (
             <ListSkeleton rows={3} />
           ) : current === 'proposti' ? (
-            <SplitList events={created.data ?? []} emptyTitle={isMe ? 'Non hai ancora proposto eventi' : 'Nessun evento proposto'} />
+            <SplitList events={created.data ?? []} emptyTitle={isMe ? m.profile.emptyProposedMe : m.profile.emptyProposed} />
           ) : current === 'salvati' ? (
             <SplitList
               events={saved.data ?? []}
-              emptyTitle="Nessun evento salvato"
-              emptyText="Tocca «Salva» su un evento per ritrovarlo qui."
+              emptyTitle={m.profile.emptySaved}
+              emptyText={m.profile.emptySavedBody}
             />
           ) : (
-            <SplitList events={going.data ?? []} emptyTitle={isMe ? 'Non hai ancora confermato eventi' : 'Nessuna partecipazione'} />
+            <SplitList events={going.data ?? []} emptyTitle={isMe ? m.profile.emptyGoingMe : m.profile.emptyGoing} />
           )}
         </div>
       </PageBody>

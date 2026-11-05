@@ -16,6 +16,7 @@ La bacheca privata delle serate del vostro gruppo: qualcuno propone una serata, 
 - **Profili** con foto, eventi proposti, partecipazioni e salvati.
 - **Accesso privato**: registrazione solo con link d'invito, accesso con email e password (o Google). Gli amministratori creano e disattivano gli inviti, rimuovono o riattivano i membri.
 - Tema scuro blu notte (predefinito), chiaro o come il telefono.
+- **Lingue**: italiano, inglese e russo. Ognuno sceglie la sua dal menu in *Impostazioni* (o in alto a destra nelle schermate di accesso e d'invito); la scelta resta nel profilo, quindi vale su ogni telefono e anche per le notifiche push.
 
 ## Tecnologia
 
@@ -101,7 +102,8 @@ Dal pannello **Inviti e membri** l'amministratore può anche disattivare un link
 - **Nome**: variabili `NEXT_PUBLIC_APP_NAME` (predefinito *Club dei clubbers*) e `NEXT_PUBLIC_APP_SHORT_NAME` (il nome sotto l'icona, predefinito *Clubbers*) su Vercel, poi Redeploy.
 - **Simbolo** (oggi provvisorio: la spunta verde): sostituisci `public/brand/mark.svg` con il nuovo disegno (SVG quadrato, fondo trasparente) e lancia `npm run icons`, che rigenera le icone dell'app in `public/icons`. Nell'app il simbolo viene preso da quello stesso file.
 - **Città**: la città proposta per i nuovi eventi è *Roma*; si cambia con `NEXT_PUBLIC_DEFAULT_CITY`. Per aggiungere un'altra città basta scriverla nel campo Città di un evento: la scelta della città compare da sola.
-- **Categorie**: `lib/categories.ts` (aggiornare anche il controllo `category in (...)` in `supabase/schema.sql`).
+- **Categorie**: `lib/categories.ts` (aggiornare anche il controllo `category in (...)` in `supabase/schema.sql`) e i nomi in ogni file di `lib/i18n/messages`.
+- **Testi e lingue**: tutti i testi stanno in `lib/i18n/messages` (`it.ts` è il riferimento; `en.ts` e `ru.ts` devono avere le stesse chiavi, e il controllo dei tipi lo verifica). Per aggiungere una lingua: un nuovo file lì, una voce in `lib/i18n/locales.ts` e il codice nel controllo `locale in (...)` di `supabase/schema.sql`.
 
 ## Sviluppo sul computer
 
@@ -126,9 +128,10 @@ app/                 schermate (bacheca, evento, calendario, profilo, admin, acc
   api/link-preview   legge i link degli eventi (con protezioni di sicurezza)
   api/push           invio notifiche push
   api/eventi/[id]/ics  file per il calendario
-  fonts/             Archivo (carattere dei titoli, licenza OFL)
+  fonts/             Archivo (carattere dei titoli, licenza OFL; per il russo Roboto Flex da Google Fonts)
 components/          interfaccia (card, lista, partecipazione, messaggi, modulo evento…)
-lib/                 dati, date in italiano, città, immagini, notifiche, calendario
+lib/                 dati, date, città, immagini, notifiche, calendario
+  i18n/              lingue: dizionari it/en/ru, plurali, menu della lingua
 public/brand/        simbolo dell'app (mark.svg)
 public/icons/        icone generate da `npm run icons`
 public/sw.js         service worker (installazione, push, pagina offline)

@@ -3,6 +3,7 @@
 import { useSyncExternalStore } from 'react'
 import { LuCircleAlert, LuCheck } from 'react-icons/lu'
 import { cn } from '@/lib/cn'
+import { msgs } from '@/lib/i18n/core'
 import { Button } from '@/components/ui/button'
 import { Sheet } from '@/components/ui/sheet'
 
@@ -117,7 +118,7 @@ export function Feedback() {
                 {confirm.confirmLabel}
               </Button>
               <Button variant="ghost" size="lg" onClick={() => closeConfirm(false)}>
-                {confirm.cancelLabel ?? 'Annulla'}
+                {confirm.cancelLabel ?? msgs().common.cancel}
               </Button>
             </div>
           </div>

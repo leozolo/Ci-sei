@@ -13,22 +13,18 @@ import { createInvite, errorMessage, revokeInvite, setMemberRole, setMemberStatu
 import { cn } from '@/lib/cn'
 import { APP_NAME } from '@/lib/config'
 import { relativeTime } from '@/lib/format'
+import { fmt, intlLocale, msgs, plural } from '@/lib/i18n/core'
+import { useI18n } from '@/lib/i18n/react'
 import { invalidate, useQuery } from '@/lib/query'
 import { whatsappUrl } from '@/lib/share'
 import { sb } from '@/lib/supabase/client'
 import type { AdminMember, InviteRow } from '@/lib/types'
 
 const USES = [1, 5, 10, 25]
-const VALIDITY: { days: number | null; label: string }[] = [
-  { days: 1, label: '1 giorno' },
-  { days: 7, label: '7 giorni' },
-  { days: 30, label: '30 giorni' },
-  { days: null, label: 'Senza scadenza' },
-]
+const VALIDITY: (number | null)[] = [1, 7, 30, null]
 
 const inviteLink = (code: string) => `${window.location.origin}/invito/${code}`
-const inviteMessage = (code: string) =>
-  `Ti invito su «${APP_NAME}», la bacheca dove organizziamo le uscite del gruppo 🎉\nEntra da qui: ${inviteLink(code)}`
+const inviteMessage = (code: string) => fmt(msgs().admin.inviteMessage, { app: APP_NAME, link: inviteLink(code) })
 
 function isActive(i: InviteRow) {
   return !i.revoked_at && (!i.expires_at || new Date(i.expires_at) > new Date()) && i.uses < i.max_uses
@@ -49,20 +45,21 @@ async function fetchAdminMembers(): Promise<AdminMember[]> {
 async function copy(text: string) {
   try {
     await navigator.clipboard.writeText(text)
-    toast.success('Link copiato')
+    toast.success(msgs().actions.linkCopied)
   } catch {
-    toast.error('Copia non riuscita: tieni premuto sul link per copiarlo')
+    toast.error(msgs().admin.copyFailed)
   }
 }
 
 function InviteActions({ code }: { code: string }) {
+  const { m } = useI18n()
   return (
-    <div className="mt-3 flex gap-2">
+    <div className="mt-3 flex flex-wrap gap-2">
       <a href={whatsappUrl(inviteMessage(code))} target="_blank" rel="noopener noreferrer" className={buttonClass('primary', 'sm')}>
-        <LuMessageCircle className="size-4" /> Invia su WhatsApp
+        <LuMessageCircle className="size-4" /> {m.admin.sendWhatsapp}
       </a>
       <Button size="sm" variant="outline" icon={<LuCopy className="size-4" />} onClick={() => void copy(inviteLink(code))}>
-        Copia link
+        {m.admin.copyLink}
       </Button>
     </div>
   )
@@ -70,6 +67,7 @@ function InviteActions({ code }: { code: string }) {
 
 function AdminContent() {
   const { me } = useApp()
+  const { m: t } = useI18n()
   const invites = useQuery(['admin', 'invites', me.id], fetchInvites)
   const members = useQuery(['admin', 'members', me.id], fetchAdminMembers)
   const [uses, setUses] = useState(1)
@@ -96,7 +94,7 @@ function AdminContent() {
   }
 
   const revoke = async (i: InviteRow) => {
-    const ok = await confirmDialog({ title: 'Disattivare questo link?', message: 'Chi non l’ha ancora usato non potrà più entrare.', confirmLabel: 'Disattiva', destructive: true })
+    const ok = await confirmDialog({ title: t.admin.revokeTitle, message: t.admin.revokeMessage, confirmLabel: t.admin.revoke, destructive: true })
     if (!ok) return
     try {
       await revokeInvite(i.id)
@@ -123,45 +121,45 @@ function AdminContent() {
 
   const remove = async (m: AdminMember) => {
     const ok = await confirmDialog({
-      title: `Rimuovere ${m.display_name}?`,
-      message: 'Non vedrà più nulla del gruppo. I suoi eventi e messaggi restano. Puoi riattivarlo quando vuoi.',
-      confirmLabel: 'Rimuovi dal gruppo',
+      title: fmt(t.admin.removeTitle, { name: m.display_name }),
+      message: t.admin.removeMessage,
+      confirmLabel: t.admin.remove,
       destructive: true,
     })
-    if (ok) await memberAction(() => setMemberStatus(m.id, 'removed'), `${m.display_name} è stato rimosso`)
+    if (ok) await memberAction(() => setMemberStatus(m.id, 'removed'), fmt(t.admin.removedToast, { name: m.display_name }))
   }
 
   return (
     <PageBody>
       <section className="rounded-[16px] border border-line bg-elev p-4">
         <h2 className="flex items-center gap-2 font-list text-[23px] font-extrabold leading-none">
-          <LuUserPlus className="size-5" /> Invita amici
+          <LuUserPlus className="size-5" /> {t.admin.inviteTitle}
         </h2>
-        <p className="mt-1 text-[14px] text-muted">Crea un link e mandalo su WhatsApp: chi lo apre si registra ed entra nel gruppo.</p>
+        <p className="mt-1 text-[14px] text-muted">{t.admin.inviteBody}</p>
 
-        <p className="mb-2 mt-4 text-[13px] font-semibold">Quante persone possono usarlo</p>
+        <p className="mb-2 mt-4 text-[13px] font-semibold">{t.admin.usesLabel}</p>
         <div className="flex flex-wrap gap-2">
           {USES.map((n) => (
             <Chip key={n} active={uses === n} onClick={() => setUses(n)}>
-              {n === 1 ? '1 persona' : `${n} persone`}
+              {plural(t.admin.people, n)}
             </Chip>
           ))}
         </div>
-        <p className="mb-2 mt-4 text-[13px] font-semibold">Valido per</p>
+        <p className="mb-2 mt-4 text-[13px] font-semibold">{t.admin.validityLabel}</p>
         <div className="flex flex-wrap gap-2">
           {VALIDITY.map((v) => (
-            <Chip key={v.label} active={days === v.days} onClick={() => setDays(v.days)}>
-              {v.label}
+            <Chip key={v ?? 'never'} active={days === v} onClick={() => setDays(v)}>
+              {v === null ? t.admin.noExpiry : plural(t.admin.days, v)}
             </Chip>
           ))}
         </div>
         <Button className="mt-5 w-full" size="lg" loading={creating} onClick={() => void create()}>
-          Crea link d&apos;invito
+          {t.admin.create}
         </Button>
 
         {justCreated ? (
           <div className="mt-4 rounded-[12px] border border-line-strong p-3.5">
-            <p className="text-[13px] font-semibold text-going">Link pronto</p>
+            <p className="text-[13px] font-semibold text-going">{t.admin.ready}</p>
             <p className="mt-1 select-all break-all font-mono text-[13px]">{inviteLink(justCreated.code)}</p>
             <InviteActions code={justCreated.code} />
           </div>
@@ -169,11 +167,11 @@ function AdminContent() {
       </section>
 
       <section className="mt-7">
-        <h2 className="mb-2 px-1 text-[13px] font-semibold text-muted">Link attivi</h2>
+        <h2 className="mb-2 px-1 text-[13px] font-semibold text-muted">{t.admin.activeLinks}</h2>
         {invites.isLoading ? (
           <ListSkeleton rows={1} />
         ) : active.length === 0 ? (
-          <p className="rounded-[16px] border border-line bg-elev px-4 py-4 text-[14px] text-muted">Nessun link attivo.</p>
+          <p className="rounded-[16px] border border-line bg-elev px-4 py-4 text-[14px] text-muted">{t.admin.noLinks}</p>
         ) : (
           <ul className="space-y-2">
             {active.map((i) => (
@@ -182,12 +180,16 @@ function AdminContent() {
                   <div className="min-w-0">
                     <p className="truncate font-mono text-[13px]">…/invito/{i.code}</p>
                     <p className="mt-1 text-[13px] text-muted">
-                      Usato {i.uses} su {i.max_uses}
-                      {i.expires_at ? `, scade ${new Date(i.expires_at).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })}` : ', senza scadenza'}
+                      {fmt(t.admin.used, { n: i.uses, max: i.max_uses })}
+                      {i.expires_at
+                        ? fmt(t.admin.expires, {
+                            date: new Date(i.expires_at).toLocaleDateString(intlLocale(), { day: 'numeric', month: 'short' }).replace(/\./g, ''),
+                          })
+                        : t.admin.neverExpires}
                     </p>
                   </div>
                   <button type="button" onClick={() => void revoke(i)} className="shrink-0 text-[13px] font-semibold text-no">
-                    Disattiva
+                    {t.admin.revoke}
                   </button>
                 </div>
                 <InviteActions code={i.code} />
@@ -198,7 +200,7 @@ function AdminContent() {
       </section>
 
       <section className="mt-7">
-        <h2 className="mb-2 px-1 text-[13px] font-semibold text-muted">Membri</h2>
+        <h2 className="mb-2 px-1 text-[13px] font-semibold text-muted">{t.settings.members}</h2>
         {members.isLoading ? (
           <ListSkeleton rows={3} />
         ) : (
@@ -212,12 +214,12 @@ function AdminContent() {
                       {m.display_name}
                     </span>
                     <span className="block truncate text-[12px] text-muted">
-                      {m.email ?? 'senza email'}
-                      {m.last_sign_in_at ? `, ultimo accesso ${relativeTime(m.last_sign_in_at)}` : ''}
+                      {m.email ?? t.admin.noEmail}
+                      {m.last_sign_in_at ? fmt(t.admin.lastSeen, { when: relativeTime(m.last_sign_in_at) }) : ''}
                     </span>
                   </span>
-                  {m.role === 'admin' ? <LuShieldCheck className="size-5 shrink-0 text-muted" aria-label="Amministratore" /> : null}
-                  {m.status === 'removed' ? <span className="shrink-0 text-[12px] font-semibold text-no">Rimosso</span> : null}
+                  {m.role === 'admin' ? <LuShieldCheck className="size-5 shrink-0 text-muted" aria-label={t.members.admin} /> : null}
+                  {m.status === 'removed' ? <span className="shrink-0 text-[12px] font-semibold text-no">{t.admin.removedTag}</span> : null}
                 </button>
               </li>
             ))}
@@ -235,9 +237,9 @@ function AdminContent() {
                     variant="secondary"
                     size="lg"
                     disabled={busy}
-                    onClick={() => void memberAction(() => setMemberRole(selected.id, 'member'), 'Ruolo aggiornato')}
+                    onClick={() => void memberAction(() => setMemberRole(selected.id, 'member'), t.admin.roleUpdated)}
                   >
-                    Togli il ruolo di amministratore
+                    {t.admin.demote}
                   </Button>
                 ) : (
                   <Button
@@ -245,14 +247,14 @@ function AdminContent() {
                     size="lg"
                     disabled={busy}
                     icon={<LuShieldCheck className="size-5" />}
-                    onClick={() => void memberAction(() => setMemberRole(selected.id, 'admin'), `${selected.display_name} ora è amministratore`)}
+                    onClick={() => void memberAction(() => setMemberRole(selected.id, 'admin'), fmt(t.admin.promotedToast, { name: selected.display_name }))}
                   >
-                    Rendi amministratore
+                    {t.admin.promote}
                   </Button>
                 )}
                 {selected.id !== me.id ? (
                   <Button variant="danger" size="lg" disabled={busy} icon={<LuUserMinus className="size-5" />} onClick={() => void remove(selected)}>
-                    Rimuovi dal gruppo
+                    {t.admin.remove}
                   </Button>
                 ) : null}
               </>
@@ -260,9 +262,9 @@ function AdminContent() {
               <Button
                 size="lg"
                 disabled={busy}
-                onClick={() => void memberAction(() => setMemberStatus(selected.id, 'active'), `${selected.display_name} è di nuovo nel gruppo`)}
+                onClick={() => void memberAction(() => setMemberStatus(selected.id, 'active'), fmt(t.admin.reactivatedToast, { name: selected.display_name }))}
               >
-                Riattiva nel gruppo
+                {t.admin.reactivate}
               </Button>
             )}
           </div>
@@ -274,10 +276,11 @@ function AdminContent() {
 
 export default function AdminPage() {
   const { me } = useApp()
+  const { m } = useI18n()
   return (
     <main>
-      <PageHeader back title="Inviti e membri" />
-      {me.role === 'admin' ? <AdminContent /> : <EmptyState title="Solo per amministratori" />}
+      <PageHeader back title={m.admin.title} />
+      {me.role === 'admin' ? <AdminContent /> : <EmptyState title={m.admin.onlyAdmins} />}
     </main>
   )
 }

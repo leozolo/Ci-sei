@@ -10,8 +10,12 @@ import { Mark, Wordmark } from '@/components/brand'
 import { TICK_PATH } from '@/components/marker'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/feedback'
+import { updateLocale } from '@/lib/actions'
 import { cn } from '@/lib/cn'
 import { IS_CONFIGURED } from '@/lib/config'
+import { msgs } from '@/lib/i18n/core'
+import { DEFAULT_LOCALE, isLocale } from '@/lib/i18n/locales'
+import { clearPendingLocale, readPendingLocale, useI18n } from '@/lib/i18n/react'
 import { describeNotification } from '@/lib/notifications'
 import { clearCache, invalidate, isEventKey, useQuery } from '@/lib/query'
 import { sb } from '@/lib/supabase/client'
@@ -103,7 +107,21 @@ function MemberApp({
 }) {
   const router = useRouter()
   const pathname = usePathname()
+  const { locale, setLocale } = useI18n()
   const { data: members } = useQuery(['members'], fetchMembers, { staleMs: 60_000 })
+
+  // La lingua del profilo vale su ogni telefono. Se però è stata scelta prima di
+  // accedere (schermata di accesso o d'invito), quella scelta va nel profilo.
+  useEffect(() => {
+    const saved = isLocale(me.locale) ? me.locale : DEFAULT_LOCALE
+    if (readPendingLocale()) {
+      clearPendingLocale()
+      if (saved !== locale) void updateLocale(me.id, locale).then(refreshMe).catch(() => undefined)
+      return
+    }
+    if (saved !== locale) setLocale(saved)
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- solo quando cambia il profilo
+  }, [me.id, me.locale])
   const { data: unread } = useQuery(['notifications', 'unread', me.id], () => fetchUnread(me.id))
 
   const memberMap = useMemo(() => {
@@ -142,9 +160,9 @@ function MemberApp({
           later('notifications', () => invalidate((k) => k[0] === 'notifications'))
           const n = payload.new
           if (!n || (n.event_id && live.current.pathname === `/eventi/${n.event_id}`)) return
-          const actor = (n.actor_id && live.current.memberMap.get(n.actor_id)?.display_name) || 'Qualcuno'
+          const actor = (n.actor_id && live.current.memberMap.get(n.actor_id)?.display_name) || msgs().notifications.someone
           const { action } = describeNotification(n.type, n.data ?? {})
-          toast(`${actor} ${action}`, n.event_id ? { label: 'Apri', onClick: () => router.push(`/eventi/${n.event_id}`) } : undefined)
+          toast(`${actor} ${action}`, n.event_id ? { label: msgs().nav.open, onClick: () => router.push(`/eventi/${n.event_id}`) } : undefined)
         },
       )
       .subscribe()
@@ -182,12 +200,13 @@ function MemberApp({
 function BottomNav() {
   const pathname = usePathname()
   const { me, unread } = useApp()
+  const { m } = useI18n()
   const profileActive = pathname.startsWith(`/u/${me.id}`) || pathname.startsWith('/profilo') || pathname.startsWith('/impostazioni')
   const items = [
-    { href: '/', label: 'Bacheca', icon: LuHouse, active: pathname === '/' || pathname === '/cerca' },
-    { href: '/calendario', label: 'Calendario', icon: LuCalendarDays, active: pathname.startsWith('/calendario') },
+    { href: '/', label: m.nav.board, icon: LuHouse, active: pathname === '/' || pathname === '/cerca' },
+    { href: '/calendario', label: m.nav.calendar, icon: LuCalendarDays, active: pathname.startsWith('/calendario') },
   ]
-  const itemsRight = [{ href: '/notifiche', label: 'Attività', icon: LuBell, active: pathname.startsWith('/notifiche') }]
+  const itemsRight = [{ href: '/notifiche', label: m.nav.activity, icon: LuBell, active: pathname.startsWith('/notifiche') }]
 
   const linkClass = (active: boolean) =>
     cn(
@@ -198,7 +217,7 @@ function BottomNav() {
   const activeMark = <span className="absolute top-0 h-[3px] w-6 rounded-b-full bg-going" aria-hidden />
 
   return (
-    <nav aria-label="Navigazione principale" className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg">
+    <nav aria-label={m.nav.main} className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg">
       <div className="mx-auto grid h-16 max-w-2xl grid-cols-5">
         {items.map(({ href, label, icon: Icon, active }) => (
           <Link key={href} href={href} className={linkClass(active)} aria-current={active ? 'page' : undefined}>
@@ -210,7 +229,7 @@ function BottomNav() {
         <div className="flex items-center justify-center">
           <Link
             href="/eventi/nuovo"
-            aria-label="Proponi un evento"
+            aria-label={m.nav.propose}
             className="press flex size-12 items-center justify-center rounded-[14px] bg-fg text-bg shadow-[0_6px_18px_var(--c-shadow)]"
           >
             <LuPlus className="size-6" strokeWidth={2.6} />
@@ -235,7 +254,7 @@ function BottomNav() {
           <span className={cn('rounded-full ring-2', profileActive ? 'ring-fg' : 'ring-transparent')}>
             <Avatar person={me} size={24} className="block" />
           </span>
-          Profilo
+          {m.nav.profile}
         </Link>
       </div>
     </nav>
@@ -243,6 +262,7 @@ function BottomNav() {
 }
 
 export function Splash({ failed, onRetry }: { failed?: boolean; onRetry?: () => void }) {
+  const { m } = useI18n()
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center gap-5 px-8 text-center">
       <svg viewBox="0 0 24 24" fill="none" className={cn('size-16 text-going', !failed && 'marker-draw')} aria-hidden>
@@ -251,9 +271,9 @@ export function Splash({ failed, onRetry }: { failed?: boolean; onRetry?: () => 
       <Wordmark className="text-[27px]" />
       {failed ? (
         <div>
-          <p className="text-[15px] text-muted">Non riesco a collegarmi. Controlla la connessione.</p>
+          <p className="text-[15px] text-muted">{m.nav.cantConnect}</p>
           <Button className="mt-4" variant="secondary" onClick={onRetry}>
-            Riprova
+            {m.common.retry}
           </Button>
         </div>
       ) : null}
@@ -262,13 +282,13 @@ export function Splash({ failed, onRetry }: { failed?: boolean; onRetry?: () => 
 }
 
 function SetupNeeded() {
+  const { m } = useI18n()
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-4 px-6">
       <Mark size={56} />
-      <h1 className="font-list text-[27px] font-extrabold">Manca un passaggio</h1>
+      <h1 className="font-list text-[27px] font-extrabold">{m.setup.title}</h1>
       <p className="text-[15px] text-muted">
-        L&apos;app non è ancora collegata al database. Inserisci le variabili <code>NEXT_PUBLIC_SUPABASE_URL</code> e{' '}
-        <code>NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY</code> nelle impostazioni del progetto su Vercel, poi pubblica di nuovo.
+        {m.setup.body} <code>NEXT_PUBLIC_SUPABASE_URL</code>, <code>NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY</code>
       </p>
     </div>
   )

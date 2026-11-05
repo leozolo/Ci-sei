@@ -1,5 +1,7 @@
 import webpush from 'web-push'
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { messagesFor } from '@/lib/i18n/core'
+import { DEFAULT_LOCALE, isLocale, type Locale } from '@/lib/i18n/locales'
 import { pushContent } from '@/lib/notifications'
 import type { NotificationRow } from '@/lib/types'
 
@@ -64,13 +66,14 @@ export async function dispatchPendingPush(admin: SupabaseClient, origin: string)
 
   const [subsRes, profilesRes, unreadRes] = await Promise.all([
     admin.from('push_subscriptions').select('id, user_id, endpoint, p256dh, auth').in('user_id', userIds),
-    admin.from('profiles').select('id, display_name, status').in('id', people),
+    admin.from('profiles').select('id, display_name, status, locale').in('id', people),
     admin.from('notifications').select('user_id').in('user_id', userIds).is('read_at', null).limit(5000),
   ])
   const subs = (subsRes.data ?? []) as SubscriptionRow[]
   if (subs.length === 0) return 0
-  const profiles = (profilesRes.data ?? []) as { id: string; display_name: string; status: string }[]
+  const profiles = (profilesRes.data ?? []) as { id: string; display_name: string; status: string; locale?: string | null }[]
   const names = new Map(profiles.map((p) => [p.id, p.display_name]))
+  const locales = new Map<string, Locale>(profiles.map((p) => [p.id, isLocale(p.locale) ? p.locale : DEFAULT_LOCALE]))
   const active = new Set(profiles.filter((p) => p.status === 'active').map((p) => p.id))
   const unread = new Map<string, number>()
   for (const row of (unreadRes.data ?? []) as { user_id: string }[]) unread.set(row.user_id, (unread.get(row.user_id) ?? 0) + 1)
@@ -85,8 +88,9 @@ export async function dispatchPendingPush(admin: SupabaseClient, origin: string)
       .filter((n) => active.has(n.user_id))
       .flatMap((n) =>
         (byUser.get(n.user_id) ?? []).map(async (s) => {
-          const actor = (n.actor_id && names.get(n.actor_id)) || 'Qualcuno'
-          const { title, body } = pushContent(n.type, n.data ?? {}, actor)
+          const locale = locales.get(n.user_id) ?? DEFAULT_LOCALE
+          const actor = (n.actor_id && names.get(n.actor_id)) || messagesFor(locale).notifications.someone
+          const { title, body } = pushContent(n.type, n.data ?? {}, actor, locale)
           const url = n.event_id
             ? `/eventi/${n.event_id}${n.type === 'new_comment' || n.type === 'comment_reply' ? '#commenti' : ''}`
             : '/notifiche'

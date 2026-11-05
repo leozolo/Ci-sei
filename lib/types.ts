@@ -11,6 +11,8 @@ export interface Profile {
   role: Role
   status: MemberStatus
   notify_prefs: Partial<Record<NotifyPrefKey, boolean>> | null
+  /** lingua dell'app: 'it' | 'en' | 'ru' */
+  locale?: string | null
   invited_by: string | null
   created_at: string
   updated_at?: string

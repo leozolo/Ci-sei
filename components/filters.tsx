@@ -5,10 +5,12 @@ import { LuChevronDown, LuMapPin } from 'react-icons/lu'
 import { inputClass } from '@/components/ui/field'
 import { Sheet } from '@/components/ui/sheet'
 import { CATEGORIES } from '@/lib/categories'
-import { ALL_CITIES } from '@/lib/city'
+import { ALL_CITIES, cityLabel } from '@/lib/city'
 import { cn } from '@/lib/cn'
 import { WHEN_LABELS, type WhenFilter } from '@/lib/events'
 import { dayHeading, parseDayKey, toDateInput } from '@/lib/format'
+import { msgs } from '@/lib/i18n/core'
+import { useI18n } from '@/lib/i18n/react'
 
 export function Chip({
   active,
@@ -39,21 +41,22 @@ export function Chip({
 
 export function whenLabel(value: WhenFilter): string {
   if (value.startsWith('day:')) return dayHeading(parseDayKey(value.slice(4)))
-  return WHEN_LABELS[value] ?? 'Sempre'
+  return WHEN_LABELS[value] ?? msgs().filters.when.all
 }
 
 /** Città: compare solo quando gli eventi sono in più di una città. */
 export function CityChips({ cities, city, onCity }: { cities: string[]; city: string; onCity: (c: string) => void }) {
+  const { m } = useI18n()
   if (cities.length < 2) return null
   return (
-    <div className="no-scrollbar relative -mx-4 flex gap-2 overflow-x-auto px-4 sm:flex-wrap sm:overflow-visible" role="group" aria-label="Città">
+    <div className="no-scrollbar relative -mx-4 flex gap-2 overflow-x-auto px-4 sm:flex-wrap sm:overflow-visible" role="group" aria-label={m.filters.city}>
       <Chip active={city === ALL_CITIES} onClick={() => onCity(ALL_CITIES)}>
         <LuMapPin className="size-4" aria-hidden />
-        Tutte le città
+        {m.filters.allCities}
       </Chip>
       {cities.map((c) => (
         <Chip key={c} active={city === c} onClick={() => onCity(c)}>
-          {c}
+          {cityLabel(c)}
         </Chip>
       ))}
     </div>
@@ -73,6 +76,7 @@ export function FilterBar({
   onCategory: (v: string | null) => void
 }) {
   const [open, setOpen] = useState(false)
+  const { m } = useI18n()
   const options: WhenFilter[] = ['all', 'today', 'tomorrow', 'weekend', 'week', 'month']
   const pickedDay = when.startsWith('day:') ? when.slice(4) : ''
 
@@ -80,12 +84,12 @@ export function FilterBar({
     <>
       <div className="no-scrollbar relative -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:flex-wrap sm:overflow-visible">
         <Chip active={when !== 'all'} onClick={() => setOpen(true)}>
-          {when === 'all' ? 'Quando' : whenLabel(when)}
+          {when === 'all' ? m.filters.whenButton : whenLabel(when)}
           <LuChevronDown className="size-4 opacity-70" aria-hidden />
         </Chip>
         <span className="my-1.5 w-px shrink-0 bg-line-strong sm:hidden" aria-hidden />
         <Chip active={!category} onClick={() => onCategory(null)}>
-          Tutti
+          {m.filters.allCategories}
         </Chip>
         {CATEGORIES.map((c) => {
           const Icon = c.icon
@@ -98,7 +102,7 @@ export function FilterBar({
         })}
       </div>
 
-      <Sheet open={open} onClose={() => setOpen(false)} title="Quando">
+      <Sheet open={open} onClose={() => setOpen(false)} title={m.filters.whenButton}>
         <div className="grid gap-1.5 pt-1">
           {options.map((o) => (
             <button
@@ -117,7 +121,7 @@ export function FilterBar({
             </button>
           ))}
           <label className="mt-2 block text-[14px] font-semibold" htmlFor="filtro-giorno">
-            Un giorno preciso
+            {m.filters.exactDay}
           </label>
           <input
             id="filtro-giorno"

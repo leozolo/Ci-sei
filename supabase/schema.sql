@@ -16,6 +16,7 @@ create table if not exists public.profiles (
   role          text not null default 'member' check (role in ('admin', 'member')),
   status        text not null default 'active' check (status in ('active', 'removed')),
   notify_prefs  jsonb not null default '{}'::jsonb,
+  locale        text not null default 'it' check (locale in ('it', 'en', 'ru')),
   invited_by    uuid,
   created_at    timestamptz not null default now(),
   updated_at    timestamptz not null default now()
@@ -56,6 +57,8 @@ create table if not exists public.events (
 );
 -- installazioni precedenti: aggiunge la città senza toccare i dati
 alter table public.events add column if not exists city text not null default 'Roma';
+-- lingua dell'app scelta da ogni membro (vale su ogni telefono e per le notifiche)
+alter table public.profiles add column if not exists locale text not null default 'it' check (locale in ('it', 'en', 'ru'));
 create index if not exists events_starts_at_idx      on public.events (starts_at);
 create index if not exists events_effective_end_idx  on public.events (effective_end);
 create index if not exists events_created_by_idx     on public.events (created_by);
@@ -207,6 +210,7 @@ declare
   v_meta    jsonb;
   v_name    text;
   v_avatar  text;
+  v_locale  text;
 begin
   if v_uid is null then
     raise exception 'not_authenticated' using errcode = '28000';
@@ -230,13 +234,14 @@ begin
   );
   v_name   := left(v_name, 40);
   v_avatar := coalesce(v_meta ->> 'avatar_url', v_meta ->> 'picture');
+  v_locale := case when v_meta ->> 'locale' in ('it', 'en', 'ru') then v_meta ->> 'locale' else 'it' end;
 
   -- evita che due persone diventino "primo amministratore" in contemporanea
   perform pg_advisory_xact_lock(hashtext('ci_sei_join_group'));
 
   if not exists (select 1 from public.profiles) then
-    insert into public.profiles (id, display_name, avatar_url, role)
-    values (v_uid, v_name, v_avatar, 'admin')
+    insert into public.profiles (id, display_name, avatar_url, role, locale)
+    values (v_uid, v_name, v_avatar, 'admin', v_locale)
     returning * into v_profile;
     return v_profile;
   end if;
@@ -255,8 +260,8 @@ begin
 
   update public.invites set uses = uses + 1 where id = v_invite.id;
 
-  insert into public.profiles (id, display_name, avatar_url, role, invited_by)
-  values (v_uid, v_name, v_avatar, 'member', v_invite.created_by)
+  insert into public.profiles (id, display_name, avatar_url, role, invited_by, locale)
+  values (v_uid, v_name, v_avatar, 'member', v_invite.created_by, v_locale)
   returning * into v_profile;
   return v_profile;
 end;

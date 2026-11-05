@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { LuX } from 'react-icons/lu'
 import { cn } from '@/lib/cn'
+import { msgs } from '@/lib/i18n/core'
 
 /** Pannello che sale dal basso (su computer: finestra centrata). */
 export function Sheet({
@@ -81,7 +82,7 @@ export function Sheet({
             <button
               type="button"
               onClick={onClose}
-              aria-label="Chiudi"
+              aria-label={msgs().common.close}
               className="press -mr-2 inline-flex size-9 items-center justify-center rounded-full text-muted hover:bg-elev-2"
             >
               <LuX className="size-5" />

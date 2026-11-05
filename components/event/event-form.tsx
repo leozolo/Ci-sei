@@ -14,6 +14,7 @@ import { normalizeCity } from '@/lib/city'
 import { DEFAULT_CITY } from '@/lib/config'
 import { cn } from '@/lib/cn'
 import { addDays, combineLocal, toDateInput, toTimeInput } from '@/lib/format'
+import { useI18n } from '@/lib/i18n/react'
 import { invalidate, isEventKey } from '@/lib/query'
 import type { EventInput, EventView, LinkPreview } from '@/lib/types'
 
@@ -54,6 +55,8 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
   const [city, setCity] = useState(event?.city ?? DEFAULT_CITY)
   const [description, setDescription] = useState(event?.description ?? '')
   const [alsoGoing, setAlsoGoing] = useState(true)
+  const { m } = useI18n()
+  const t = m.form
 
   // undefined = locandina invariata, null = rimossa, Blob = nuova
   const [image, setImage] = useState<Blob | null | undefined>(undefined)
@@ -79,7 +82,7 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
   const pickFile = (file: File | undefined) => {
     if (!file) return
     if (!file.type.startsWith('image/')) {
-      setErrors((e) => ({ ...e, image: 'Scegli un file immagine (JPG, PNG…).' }))
+      setErrors((e) => ({ ...e, image: t.errImageFile }))
       return
     }
     setErrors((e) => ({ ...e, image: undefined }))
@@ -89,7 +92,7 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
   const importFromLink = async (raw: string) => {
     const url = normalizeUrl(raw)
     if (!/^https?:\/\/\S+\.\S+/i.test(url)) {
-      setErrors((e) => ({ ...e, link: 'Incolla un link completo, per esempio https://dice.fm/…' }))
+      setErrors((e) => ({ ...e, link: t.errLinkPaste }))
       return
     }
     setLink(url)
@@ -146,10 +149,10 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
           // immagine non disponibile: nessun problema
         }
       }
-      if (filled > 0) toast('Ho compilato i campi dal link: controlla e completa.')
-      else toast('Da questo link non ho ricavato dettagli: compila tu i campi.')
+      if (filled > 0) toast(t.importFilled)
+      else toast(t.importEmpty)
     } catch {
-      toast.error('Non riesco a leggere quel link. Compila i campi a mano.')
+      toast.error(t.importFailed)
     } finally {
       setImporting(false)
     }
@@ -157,19 +160,19 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
 
   const validate = (): { input: EventInput } | null => {
     const next: Errors = {}
-    if (!title.trim()) next.title = 'Dai un titolo all’evento.'
-    if (!category) next.category = 'Scegli una categoria.'
+    if (!title.trim()) next.title = t.errTitle
+    if (!category) next.category = t.errCategory
     const startAt = combineLocal(date, time)
-    if (!startAt) next.date = 'Indica giorno e ora di inizio.'
+    if (!startAt) next.date = t.errDate
     let endAt: Date | null = null
     if (hasEnd && startAt) {
       endAt = combineLocal(endDate || date, endTime || '')
       // fine prima dell'inizio nello stesso giorno = finisce dopo mezzanotte
       if (endAt && endAt <= startAt && (!endDate || endDate === date)) endAt = addDays(endAt, 1)
-      if (!endAt || endAt <= startAt) next.end = 'La fine deve essere dopo l’inizio.'
+      if (!endAt || endAt <= startAt) next.end = t.errEnd
     }
     const url = normalizeUrl(link)
-    if (url && !/^https?:\/\/\S+\.\S+/i.test(url)) next.link = 'Il link deve essere completo (https://…).'
+    if (url && !/^https?:\/\/\S+\.\S+/i.test(url)) next.link = t.errLink
     setErrors(next)
     const firstError = Object.keys(next)[0]
     if (firstError) {
@@ -201,16 +204,16 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
       if (event) {
         await updateEvent(me.id, event, valid.input, image)
         invalidate(isEventKey)
-        toast.success('Modifiche salvate')
+        toast.success(t.savedToast)
         router.replace(`/eventi/${event.id}`)
       } else {
         const id = await createEvent(me.id, valid.input, image ?? null, alsoGoing)
         invalidate(isEventKey)
-        toast.success('Evento pubblicato')
+        toast.success(t.publishedToast)
         router.replace(`/eventi/${id}`)
       }
     } catch (err) {
-      toast.error(errorMessage(err, 'Non sono riuscito a salvare. Riprova.'))
+      toast.error(errorMessage(err, t.saveError))
       setSaving(false)
     }
   }
@@ -220,7 +223,7 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
       {/* Link con importazione automatica */}
       <div id="campo-link">
         <FieldLabel htmlFor="link" optional>
-          Link dell&apos;evento
+          {t.link}
         </FieldLabel>
         <div className="flex gap-2">
           <div className="relative flex-1">
@@ -231,7 +234,7 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
               inputMode="url"
               autoCapitalize="none"
               autoCorrect="off"
-              placeholder="Instagram, Dice, Eventbrite, sito…"
+              placeholder={t.linkPlaceholder}
               value={link}
               onChange={(e) => setLink(e.target.value)}
               onBlur={() => setLink((v) => normalizeUrl(v))}
@@ -253,19 +256,19 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
             disabled={!link.trim()}
             icon={<LuSparkles className="size-4" />}
           >
-            Compila
+            {t.fill}
           </Button>
         </div>
         {errors.link ? (
           <FieldHint error>{errors.link}</FieldHint>
         ) : (
-          <FieldHint>Incolla il link e compiliamo noi titolo, data, luogo e locandina quando possibile.</FieldHint>
+          <FieldHint>{t.linkHint}</FieldHint>
         )}
       </div>
 
       {/* Locandina */}
       <div id="campo-image">
-        <FieldLabel optional>Locandina</FieldLabel>
+        <FieldLabel optional>{t.poster}</FieldLabel>
         <input
           ref={fileInput}
           type="file"
@@ -279,16 +282,16 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
         {preview || hasExistingPoster ? (
           <div className="relative w-full max-w-[260px]">
             {preview ? (
-              <img src={preview} alt="Anteprima locandina" className="aspect-[4/5] w-full rounded-[12px] bg-elev-2 object-cover" />
+              <img src={preview} alt={t.posterPreview} className="aspect-[4/5] w-full rounded-[12px] bg-elev-2 object-cover" />
             ) : event ? (
               <Poster event={event} className="aspect-[4/5] w-full rounded-[12px]" />
             ) : null}
             <div className="absolute inset-x-3 bottom-3 flex gap-2">
               <Button size="sm" variant="primary" onClick={() => fileInput.current?.click()}>
-                Cambia
+                {t.change}
               </Button>
               <Button size="sm" variant="secondary" onClick={() => setImage(null)} icon={<LuX className="size-4" />}>
-                Rimuovi
+                {t.remove}
               </Button>
             </div>
           </div>
@@ -299,8 +302,8 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
             className="press flex aspect-[4/5] w-full max-w-[260px] flex-col items-center justify-center gap-2 rounded-[12px] border-2 border-dashed border-line-strong text-muted hover:border-fg/60 hover:text-fg"
           >
             <LuImagePlus className="size-8" />
-            <span className="text-[14px] font-semibold">Aggiungi la locandina</span>
-            <span className="text-[12px]">foto o screenshot</span>
+            <span className="text-[14px] font-semibold">{t.addPoster}</span>
+            <span className="text-[12px]">{t.posterHint}</span>
           </button>
         )}
         {errors.image ? <FieldHint error>{errors.image}</FieldHint> : null}
@@ -309,8 +312,8 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
       <div id="campo-title">
         <TextField
           id="titolo"
-          label="Titolo"
-          placeholder="Es. Techno all'alba al Brancaleone"
+          label={t.title}
+          placeholder={t.titlePlaceholder}
           value={title}
           maxLength={120}
           onChange={(e) => setTitle(e.target.value)}
@@ -320,7 +323,7 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
       </div>
 
       <div id="campo-category">
-        <FieldLabel>Categoria</FieldLabel>
+        <FieldLabel>{t.category}</FieldLabel>
         <div className="flex flex-wrap gap-2">
           {CATEGORIES.map((c) => (
             <button
@@ -342,18 +345,18 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
       </div>
 
       <div id="campo-date">
-        <FieldLabel>Quando</FieldLabel>
+        <FieldLabel>{t.when}</FieldLabel>
         <div className="grid grid-cols-[1.4fr_1fr] gap-2">
           <input
             type="date"
-            aria-label="Giorno"
+            aria-label={t.day}
             value={date}
             onChange={(e) => setDate(e.target.value)}
             className={cn(inputClass, 'h-12', errors.date && !date && 'border-no')}
           />
           <input
             type="time"
-            aria-label="Ora di inizio"
+            aria-label={t.startTime}
             value={time}
             onChange={(e) => setTime(e.target.value)}
             className={cn(inputClass, 'h-12')}
@@ -365,7 +368,7 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
           {hasEnd ? (
             <div className="rounded-[14px] border border-line bg-elev p-3">
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-[14px] font-semibold">Fine</span>
+                <span className="text-[14px] font-semibold">{t.end}</span>
                 <button
                   type="button"
                   onClick={() => {
@@ -374,13 +377,13 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
                   }}
                   className="text-[13px] text-muted underline-offset-4 hover:underline"
                 >
-                  Togli
+                  {t.removeEnd}
                 </button>
               </div>
               <div className="grid grid-cols-[1.4fr_1fr] gap-2">
                 <input
                   type="date"
-                  aria-label="Giorno di fine"
+                  aria-label={t.endDay}
                   value={endDate}
                   min={date || undefined}
                   onChange={(e) => setEndDate(e.target.value)}
@@ -388,13 +391,13 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
                 />
                 <input
                   type="time"
-                  aria-label="Ora di fine"
+                  aria-label={t.endTime}
                   value={endTime}
                   onChange={(e) => setEndTime(e.target.value)}
                   className={cn(inputClass, 'h-12')}
                 />
               </div>
-              <FieldHint>Se finisce dopo mezzanotte basta l&apos;ora: la data la capiamo noi.</FieldHint>
+              <FieldHint>{t.endHint}</FieldHint>
             </div>
           ) : (
             <button
@@ -405,7 +408,7 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
               }}
               className="text-[14px] font-semibold text-muted underline-offset-4 hover:text-fg hover:underline"
             >
-              + Aggiungi orario di fine (o più giorni)
+              {t.addEnd}
             </button>
           )}
           {errors.end ? <FieldHint error>{errors.end}</FieldHint> : null}
@@ -415,38 +418,38 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
       <div className="space-y-3">
         <TextField
           id="luogo"
-          label="Dove"
+          label={t.where}
           optional
-          placeholder="Nome del locale"
+          placeholder={t.venuePlaceholder}
           value={locationName}
           maxLength={200}
           onChange={(e) => setLocationName(e.target.value)}
         />
         <TextField
           id="indirizzo"
-          aria-label="Indirizzo"
-          placeholder="Indirizzo (via e numero)"
+          aria-label={t.address}
+          placeholder={t.addressPlaceholder}
           value={address}
           maxLength={300}
           onChange={(e) => setAddress(e.target.value)}
         />
         <TextField
           id="citta"
-          label="Città"
+          label={t.city}
           value={city}
           maxLength={60}
           autoCapitalize="words"
           onChange={(e) => setCity(e.target.value)}
           onBlur={() => setCity((v) => normalizeCity(v))}
-          hint="Per gli eventi fuori città: scrivi un'altra città e comparirà il filtro per città in bacheca."
+          hint={t.cityHint}
         />
       </div>
 
       <TextArea
         id="descrizione"
-        label="Descrizione"
+        label={t.description}
         optional
-        placeholder="Line-up, prezzo, dress code, cosa sapere…"
+        placeholder={t.descriptionPlaceholder}
         value={description}
         maxLength={4000}
         rows={4}
@@ -455,12 +458,12 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
 
       {!editing ? (
         <div className="rounded-[14px] border border-line bg-elev px-4">
-          <Switch checked={alsoGoing} onChange={setAlsoGoing} label="Mettimi in lista" description="Segna subito la tua presenza." />
+          <Switch checked={alsoGoing} onChange={setAlsoGoing} label={m.rsvp.putMe} description={t.alsoGoingHint} />
         </div>
       ) : null}
 
       <Button type="submit" size="lg" className="w-full" loading={saving}>
-        {editing ? 'Salva modifiche' : 'Pubblica'}
+        {editing ? t.saveChanges : t.publish}
       </Button>
     </form>
   )

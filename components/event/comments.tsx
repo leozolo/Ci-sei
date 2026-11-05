@@ -9,11 +9,11 @@ import { confirmDialog, toast } from '@/components/ui/feedback'
 import { addComment, deleteComment, errorMessage } from '@/lib/actions'
 import { cn } from '@/lib/cn'
 import { relativeTime } from '@/lib/format'
+import { useI18n } from '@/lib/i18n/react'
 import { invalidate, isEventKey, updateCache, useQuery } from '@/lib/query'
 import { sb } from '@/lib/supabase/client'
 import type { CommentRow } from '@/lib/types'
 
-const SUGGESTIONS = ['Chi va in macchina?', 'Ci vediamo prima per un drink?', 'Qualcuno ha già i biglietti?']
 
 async function fetchComments(eventId: string): Promise<CommentRow[]> {
   const { data, error } = await sb()
@@ -47,6 +47,7 @@ export function Linkify({ text }: { text: string }) {
 
 export function Comments({ eventId }: { eventId: string }) {
   const { me, memberMap } = useApp()
+  const { m } = useI18n()
   const key = ['comments', eventId] as const
   const { data: comments, isLoading } = useQuery(key, () => fetchComments(eventId))
   const [text, setText] = useState('')
@@ -97,7 +98,7 @@ export function Comments({ eventId }: { eventId: string }) {
     } catch (err) {
       updateCache<CommentRow[]>(isThisKey, (list) => list.filter((c) => c.id !== temp.id))
       setText(body)
-      toast.error(errorMessage(err, 'Messaggio non inviato. Riprova.'))
+      toast.error(errorMessage(err, m.comments.sendError))
     } finally {
       setSending(false)
       invalidate(isThisKey)
@@ -106,7 +107,7 @@ export function Comments({ eventId }: { eventId: string }) {
   }
 
   const remove = async (c: CommentRow) => {
-    const ok = await confirmDialog({ title: 'Eliminare il messaggio?', confirmLabel: 'Elimina', destructive: true })
+    const ok = await confirmDialog({ title: m.comments.deleteTitle, confirmLabel: m.common.delete, destructive: true })
     if (!ok) return
     updateCache<CommentRow[]>(isThisKey, (list) => list.filter((x) => x.id !== c.id && x.parent_id !== c.id))
     try {
@@ -122,7 +123,7 @@ export function Comments({ eventId }: { eventId: string }) {
   const canDelete = (c: CommentRow) => c.user_id === me.id || me.role === 'admin'
 
   const renderComment = (c: CommentRow, nested: boolean) => {
-    const name = memberMap.get(c.user_id)?.display_name ?? 'Ex membro'
+    const name = memberMap.get(c.user_id)?.display_name ?? m.common.exMember
     const pending = c.id.startsWith('tmp-')
     return (
       <li key={c.id} className={cn('flex gap-2.5', nested && 'ml-11 mt-3', pending && 'opacity-60')}>
@@ -137,15 +138,15 @@ export function Comments({ eventId }: { eventId: string }) {
             </p>
           </div>
           <div className="mt-1 flex items-center gap-4 px-2 text-[12px] text-muted">
-            <span>{pending ? 'invio…' : relativeTime(c.created_at)}</span>
+            <span>{pending ? m.comments.sending : relativeTime(c.created_at)}</span>
             {!pending ? (
               <button type="button" onClick={() => reply(c)} className="font-semibold hover:text-fg">
-                Rispondi
+                {m.comments.reply}
               </button>
             ) : null}
             {!pending && canDelete(c) ? (
               <button type="button" onClick={() => void remove(c)} className="hover:text-no">
-                Elimina
+                {m.common.delete}
               </button>
             ) : null}
           </div>
@@ -157,9 +158,10 @@ export function Comments({ eventId }: { eventId: string }) {
   return (
     <section id="commenti" className="scroll-mt-20" aria-labelledby="commenti-titolo">
       <h2 id="commenti-titolo" className="font-list text-[23px] font-extrabold leading-none">
-        Messaggi{comments && comments.length ? <span className="ml-2 text-muted">{comments.length}</span> : null}
+        {m.comments.title}
+        {comments && comments.length ? <span className="ml-2 text-muted">{comments.length}</span> : null}
       </h2>
-      <p className="mt-1 text-[13px] text-muted">Per organizzarvi: passaggi, orari, biglietti, domande.</p>
+      <p className="mt-1 text-[13px] text-muted">{m.comments.subtitle}</p>
 
       {isLoading ? (
         <div className="mt-4 space-y-3" aria-hidden>
@@ -181,9 +183,9 @@ export function Comments({ eventId }: { eventId: string }) {
         {replyTo ? (
           <div className="flex items-center justify-between gap-2 px-3 pb-1 pt-1.5 text-[13px] text-muted">
             <span className="truncate">
-              Rispondi a <b className="text-fg">{memberMap.get(replyTo.user_id)?.display_name ?? 'Ex membro'}</b>
+              {m.comments.replyingTo} <b className="text-fg">{memberMap.get(replyTo.user_id)?.display_name ?? m.common.exMember}</b>
             </span>
-            <button type="button" aria-label="Annulla risposta" onClick={() => setReplyTo(null)} className="p-1">
+            <button type="button" aria-label={m.comments.cancelReply} onClick={() => setReplyTo(null)} className="p-1">
               <LuX className="size-4" />
             </button>
           </div>
@@ -200,16 +202,16 @@ export function Comments({ eventId }: { eventId: string }) {
             onKeyDown={(e) => {
               if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) void send()
             }}
-            placeholder={replyTo ? 'Scrivi una risposta…' : 'Scrivi un messaggio…'}
+            placeholder={replyTo ? m.comments.replyPlaceholder : m.comments.placeholder}
             maxLength={2000}
-            aria-label="Messaggio"
+            aria-label={m.comments.inputLabel}
             className="max-h-40 min-h-11 flex-1 resize-none bg-transparent px-3 py-2.5 text-[16px] leading-snug outline-none placeholder:text-faint"
           />
           <button
             type="button"
             onClick={() => void send()}
             disabled={!text.trim() || sending}
-            aria-label="Invia"
+            aria-label={m.comments.send}
             className="press mb-0.5 mr-0.5 inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-fg text-bg disabled:opacity-30"
           >
             <LuArrowUp className="size-5" strokeWidth={2.6} />
@@ -219,7 +221,7 @@ export function Comments({ eventId }: { eventId: string }) {
 
       {!text && !replyTo ? (
         <div className="no-scrollbar relative -mx-4 mt-2.5 flex gap-2 overflow-x-auto px-4 sm:flex-wrap sm:overflow-visible">
-          {SUGGESTIONS.map((s) => (
+          {m.comments.suggestions.map((s) => (
             <button
               key={s}
               type="button"

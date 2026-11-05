@@ -20,6 +20,8 @@ import { deleteEvent, errorMessage, setCancelled, setLiked, setSaved } from '@/l
 import { googleCalendarUrl } from '@/lib/calendar'
 import { cn } from '@/lib/cn'
 import { patchEvent, withLike, withSaved } from '@/lib/events'
+import { plural } from '@/lib/i18n/core'
+import { useI18n } from '@/lib/i18n/react'
 import { invalidate, isEventKey } from '@/lib/query'
 import { eventLink, nativeShare, shareText, whatsappUrl } from '@/lib/share'
 import type { EventView } from '@/lib/types'
@@ -59,6 +61,7 @@ function ActionButton({
 export function EventActions({ event }: { event: EventView }) {
   const me = useMe()
   const router = useRouter()
+  const { m, locale } = useI18n()
   const [calendarOpen, setCalendarOpen] = useState(false)
 
   const toggleLike = async () => {
@@ -78,7 +81,7 @@ export function EventActions({ event }: { event: EventView }) {
     patchEvent(event.id, (e) => withSaved(e, me.id, next))
     try {
       await setSaved(event.id, me.id, next)
-      if (next) toast('Salvato tra i preferiti', { label: 'Vedi', onClick: () => router.push(`/u/${me.id}?tab=salvati`) })
+      if (next) toast(m.actions.savedToast, { label: m.actions.savedSee, onClick: () => router.push(`/u/${me.id}?tab=salvati`) })
     } catch (err) {
       toast.error(errorMessage(err))
     } finally {
@@ -91,9 +94,9 @@ export function EventActions({ event }: { event: EventView }) {
     if (done) return
     try {
       await navigator.clipboard.writeText(eventLink(event.id))
-      toast.success('Link copiato')
+      toast.success(m.actions.linkCopied)
     } catch {
-      toast.error('Copia non riuscita')
+      toast.error(m.actions.copyFailed)
     }
   }
 
@@ -102,37 +105,37 @@ export function EventActions({ event }: { event: EventView }) {
   return (
     <>
       <div className="flex border-y border-line py-1">
-        <ActionButton label="Mi piace" onClick={toggleLike} active={event.liked}>
+        <ActionButton label={m.actions.like} onClick={toggleLike} active={event.liked}>
           <LuHeart className={cn('size-[22px]', event.liked && 'fill-current')} strokeWidth={1.8} />
-          {event.likeCount > 0 ? `${event.likeCount} mi piace` : 'Mi piace'}
+          {event.likeCount > 0 ? plural(m.actions.likes, event.likeCount) : m.actions.like}
         </ActionButton>
-        <ActionButton label={event.saved ? 'Salvato' : 'Salva'} onClick={toggleSave} active={event.saved}>
+        <ActionButton label={event.saved ? m.actions.saved : m.actions.save} onClick={toggleSave} active={event.saved}>
           <LuBookmark className={cn('size-[22px]', event.saved && 'fill-current')} strokeWidth={1.8} />
-          {event.saved ? 'Salvato' : 'Salva'}
+          {event.saved ? m.actions.saved : m.actions.save}
         </ActionButton>
-        <ActionButton label="Condividi su WhatsApp" href={link ? whatsappUrl(shareText(event)) : undefined}>
+        <ActionButton label={m.actions.whatsappAria} href={link ? whatsappUrl(shareText(event)) : undefined}>
           <LuMessageCircle className="size-[22px]" strokeWidth={1.8} />
           WhatsApp
         </ActionButton>
-        <ActionButton label="Aggiungi al calendario" onClick={() => setCalendarOpen(true)}>
+        <ActionButton label={m.actions.calendarAria} onClick={() => setCalendarOpen(true)}>
           <LuCalendarPlus className="size-[22px]" strokeWidth={1.8} />
-          Calendario
+          {m.actions.calendar}
         </ActionButton>
-        <ActionButton label="Condividi" onClick={() => void share()}>
+        <ActionButton label={m.actions.share} onClick={() => void share()}>
           <LuShare2 className="size-[22px]" strokeWidth={1.8} />
-          Condividi
+          {m.actions.share}
         </ActionButton>
       </div>
 
-      <Sheet open={calendarOpen} onClose={() => setCalendarOpen(false)} title="Aggiungi al tuo calendario">
+      <Sheet open={calendarOpen} onClose={() => setCalendarOpen(false)} title={m.actions.calendarTitle}>
         <div className="grid gap-2 pt-1">
           <a
-            href={`/api/eventi/${event.id}/ics`}
+            href={`/api/eventi/${event.id}/ics?lang=${locale}`}
             className="press flex items-center justify-between rounded-[12px] border border-line-strong px-4 py-3.5 font-semibold"
             onClick={() => setCalendarOpen(false)}
           >
             iPhone, Mac, Outlook
-            <span className="text-[13px] font-normal text-muted">file .ics</span>
+            <span className="text-[13px] font-normal text-muted">{m.actions.icsFile}</span>
           </a>
           <a
             href={link ? googleCalendarUrl(event, link) : '#'}
@@ -142,9 +145,9 @@ export function EventActions({ event }: { event: EventView }) {
             onClick={() => setCalendarOpen(false)}
           >
             Google Calendar
-            <span className="text-[13px] font-normal text-muted">si apre nel browser</span>
+            <span className="text-[13px] font-normal text-muted">{m.actions.opensInBrowser}</span>
           </a>
-          <p className="px-1 pt-1 text-[13px] text-muted">Con il file .ics ricevi anche un promemoria 2 ore prima.</p>
+          <p className="px-1 pt-1 text-[13px] text-muted">{m.actions.icsReminder}</p>
         </div>
       </Sheet>
     </>
@@ -154,6 +157,7 @@ export function EventActions({ event }: { event: EventView }) {
 /** Menu per chi ha proposto l'evento (o per un amministratore). */
 export function OwnerMenu({ event, open, onClose }: { event: EventView; open: boolean; onClose: () => void }) {
   const router = useRouter()
+  const { m } = useI18n()
   const [busy, setBusy] = useState(false)
 
   const toggleCancelled = async () => {
@@ -161,19 +165,19 @@ export function OwnerMenu({ event, open, onClose }: { event: EventView; open: bo
     const ok = await confirmDialog(
       next
         ? {
-            title: 'Annullare l’evento?',
-            message: 'Resta visibile come «Annullato» e avvisiamo chi partecipa.',
-            confirmLabel: 'Annulla evento',
-            cancelLabel: 'Indietro',
+            title: m.owner.cancelTitle,
+            message: m.owner.cancelMessage,
+            confirmLabel: m.owner.cancelEvent,
+            cancelLabel: m.common.back,
             destructive: true,
           }
-        : { title: 'Rimettere in programma?', message: 'Avvisiamo chi aveva risposto.', confirmLabel: 'Rimetti in programma' },
+        : { title: m.owner.restoreTitle, message: m.owner.restoreMessage, confirmLabel: m.owner.restore },
     )
     if (!ok) return
     setBusy(true)
     try {
       await setCancelled(event.id, next)
-      toast.success(next ? 'Evento annullato' : 'Evento di nuovo in programma')
+      toast.success(next ? m.owner.cancelledToast : m.owner.restoredToast)
       onClose()
     } catch (err) {
       toast.error(errorMessage(err))
@@ -185,17 +189,17 @@ export function OwnerMenu({ event, open, onClose }: { event: EventView; open: bo
 
   const remove = async () => {
     const ok = await confirmDialog({
-      title: 'Eliminare l’evento?',
-      message: 'Spariscono anche partecipazioni e messaggi. Non si può annullare.',
-      confirmLabel: 'Elimina',
-      cancelLabel: 'Indietro',
+      title: m.owner.deleteTitle,
+      message: m.owner.deleteMessage,
+      confirmLabel: m.common.delete,
+      cancelLabel: m.common.back,
       destructive: true,
     })
     if (!ok) return
     setBusy(true)
     try {
       await deleteEvent(event)
-      toast.success('Evento eliminato')
+      toast.success(m.owner.deletedToast)
       invalidate(isEventKey)
       router.replace('/')
     } catch (err) {
@@ -207,17 +211,17 @@ export function OwnerMenu({ event, open, onClose }: { event: EventView; open: bo
   const item = 'press flex w-full items-center gap-3 rounded-[12px] border border-line-strong px-4 py-3.5 text-left font-semibold disabled:opacity-50'
 
   return (
-    <Sheet open={open} onClose={onClose} title="Gestisci evento">
+    <Sheet open={open} onClose={onClose} title={m.owner.title}>
       <div className="grid gap-2 pt-1">
         <button type="button" className={item} disabled={busy} onClick={() => router.push(`/eventi/${event.id}/modifica`)}>
-          <LuPencil className="size-5" /> Modifica
+          <LuPencil className="size-5" /> {m.common.edit}
         </button>
         <button type="button" className={item} disabled={busy} onClick={() => void toggleCancelled()}>
           {event.is_cancelled ? <LuUndo2 className="size-5" /> : <LuBan className="size-5" />}
-          {event.is_cancelled ? 'Rimetti in programma' : 'Annulla evento'}
+          {event.is_cancelled ? m.owner.restore : m.owner.cancelEvent}
         </button>
         <button type="button" className={cn(item, 'text-no')} disabled={busy} onClick={() => void remove()}>
-          <LuTrash2 className="size-5" /> Elimina
+          <LuTrash2 className="size-5" /> {m.common.delete}
         </button>
       </div>
     </Sheet>

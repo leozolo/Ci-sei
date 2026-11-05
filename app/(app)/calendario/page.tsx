@@ -11,11 +11,11 @@ import { IconButton, buttonClass } from '@/components/ui/button'
 import { useCityFilter } from '@/lib/city'
 import { cn } from '@/lib/cn'
 import { fetchRange } from '@/lib/events'
-import { addDays, dayHeading, dayKey, isSameDay, monthTitle, startOfDay } from '@/lib/format'
+import { addDays, dayHeading, dayKey, isSameDay, monthTitle, startOfDay, weekdayInitials } from '@/lib/format'
+import { fmt, plural } from '@/lib/i18n/core'
+import { useI18n } from '@/lib/i18n/react'
 import { useQuery } from '@/lib/query'
 import type { EventView } from '@/lib/types'
-
-const WEEKDAYS = ['L', 'M', 'M', 'G', 'V', 'S', 'D']
 
 function gridStart(month: Date): Date {
   const first = new Date(month.getFullYear(), month.getMonth(), 1)
@@ -25,6 +25,7 @@ function gridStart(month: Date): Date {
 
 export default function CalendarPage() {
   const { me } = useApp()
+  const { m } = useI18n()
   const today = startOfDay(new Date())
   const [month, setMonth] = useState(() => new Date(today.getFullYear(), today.getMonth(), 1))
   const [selected, setSelected] = useState(today)
@@ -68,15 +69,15 @@ export default function CalendarPage() {
   }, [events, selected])
 
   const days = Array.from({ length: 42 }, (_, i) => addDays(from, i))
-  const moveMonth = (delta: number) => setMonth((m) => new Date(m.getFullYear(), m.getMonth() + delta, 1))
+  const moveMonth = (delta: number) => setMonth((cur) => new Date(cur.getFullYear(), cur.getMonth() + delta, 1))
 
   return (
     <main>
       <PageHeader
-        title="Calendario"
+        title={m.nav.calendar}
         actions={
           <Chip active={onlyMine} onClick={() => setOnlyMine((v) => !v)} className="mr-1 h-8 text-[13px]">
-            Solo i miei
+            {m.calendar.onlyMine}
           </Chip>
         }
       />
@@ -87,7 +88,7 @@ export default function CalendarPage() {
         <div className="flex items-center justify-between">
           <h2 className="font-list text-[23px] font-extrabold leading-none">{monthTitle(month)}</h2>
           <div className="flex items-center gap-1">
-            <IconButton label="Mese precedente" onClick={() => moveMonth(-1)}>
+            <IconButton label={m.calendar.prevMonth} onClick={() => moveMonth(-1)}>
               <LuChevronLeft className="size-5" />
             </IconButton>
             <button
@@ -98,16 +99,16 @@ export default function CalendarPage() {
               }}
               className="press rounded-full px-3 py-1.5 text-[13px] font-semibold hover:bg-elev-2"
             >
-              Oggi
+              {m.dates.today}
             </button>
-            <IconButton label="Mese successivo" onClick={() => moveMonth(1)}>
+            <IconButton label={m.calendar.nextMonth} onClick={() => moveMonth(1)}>
               <LuChevronRight className="size-5" />
             </IconButton>
           </div>
         </div>
 
         <div className="mt-3 grid grid-cols-7 text-center text-[12px] font-semibold text-faint" aria-hidden>
-          {WEEKDAYS.map((d, i) => (
+          {weekdayInitials().map((d, i) => (
             <span key={i} className="py-1">
               {d}
             </span>
@@ -126,7 +127,7 @@ export default function CalendarPage() {
                 type="button"
                 role="gridcell"
                 aria-selected={isSelected}
-                aria-label={`${dayHeading(d)}${list.length ? `, ${list.length} eventi` : ''}`}
+                aria-label={list.length ? `${dayHeading(d)}, ${plural(m.calendar.events, list.length)}` : dayHeading(d)}
                 onClick={() => {
                   setSelected(d)
                   if (!inMonth) setMonth(new Date(d.getFullYear(), d.getMonth(), 1))
@@ -158,9 +159,9 @@ export default function CalendarPage() {
             <Link
               href={`/eventi/nuovo?data=${dayKey(selected)}`}
               className={buttonClass('secondary', 'sm')}
-              aria-label={`Proponi un evento per ${dayHeading(selected)}`}
+              aria-label={fmt(m.calendar.proposeFor, { day: dayHeading(selected) })}
             >
-              <LuPlus className="size-4" /> Proponi
+              <LuPlus className="size-4" /> {m.calendar.propose}
             </Link>
           </div>
           <div className="mt-3">
@@ -173,8 +174,8 @@ export default function CalendarPage() {
                 ))}
               </div>
             ) : (
-              <EmptyState title="Niente in programma">
-                {selected < today ? 'Nessun evento quel giorno.' : 'Libero! Se hai un’idea, proponila al gruppo.'}
+              <EmptyState title={m.calendar.emptyTitle}>
+                {selected < today ? m.calendar.emptyPast : m.calendar.emptyFuture}
               </EmptyState>
             )}
           </div>

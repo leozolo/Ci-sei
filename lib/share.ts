@@ -1,4 +1,5 @@
 import { whenLong } from '@/lib/format'
+import { fmt, msgs } from '@/lib/i18n/core'
 import type { EventRow } from '@/lib/types'
 
 type ShareEvent = Pick<EventRow, 'id' | 'title' | 'starts_at' | 'ends_at' | 'location_name' | 'address'>
@@ -13,7 +14,7 @@ export function placeText(e: Pick<EventRow, 'location_name' | 'address'>): strin
 
 export function shareText(e: ShareEvent): string {
   const place = placeText(e)
-  return [`*${e.title}*`, `📅 ${whenLong(e)}`, place ? `📍 ${place}` : '', `Ci sei? Mettiti in lista 👉 ${eventLink(e.id)}`]
+  return [`*${e.title}*`, `📅 ${whenLong(e)}`, place ? `📍 ${place}` : '', fmt(msgs().share.cta, { link: eventLink(e.id) })]
     .filter(Boolean)
     .join('\n')
 }

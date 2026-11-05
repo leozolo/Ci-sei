@@ -12,6 +12,7 @@ import { markAllRead } from '@/lib/actions'
 import { cn } from '@/lib/cn'
 import { relativeTime } from '@/lib/format'
 import { describeNotification } from '@/lib/notifications'
+import { useI18n } from '@/lib/i18n/react'
 import { invalidate, useQuery } from '@/lib/query'
 import { sb } from '@/lib/supabase/client'
 import type { NotificationRow } from '@/lib/types'
@@ -29,6 +30,7 @@ async function fetchNotifications(meId: string): Promise<NotificationRow[]> {
 
 export default function NotificationsPage() {
   const { me, memberMap } = useApp()
+  const { m } = useI18n()
   const { data, isLoading } = useQuery(['notifications', 'list', me.id], () => fetchNotifications(me.id))
   const [freshIds, setFreshIds] = useState<Set<number>>(new Set())
   const marked = useRef(false)
@@ -50,7 +52,7 @@ export default function NotificationsPage() {
 
   return (
     <main>
-      <PageHeader title="Attività" />
+      <PageHeader title={m.nav.activity} />
       <PageBody>
         <div className="rounded-[16px] border border-line bg-elev px-4">
           <PushToggle />
@@ -60,13 +62,13 @@ export default function NotificationsPage() {
           {isLoading ? (
             <ListSkeleton rows={4} />
           ) : !data || data.length === 0 ? (
-            <EmptyState title="Ancora nessuna attività" icon={<LuBell className="size-8" />}>
-              Qui trovi nuovi eventi, messaggi, cambi di programma e amici che partecipano.
+            <EmptyState title={m.activity.emptyTitle} icon={<LuBell className="size-8" />}>
+              {m.activity.emptyBody}
             </EmptyState>
           ) : (
             <ul className="space-y-1">
               {data.map((n) => {
-                const actor = n.actor_id ? memberMap.get(n.actor_id)?.display_name ?? 'Ex membro' : 'Qualcuno'
+                const actor = n.actor_id ? memberMap.get(n.actor_id)?.display_name ?? m.common.exMember : m.notifications.someone
                 const { action, quote } = describeNotification(n.type, n.data ?? {})
                 const href = n.event_id
                   ? `/eventi/${n.event_id}${n.type === 'new_comment' || n.type === 'comment_reply' ? '#commenti' : ''}`
@@ -77,7 +79,7 @@ export default function NotificationsPage() {
                     <Link href={href} className={cn('press -mx-2 flex gap-3 rounded-[20px] p-2.5', fresh ? 'bg-elev' : 'hover:bg-elev')}>
                       <span className="relative shrink-0">
                         <Avatar id={n.actor_id} size={42} />
-                        {fresh ? <span className="absolute -left-0.5 -top-0.5 size-3 rounded-full bg-going ring-2 ring-bg" aria-label="Nuova" /> : null}
+                        {fresh ? <span className="absolute -left-0.5 -top-0.5 size-3 rounded-full bg-going ring-2 ring-bg" aria-label={m.activity.fresh} /> : null}
                       </span>
                       <span className="min-w-0 flex-1 text-[14px] leading-snug">
                         <span className="font-semibold">{actor}</span> {action}

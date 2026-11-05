@@ -1,3 +1,4 @@
+import { msgs } from '@/lib/i18n/core'
 import { sb } from '@/lib/supabase/client'
 
 /**
@@ -157,8 +158,8 @@ function randomId() {
 export async function uploadImage(bucket: Bucket, userId: string, file: Blob, maxSide: number): Promise<string> {
   const blob = await compressImage(file, maxSide)
   const ext = EXT[blob.type]
-  if (!ext) throw new Error('Formato non supportato: scegli una foto JPG, PNG o WebP.')
-  if (blob.size > 10 * 1024 * 1024) throw new Error('Immagine troppo pesante (massimo 10 MB).')
+  if (!ext) throw new Error(msgs().errors.imageFormat)
+  if (blob.size > 10 * 1024 * 1024) throw new Error(msgs().errors.imageTooBig)
   const path = `${userId}/${randomId()}.${ext}`
   const { error } = await sb()
     .storage.from(bucket)
