@@ -1,10 +1,10 @@
-/* Ci sei? — service worker: installazione come app, notifiche push, pagina offline. */
+/* Club dei clubbers — service worker: installazione come app, notifiche push, pagina offline. */
 
-const CACHE = 'ci-sei-v1'
+const CACHE = 'clubbers-v2'
 const STATIC = ['/icons/icon-192.png', '/icons/badge-96.png']
 const DEV = self.location.hostname === 'localhost' || self.location.hostname === '127.0.0.1'
 
-const OFFLINE_HTML = `<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Offline</title><style>html,body{margin:0;height:100%;background:#000;color:#f4f3ef;font:16px/1.45 system-ui,-apple-system,sans-serif}main{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center}h1{font-size:20px;margin:0}p{margin:0;color:#a8a7ad;max-width:300px}button{margin-top:12px;border:0;border-radius:16px;background:#f4f3ef;color:#000;font:600 15px system-ui;padding:12px 20px}</style></head><body><main><h1>Sei offline</h1><p>Appena torna la connessione vedrai gli eventi aggiornati.</p><button onclick="location.reload()">Riprova</button></main></body></html>`
+const OFFLINE_HTML = `<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Offline</title><style>html,body{margin:0;height:100%;background:#0b1130;color:#f3f1ec;font:16px/1.45 system-ui,-apple-system,sans-serif}main{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center}h1{font-size:20px;margin:0}p{margin:0;color:#aab3d6;max-width:300px}button{margin-top:12px;border:0;border-radius:14px;background:#f3f1ec;color:#0b1130;font:600 15px system-ui;padding:12px 20px}</style></head><body><main><h1>Sei offline</h1><p>Appena torna la connessione vedrai gli eventi aggiornati.</p><button onclick="location.reload()">Riprova</button></main></body></html>`
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -60,7 +60,7 @@ self.addEventListener('push', (event) => {
   } catch {
     data = { body: event.data ? event.data.text() : '' }
   }
-  const title = data.title || 'Ci sei?'
+  const title = data.title || 'Club dei clubbers'
   const options = {
     body: data.body || '',
     icon: '/icons/icon-192.png',

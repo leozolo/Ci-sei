@@ -85,7 +85,7 @@ export function InstallHint() {
   }
 
   return (
-    <div className="relative flex items-start gap-3 rounded-[20px] border border-line bg-elev p-4 pr-11">
+    <div className="relative flex items-start gap-3 rounded-[16px] border border-line bg-elev p-4 pr-11">
       <LuSmartphone className="mt-0.5 size-5 shrink-0 text-muted" />
       <div className="min-w-0 text-[14px]">
         <p className="font-semibold">Mettila sulla schermata Home</p>

@@ -38,8 +38,8 @@ function ActionButton({
   href?: string
 }) {
   const cls = cn(
-    'press flex min-w-0 flex-1 flex-col items-center justify-center gap-1.5 rounded-[18px] px-0.5 py-3 text-[11.5px] font-semibold',
-    active ? 'bg-invert text-invert-fg' : 'bg-elev text-fg hover:bg-elev-2',
+    'press flex min-w-0 flex-1 flex-col items-center justify-center gap-1.5 rounded-[12px] px-0.5 py-2.5 text-[12px] font-semibold hover:bg-elev',
+    active ? 'text-fg' : 'text-muted hover:text-fg',
   )
   if (href) {
     return (
@@ -101,25 +101,25 @@ export function EventActions({ event }: { event: EventView }) {
 
   return (
     <>
-      <div className="flex gap-2">
+      <div className="flex border-y border-line py-1">
         <ActionButton label="Mi piace" onClick={toggleLike} active={event.liked}>
-          <LuHeart key={String(event.liked)} className={cn('size-5', event.liked && 'animate-pop fill-current')} />
-          {event.likeCount > 0 ? event.likeCount : 'Mi piace'}
+          <LuHeart className={cn('size-[22px]', event.liked && 'fill-current')} strokeWidth={1.8} />
+          {event.likeCount > 0 ? `${event.likeCount} mi piace` : 'Mi piace'}
         </ActionButton>
         <ActionButton label={event.saved ? 'Salvato' : 'Salva'} onClick={toggleSave} active={event.saved}>
-          <LuBookmark className={cn('size-5', event.saved && 'fill-current')} />
+          <LuBookmark className={cn('size-[22px]', event.saved && 'fill-current')} strokeWidth={1.8} />
           {event.saved ? 'Salvato' : 'Salva'}
         </ActionButton>
         <ActionButton label="Condividi su WhatsApp" href={link ? whatsappUrl(shareText(event)) : undefined}>
-          <LuMessageCircle className="size-5" />
+          <LuMessageCircle className="size-[22px]" strokeWidth={1.8} />
           WhatsApp
         </ActionButton>
         <ActionButton label="Aggiungi al calendario" onClick={() => setCalendarOpen(true)}>
-          <LuCalendarPlus className="size-5" />
+          <LuCalendarPlus className="size-[22px]" strokeWidth={1.8} />
           Calendario
         </ActionButton>
         <ActionButton label="Condividi" onClick={() => void share()}>
-          <LuShare2 className="size-5" />
+          <LuShare2 className="size-[22px]" strokeWidth={1.8} />
           Condividi
         </ActionButton>
       </div>
@@ -128,7 +128,7 @@ export function EventActions({ event }: { event: EventView }) {
         <div className="grid gap-2 pt-1">
           <a
             href={`/api/eventi/${event.id}/ics`}
-            className="press flex items-center justify-between rounded-[18px] bg-elev-2 px-4 py-3.5 font-semibold"
+            className="press flex items-center justify-between rounded-[12px] border border-line-strong px-4 py-3.5 font-semibold"
             onClick={() => setCalendarOpen(false)}
           >
             iPhone, Mac, Outlook
@@ -138,7 +138,7 @@ export function EventActions({ event }: { event: EventView }) {
             href={link ? googleCalendarUrl(event, link) : '#'}
             target="_blank"
             rel="noopener noreferrer"
-            className="press flex items-center justify-between rounded-[18px] bg-elev-2 px-4 py-3.5 font-semibold"
+            className="press flex items-center justify-between rounded-[12px] border border-line-strong px-4 py-3.5 font-semibold"
             onClick={() => setCalendarOpen(false)}
           >
             Google Calendar
@@ -204,7 +204,7 @@ export function OwnerMenu({ event, open, onClose }: { event: EventView; open: bo
     }
   }
 
-  const item = 'press flex w-full items-center gap-3 rounded-[18px] bg-elev-2 px-4 py-3.5 text-left font-semibold disabled:opacity-50'
+  const item = 'press flex w-full items-center gap-3 rounded-[12px] border border-line-strong px-4 py-3.5 text-left font-semibold disabled:opacity-50'
 
   return (
     <Sheet open={open} onClose={onClose} title="Gestisci evento">

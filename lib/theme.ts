@@ -1,6 +1,9 @@
 export type ThemePref = 'dark' | 'light' | 'system'
 export const THEME_KEY = 'cisei:tema'
 
+const DARK_BG = '#0b1130'
+const LIGHT_BG = '#eef0f6'
+
 /** Eseguito prima del disegno della pagina: evita il "lampo" del tema sbagliato. */
 export const THEME_SCRIPT = `(function(){try{var p=localStorage.getItem('${THEME_KEY}')||'dark';var t=p==='system'?(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):p;document.documentElement.dataset.theme=t;}catch(e){}})();`
 
@@ -22,5 +25,5 @@ export function applyTheme(pref: ThemePref) {
   const resolved =
     pref === 'system' ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark') : pref
   document.documentElement.dataset.theme = resolved
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', resolved === 'light' ? '#f2f2f4' : '#000000')
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', resolved === 'light' ? LIGHT_BG : DARK_BG)
 }

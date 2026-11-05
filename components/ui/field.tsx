@@ -2,7 +2,7 @@ import type { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'rea
 import { cn } from '@/lib/cn'
 
 export const inputClass =
-  'w-full rounded-2xl border border-transparent bg-elev-2 px-4 text-[16px] text-fg outline-none transition-colors placeholder:text-faint focus:border-line-strong disabled:opacity-60'
+  'w-full rounded-[12px] border border-line bg-elev px-4 text-[16px] text-fg outline-none transition-colors placeholder:text-faint focus:border-going/70 disabled:opacity-60'
 
 export function FieldLabel({ htmlFor, children, optional }: { htmlFor?: string; children: ReactNode; optional?: boolean }) {
   return (
@@ -93,7 +93,7 @@ export function Switch({
       >
         <span
           className={cn(
-            'absolute top-[3px] size-6 rounded-full bg-white shadow transition-transform',
+            'absolute top-[3px] size-6 rounded-full bg-[#f8f7f3] shadow-[0_1px_3px_var(--c-shadow)] transition-transform',
             checked ? 'translate-x-[23px]' : 'translate-x-[3px]',
           )}
         />

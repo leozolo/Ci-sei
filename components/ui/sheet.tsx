@@ -69,15 +69,15 @@ export function Sheet({
         aria-modal="true"
         tabIndex={-1}
         className={cn(
-          'relative flex max-h-[88dvh] w-full flex-col rounded-t-[28px] bg-elev pb-safe outline-none transition-transform duration-[240ms] ease-[cubic-bezier(0.22,0.9,0.24,1)] sm:mx-4 sm:max-w-md sm:rounded-[28px] sm:pb-0',
+          'relative flex max-h-[88dvh] w-full flex-col rounded-t-[22px] border-t border-line bg-elev pb-safe shadow-[0_-12px_40px_var(--c-shadow)] outline-none transition-transform duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)] sm:mx-4 sm:max-w-md sm:rounded-[22px] sm:border sm:pb-0',
           visible ? 'translate-y-0' : 'translate-y-full sm:translate-y-8 sm:opacity-0',
           className,
         )}
       >
-        <div className="mx-auto mt-2.5 h-1.5 w-10 shrink-0 rounded-full bg-elev-3 sm:hidden" aria-hidden />
+        <div className="mx-auto mt-2.5 h-1 w-9 shrink-0 rounded-full bg-elev-3 sm:hidden" aria-hidden />
         {title ? (
           <div className="flex items-center gap-3 px-5 pb-1 pt-3">
-            <h2 className="min-w-0 flex-1 text-[17px] font-semibold">{title}</h2>
+            <h2 className="min-w-0 flex-1 font-list text-[23px] font-bold leading-tight">{title}</h2>
             <button
               type="button"
               onClick={onClose}

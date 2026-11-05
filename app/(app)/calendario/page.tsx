@@ -5,9 +5,10 @@ import { useMemo, useState } from 'react'
 import { LuChevronLeft, LuChevronRight, LuPlus } from 'react-icons/lu'
 import { useApp } from '@/components/app-context'
 import { EventRow } from '@/components/event/cards'
-import { Chip } from '@/components/filters'
+import { Chip, CityChips } from '@/components/filters'
 import { EmptyState, ListSkeleton, PageBody, PageHeader } from '@/components/page-header'
 import { IconButton, buttonClass } from '@/components/ui/button'
+import { useCityFilter } from '@/lib/city'
 import { cn } from '@/lib/cn'
 import { fetchRange } from '@/lib/events'
 import { addDays, dayHeading, dayKey, isSameDay, monthTitle, startOfDay } from '@/lib/format'
@@ -37,9 +38,10 @@ export default function CalendarPage() {
     { keepPrevious: true },
   )
 
+  const { city, cities, setCity, matches } = useCityFilter(data)
   const events = useMemo(
-    () => (data ?? []).filter((e) => !onlyMine || e.myStatus === 'going' || e.myStatus === 'maybe'),
-    [data, onlyMine],
+    () => (data ?? []).filter((e) => matches(e) && (!onlyMine || e.myStatus === 'going' || e.myStatus === 'maybe')),
+    [data, onlyMine, matches],
   )
 
   // per ogni giorno: eventi che iniziano quel giorno (i multi-giorno contano solo all'inizio per i pallini)
@@ -79,8 +81,11 @@ export default function CalendarPage() {
         }
       />
       <PageBody>
+        <div className="mb-3">
+          <CityChips cities={cities} city={city} onCity={setCity} />
+        </div>
         <div className="flex items-center justify-between">
-          <h2 className="font-display text-[20px] font-semibold tracking-[-0.02em]">{monthTitle(month)}</h2>
+          <h2 className="font-list text-[23px] font-extrabold leading-none">{monthTitle(month)}</h2>
           <div className="flex items-center gap-1">
             <IconButton label="Mese precedente" onClick={() => moveMonth(-1)}>
               <LuChevronLeft className="size-5" />

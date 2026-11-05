@@ -1,19 +1,19 @@
 import type { MetadataRoute } from 'next'
-import { APP_NAME } from '@/lib/config'
+import { APP_NAME, APP_SHORT_NAME } from '@/lib/config'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: '/',
     name: APP_NAME,
-    short_name: APP_NAME,
-    description: 'La bacheca privata degli eventi del gruppo: chi c’è, quando e dove.',
+    short_name: APP_SHORT_NAME,
+    description: 'La lista del gruppo: cosa c’è in città e chi ci va.',
     lang: 'it',
     start_url: '/',
     scope: '/',
     display: 'standalone',
     orientation: 'portrait',
-    background_color: '#000000',
-    theme_color: '#000000',
+    background_color: '#0b1130',
+    theme_color: '#0b1130',
     categories: ['social', 'entertainment', 'lifestyle'],
     icons: [
       { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },

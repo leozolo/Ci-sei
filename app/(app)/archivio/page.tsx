@@ -46,7 +46,7 @@ export default function ArchivePage() {
           <div className="space-y-7">
             {months.map((m) => (
               <section key={m.label}>
-                <h2 className="mb-1 font-display text-[16px] font-semibold tracking-[-0.02em]">{m.label}</h2>
+                <h2 className="mb-1 font-list text-[23px] font-extrabold leading-none">{m.label}</h2>
                 <div className="space-y-1">
                   {m.events.map((e) => (
                     <EventRow key={e.id} event={e} />

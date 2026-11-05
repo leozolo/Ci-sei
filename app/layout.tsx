@@ -1,20 +1,25 @@
 import type { Metadata, Viewport } from 'next'
-import { Instrument_Sans, Unbounded } from 'next/font/google'
+import localFont from 'next/font/local'
 import type { ReactNode } from 'react'
 import { PwaRuntime } from '@/components/pwa'
 import { Feedback } from '@/components/ui/feedback'
-import { APP_NAME } from '@/lib/config'
+import { APP_NAME, APP_SHORT_NAME } from '@/lib/config'
 import { THEME_SCRIPT } from '@/lib/theme'
 import './globals.css'
 
-const body = Instrument_Sans({ subsets: ['latin'], variable: '--font-body', display: 'swap' })
-const heading = Unbounded({ subsets: ['latin'], variable: '--font-heading', display: 'swap' })
+// Archivo (Omnibus-Type, licenza OFL), ridotto a larghezze 62–100 e pesi 500–900.
+const archivo = localFont({
+  src: [{ path: './fonts/archivo-condensed.woff', weight: '500 900', style: 'normal' }],
+  variable: '--font-archivo',
+  display: 'swap',
+  declarations: [{ prop: 'font-stretch', value: '62% 100%' }],
+})
 
 export const metadata: Metadata = {
   title: { default: APP_NAME, template: `%s · ${APP_NAME}` },
-  description: 'La bacheca privata degli eventi del gruppo: chi c’è, quando e dove.',
+  description: 'La lista del gruppo: cosa c’è in città e chi ci va.',
   applicationName: APP_NAME,
-  appleWebApp: { capable: true, title: APP_NAME, statusBarStyle: 'black-translucent' },
+  appleWebApp: { capable: true, title: APP_SHORT_NAME, statusBarStyle: 'black-translucent' },
   formatDetection: { telephone: false, email: false, address: false },
   icons: {
     icon: [
@@ -30,12 +35,12 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#000000',
+  themeColor: '#0b1130',
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="it" data-theme="dark" className={`${body.variable} ${heading.variable}`} suppressHydrationWarning>
+    <html lang="it" data-theme="dark" className={archivo.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>

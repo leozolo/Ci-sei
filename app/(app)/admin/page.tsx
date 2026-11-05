@@ -133,8 +133,8 @@ function AdminContent() {
 
   return (
     <PageBody>
-      <section className="rounded-[24px] bg-elev p-4">
-        <h2 className="flex items-center gap-2 font-display text-[17px] font-semibold tracking-[-0.02em]">
+      <section className="rounded-[16px] border border-line bg-elev p-4">
+        <h2 className="flex items-center gap-2 font-list text-[23px] font-extrabold leading-none">
           <LuUserPlus className="size-5" /> Invita amici
         </h2>
         <p className="mt-1 text-[14px] text-muted">Crea un link e mandalo su WhatsApp: chi lo apre si registra ed entra nel gruppo.</p>
@@ -160,7 +160,7 @@ function AdminContent() {
         </Button>
 
         {justCreated ? (
-          <div className="mt-4 rounded-[18px] bg-elev-2 p-3.5">
+          <div className="mt-4 rounded-[12px] border border-line-strong p-3.5">
             <p className="text-[13px] font-semibold text-going">Link pronto</p>
             <p className="mt-1 select-all break-all font-mono text-[13px]">{inviteLink(justCreated.code)}</p>
             <InviteActions code={justCreated.code} />
@@ -173,11 +173,11 @@ function AdminContent() {
         {invites.isLoading ? (
           <ListSkeleton rows={1} />
         ) : active.length === 0 ? (
-          <p className="rounded-[20px] bg-elev px-4 py-4 text-[14px] text-muted">Nessun link attivo.</p>
+          <p className="rounded-[16px] border border-line bg-elev px-4 py-4 text-[14px] text-muted">Nessun link attivo.</p>
         ) : (
           <ul className="space-y-2">
             {active.map((i) => (
-              <li key={i.id} className="rounded-[20px] bg-elev p-4">
+              <li key={i.id} className="rounded-[16px] border border-line bg-elev p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="truncate font-mono text-[13px]">…/invito/{i.code}</p>
@@ -202,16 +202,16 @@ function AdminContent() {
         {members.isLoading ? (
           <ListSkeleton rows={3} />
         ) : (
-          <ul className="divide-y divide-line rounded-[20px] bg-elev px-4">
+          <ul className="divide-y divide-line rounded-[16px] border border-line bg-elev px-4">
             {people.map((m) => (
               <li key={m.id}>
                 <button type="button" onClick={() => setSelected(m)} className="flex w-full items-center gap-3 py-3 text-left">
                   <Avatar person={m} size={40} className={cn(m.status === 'removed' && 'opacity-40 grayscale')} />
                   <span className="min-w-0 flex-1">
-                    <span className={cn('block truncate text-[15px] font-semibold', m.status === 'removed' && 'text-muted line-through')}>
+                    <span className={cn('block truncate font-list text-[18px] font-bold uppercase', m.status === 'removed' && 'text-muted line-through decoration-no decoration-2')}>
                       {m.display_name}
                     </span>
-                    <span className="block truncate text-[12.5px] text-muted">
+                    <span className="block truncate text-[12px] text-muted">
                       {m.email ?? 'senza email'}
                       {m.last_sign_in_at ? `, ultimo accesso ${relativeTime(m.last_sign_in_at)}` : ''}
                     </span>

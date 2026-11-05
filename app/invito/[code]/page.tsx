@@ -147,8 +147,8 @@ export default function InvitePage() {
   if (session) {
     return (
       <AuthScreen subtitle={invitedBy}>
-        <div className="rounded-[28px] bg-elev p-5">
-          <h1 className="text-[20px] font-bold">Entra nel gruppo</h1>
+        <div className="rounded-[16px] border border-line bg-elev p-5">
+          <h1 className="font-list text-[27px] font-extrabold leading-tight">Entra nel gruppo</h1>
           <p className="mt-1 text-[14px] text-muted">Con l&apos;account {session.user.email}.</p>
           <form
             className="mt-5 space-y-3"
@@ -177,7 +177,7 @@ export default function InvitePage() {
 
   return (
     <AuthScreen subtitle={invitedBy}>
-      <div className="rounded-[28px] bg-elev p-5">
+      <div className="rounded-[16px] border border-line bg-elev p-5">
         <div className="flex gap-1 rounded-full bg-elev-2 p-1" role="tablist">
           {(
             [

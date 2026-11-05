@@ -115,8 +115,8 @@ export default function WelcomePage() {
 
   return (
     <AuthScreen subtitle={email ? `Sei collegato come ${email}.` : undefined}>
-      <div className="rounded-[28px] bg-elev p-5">
-        <h1 className="text-[20px] font-bold">{state === 'create' ? 'Crea il gruppo' : 'Ti serve un invito'}</h1>
+      <div className="rounded-[16px] border border-line bg-elev p-5">
+        <h1 className="font-list text-[27px] font-extrabold leading-tight">{state === 'create' ? 'Crea il gruppo' : 'Ti serve un invito'}</h1>
         <p className="mt-1 text-[14px] text-muted">
           {state === 'create'
             ? 'Il gruppo è ancora vuoto: entri come amministratore e potrai invitare gli amici.'

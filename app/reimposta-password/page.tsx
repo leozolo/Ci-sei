@@ -67,8 +67,8 @@ export default function ResetPasswordPage() {
 
   return (
     <AuthScreen>
-      <div className="rounded-[28px] bg-elev p-5">
-        <h1 className="text-[20px] font-bold">Nuova password</h1>
+      <div className="rounded-[16px] border border-line bg-elev p-5">
+        <h1 className="font-list text-[27px] font-extrabold leading-tight">Nuova password</h1>
         <form onSubmit={submit} className="mt-5 space-y-3" noValidate>
           <TextField id="nuova" label="Nuova password" type="password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} />
           <TextField id="conferma" label="Ripeti la password" type="password" autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} />

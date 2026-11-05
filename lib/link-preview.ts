@@ -73,6 +73,7 @@ interface LdEvent {
   image?: string
   locationName?: string
   address?: string
+  city?: string
 }
 
 function str(v: unknown): string | undefined {
@@ -96,6 +97,7 @@ function toEvent(obj: Record<string, unknown>): LdEvent {
   const loc = Array.isArray(obj.location) ? obj.location[0] : obj.location
   let locationName: string | undefined
   let address: string | undefined
+  let city: string | undefined
   if (typeof loc === 'string') locationName = loc
   else if (loc && typeof loc === 'object') {
     const l = loc as Record<string, unknown>
@@ -105,6 +107,7 @@ function toEvent(obj: Record<string, unknown>): LdEvent {
       if (typeof a === 'string') address = a
       else if (a && typeof a === 'object') {
         const ad = a as Record<string, unknown>
+        city = str(ad.addressLocality)
         const cityLine = [str(ad.postalCode), str(ad.addressLocality)].filter(Boolean).join(' ')
         address = [str(ad.streetAddress), cityLine].filter(Boolean).join(', ') || undefined
       }
@@ -118,6 +121,7 @@ function toEvent(obj: Record<string, unknown>): LdEvent {
     image: firstImage(obj.image),
     locationName,
     address,
+    city,
   }
 }
 
@@ -222,5 +226,6 @@ export function parseLinkPreview(html: string, pageUrl: string): LinkPreview {
     endDate: clean(ld?.endDate),
     locationName: limit(clean(ld?.locationName), 200),
     address: limit(clean(ld?.address), 300),
+    city: limit(clean(ld?.city), 60),
   }
 }

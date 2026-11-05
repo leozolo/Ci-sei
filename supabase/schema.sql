@@ -1,5 +1,5 @@
 -- =====================================================================
---  CI SEI? — database Supabase
+--  CLUB DEI CLUBBERS — database Supabase
 --  Come usarlo: Supabase → SQL Editor → New query → incolla tutto → Run.
 --  Lo script si può rieseguire senza perdere dati.
 -- =====================================================================
@@ -44,6 +44,7 @@ create table if not exists public.events (
   starts_at      timestamptz not null,
   ends_at        timestamptz,
   effective_end  timestamptz,           -- calcolata: fine evento o inizio + 6 ore
+  city           text not null default 'Roma' check (char_length(btrim(city)) between 1 and 60),
   location_name  text check (location_name is null or char_length(location_name) <= 200),
   address        text check (address is null or char_length(address) <= 300),
   external_url   text check (external_url is null or (char_length(external_url) <= 2000 and external_url ~* '^https?://')),
@@ -53,9 +54,12 @@ create table if not exists public.events (
   updated_at     timestamptz not null default now(),
   constraint events_end_after_start check (ends_at is null or ends_at > starts_at)
 );
+-- installazioni precedenti: aggiunge la città senza toccare i dati
+alter table public.events add column if not exists city text not null default 'Roma';
 create index if not exists events_starts_at_idx      on public.events (starts_at);
 create index if not exists events_effective_end_idx  on public.events (effective_end);
 create index if not exists events_created_by_idx     on public.events (created_by);
+create index if not exists events_city_idx           on public.events (city, starts_at);
 
 -- Partecipazioni: Partecipo / Forse / Non partecipo (+ eventuali ospiti)
 create table if not exists public.rsvps (
@@ -440,7 +444,8 @@ begin
       v_changes := v_changes || 'ends_at'::text;
     end if;
     if new.location_name is distinct from old.location_name
-       or new.address is distinct from old.address then
+       or new.address is distinct from old.address
+       or new.city is distinct from old.city then
       v_changes := v_changes || 'location'::text;
     end if;
     if old.is_cancelled and not new.is_cancelled then
@@ -702,6 +707,20 @@ grant execute on function public.save_push_subscription(text, text, text, text) 
 grant execute on function public.get_invite_info(text)                          to anon, authenticated;
 grant execute on function public.group_has_members()                            to anon, authenticated;
 grant execute on function public.claim_pending_push(int)                        to service_role;
+
+-- funzioni interne (trigger e controlli): mai richiamabili dall'esterno
+revoke execute on function public.events_before_write()    from public, anon, authenticated;
+revoke execute on function public.rsvps_before_write()     from public, anon, authenticated;
+revoke execute on function public.comments_before_write()  from public, anon, authenticated;
+revoke execute on function public.profiles_before_update() from public, anon, authenticated;
+revoke execute on function public.notify_new_event()       from public, anon, authenticated;
+revoke execute on function public.notify_event_update()    from public, anon, authenticated;
+revoke execute on function public.notify_new_comment()     from public, anon, authenticated;
+revoke execute on function public.notify_rsvp()            from public, anon, authenticated;
+revoke execute on function public.is_member()              from public, anon;
+revoke execute on function public.is_admin()               from public, anon;
+grant execute on function public.is_member()               to authenticated;
+grant execute on function public.is_admin()                to authenticated;
 
 -- ---------------------------------------------------------------------
 --  ARCHIVIAZIONE IMMAGINI (bucket privati: locandine e foto profilo)

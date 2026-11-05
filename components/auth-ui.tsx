@@ -10,9 +10,9 @@ export function AuthScreen({ children, subtitle }: { children: ReactNode; subtit
   return (
     <main className="pt-safe pb-safe mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center px-5 py-10">
       <div className="mb-8 flex flex-col items-center text-center">
-        <Mark size={64} className="text-fg" />
-        <Wordmark className="mt-3 text-[30px]" />
-        {subtitle ? <p className="mt-2 max-w-xs text-[15px] text-muted">{subtitle}</p> : null}
+        <Mark size={56} />
+        <Wordmark className="mt-3 text-[32px]" />
+        {subtitle ? <p className="mt-2 max-w-xs text-balance text-[15px] text-muted">{subtitle}</p> : null}
       </div>
       {children}
     </main>
@@ -21,9 +21,9 @@ export function AuthScreen({ children, subtitle }: { children: ReactNode; subtit
 
 export function Notice({ children, tone = 'info' }: { children: ReactNode; tone?: 'info' | 'error' | 'success' }) {
   const cls =
-    tone === 'error' ? 'bg-no/15 text-no' : tone === 'success' ? 'bg-going/15 text-going' : 'bg-elev text-fg'
+    tone === 'error' ? 'bg-no/10 text-no' : tone === 'success' ? 'bg-going/10 text-going' : 'border border-line bg-elev text-fg'
   return (
-    <p role={tone === 'error' ? 'alert' : 'status'} className={`rounded-[16px] px-4 py-3 text-[14px] font-medium ${cls}`}>
+    <p role={tone === 'error' ? 'alert' : 'status'} className={`rounded-[12px] px-4 py-3 text-[14px] font-medium ${cls}`}>
       {children}
     </p>
   )

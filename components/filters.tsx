@@ -1,10 +1,11 @@
 'use client'
 
 import { useState, type ReactNode } from 'react'
-import { LuChevronDown } from 'react-icons/lu'
+import { LuChevronDown, LuMapPin } from 'react-icons/lu'
 import { inputClass } from '@/components/ui/field'
 import { Sheet } from '@/components/ui/sheet'
 import { CATEGORIES } from '@/lib/categories'
+import { ALL_CITIES } from '@/lib/city'
 import { cn } from '@/lib/cn'
 import { WHEN_LABELS, type WhenFilter } from '@/lib/events'
 import { dayHeading, parseDayKey, toDateInput } from '@/lib/format'
@@ -26,8 +27,8 @@ export function Chip({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        'press inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-[14px] font-semibold',
-        active ? 'bg-invert text-invert-fg' : 'bg-elev-2 text-fg hover:bg-elev-3',
+        'press inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3.5 text-[14px] font-semibold',
+        active ? 'border-fg bg-fg text-bg' : 'border-line-strong text-fg hover:border-fg/60',
         className,
       )}
     >
@@ -39,6 +40,24 @@ export function Chip({
 export function whenLabel(value: WhenFilter): string {
   if (value.startsWith('day:')) return dayHeading(parseDayKey(value.slice(4)))
   return WHEN_LABELS[value] ?? 'Sempre'
+}
+
+/** Città: compare solo quando gli eventi sono in più di una città. */
+export function CityChips({ cities, city, onCity }: { cities: string[]; city: string; onCity: (c: string) => void }) {
+  if (cities.length < 2) return null
+  return (
+    <div className="no-scrollbar relative -mx-4 flex gap-2 overflow-x-auto px-4 sm:flex-wrap sm:overflow-visible" role="group" aria-label="Città">
+      <Chip active={city === ALL_CITIES} onClick={() => onCity(ALL_CITIES)}>
+        <LuMapPin className="size-4" aria-hidden />
+        Tutte le città
+      </Chip>
+      {cities.map((c) => (
+        <Chip key={c} active={city === c} onClick={() => onCity(c)}>
+          {c}
+        </Chip>
+      ))}
+    </div>
+  )
 }
 
 /** Barra filtri: quando + categorie. */
@@ -59,21 +78,24 @@ export function FilterBar({
 
   return (
     <>
-      <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
+      <div className="no-scrollbar relative -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:flex-wrap sm:overflow-visible">
         <Chip active={when !== 'all'} onClick={() => setOpen(true)}>
           {when === 'all' ? 'Quando' : whenLabel(when)}
-          <LuChevronDown className="size-4 opacity-70" />
+          <LuChevronDown className="size-4 opacity-70" aria-hidden />
         </Chip>
-        <span className="my-1.5 w-px shrink-0 bg-line-strong" aria-hidden />
+        <span className="my-1.5 w-px shrink-0 bg-line-strong sm:hidden" aria-hidden />
         <Chip active={!category} onClick={() => onCategory(null)}>
           Tutti
         </Chip>
-        {CATEGORIES.map((c) => (
-          <Chip key={c.id} active={category === c.id} onClick={() => onCategory(category === c.id ? null : c.id)}>
-            <span aria-hidden>{c.emoji}</span>
-            {c.label}
-          </Chip>
-        ))}
+        {CATEGORIES.map((c) => {
+          const Icon = c.icon
+          return (
+            <Chip key={c.id} active={category === c.id} onClick={() => onCategory(category === c.id ? null : c.id)}>
+              <Icon className="size-4" strokeWidth={1.9} aria-hidden />
+              {c.label}
+            </Chip>
+          )
+        })}
       </div>
 
       <Sheet open={open} onClose={() => setOpen(false)} title="Quando">
@@ -87,8 +109,8 @@ export function FilterBar({
                 setOpen(false)
               }}
               className={cn(
-                'press flex items-center justify-between rounded-[16px] px-4 py-3.5 text-left text-[15px] font-semibold',
-                when === o ? 'bg-invert text-invert-fg' : 'bg-elev-2',
+                'press flex items-center justify-between rounded-[12px] border px-4 py-3.5 text-left text-[15px] font-semibold',
+                when === o ? 'border-fg bg-fg text-bg' : 'border-line-strong',
               )}
             >
               {WHEN_LABELS[o]}

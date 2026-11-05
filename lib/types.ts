@@ -27,6 +27,7 @@ export interface EventRow {
   starts_at: string
   ends_at: string | null
   effective_end: string
+  city: string
   location_name: string | null
   address: string | null
   external_url: string | null
@@ -72,6 +73,7 @@ export interface EventInput {
   category: string
   starts_at: string
   ends_at: string | null
+  city: string
   location_name: string | null
   address: string | null
   external_url: string | null
@@ -141,4 +143,5 @@ export interface LinkPreview {
   endDate?: string
   locationName?: string
   address?: string
+  city?: string
 }
