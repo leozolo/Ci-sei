@@ -1,0 +1,702 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-05T11:18:15+00:00",
+  "title": "Design System: Club dei clubbers",
+  "extensions": {
+    "colorMeta": {
+      "night": {
+        "role": "neutral",
+        "displayName": "Night",
+        "canonical": "#0b1130",
+        "oklch": "oklch(19.4% 0.062 271.2)",
+        "tonalRamp": [
+          "#090b12",
+          "#202433",
+          "#3a4157",
+          "#56607f",
+          "#7581a8",
+          "#99a4c5",
+          "#c0c8e3",
+          "#e8eeff"
+        ]
+      },
+      "night-raised": {
+        "role": "neutral",
+        "displayName": "Night Raised",
+        "canonical": "#121a3c",
+        "oklch": "oklch(23.2% 0.066 270.5)",
+        "tonalRamp": [
+          "#090b12",
+          "#202433",
+          "#394159",
+          "#556081",
+          "#7381aa",
+          "#98a4c7",
+          "#bfc8e4",
+          "#e8eeff"
+        ]
+      },
+      "night-raised-2": {
+        "role": "neutral",
+        "displayName": "Night Raised 2",
+        "canonical": "#1a2450",
+        "oklch": "oklch(27.9% 0.081 270.7)",
+        "tonalRamp": [
+          "#080b14",
+          "#1e2437",
+          "#38415e",
+          "#535f88",
+          "#7080b3",
+          "#95a4cf",
+          "#bdc8ea",
+          "#e9eefe"
+        ]
+      },
+      "night-raised-3": {
+        "role": "neutral",
+        "displayName": "Night Raised 3",
+        "canonical": "#253064",
+        "oklch": "oklch(33.0% 0.092 271.5)",
+        "tonalRamp": [
+          "#080b15",
+          "#1e2439",
+          "#374061",
+          "#525e8d",
+          "#6f7fb9",
+          "#94a3d4",
+          "#bcc8ef",
+          "#e9eeff"
+        ]
+      },
+      "chalk": {
+        "role": "neutral",
+        "displayName": "Chalk",
+        "canonical": "#f3f1ec",
+        "oklch": "oklch(95.8% 0.007 88.6)",
+        "tonalRamp": [
+          "#0c0b08",
+          "#262521",
+          "#43423e",
+          "#63615d",
+          "#84827e",
+          "#a7a5a0",
+          "#cbc9c4",
+          "#f0eee9"
+        ]
+      },
+      "chalk-muted": {
+        "role": "neutral",
+        "displayName": "Chalk Muted",
+        "canonical": "#aab3d6",
+        "oklch": "oklch(77.1% 0.051 273.8)",
+        "tonalRamp": [
+          "#090b11",
+          "#212430",
+          "#3c4153",
+          "#59607a",
+          "#7881a1",
+          "#9da4bf",
+          "#c2c8de",
+          "#eaeefd"
+        ]
+      },
+      "chalk-faint": {
+        "role": "neutral",
+        "displayName": "Chalk Faint",
+        "canonical": "#7c87b3",
+        "oklch": "oklch(63.1% 0.068 273.5)",
+        "tonalRamp": [
+          "#090b12",
+          "#202434",
+          "#3a4159",
+          "#575f81",
+          "#7580ab",
+          "#9aa3c8",
+          "#c0c8e5",
+          "#e9eefe"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "rgba(214, 222, 255, 0.11)"
+      },
+      "hairline-strong": {
+        "role": "neutral",
+        "displayName": "Hairline Strong",
+        "canonical": "rgba(214, 222, 255, 0.22)"
+      },
+      "marker-green": {
+        "role": "primary",
+        "displayName": "Marker Green",
+        "canonical": "#48e28b",
+        "oklch": "oklch(81.2% 0.178 154.2)",
+        "tonalRamp": [
+          "#001005",
+          "#022e16",
+          "#06502a",
+          "#0e7441",
+          "#089b57",
+          "#4fbf7b",
+          "#8fdea9",
+          "#c8fed8"
+        ]
+      },
+      "marker-green-ink": {
+        "role": "primary",
+        "displayName": "Marker Green Ink",
+        "canonical": "#06281a",
+        "oklch": "oklch(24.8% 0.047 162.1)",
+        "tonalRamp": [
+          "#070d0a",
+          "#1c2822",
+          "#34473d",
+          "#4d685a",
+          "#698b7a",
+          "#91ad9e",
+          "#b9cfc3",
+          "#e3f3ea"
+        ]
+      },
+      "marker-yellow": {
+        "role": "secondary",
+        "displayName": "Marker Yellow",
+        "canonical": "#ffd34a",
+        "oklch": "oklch(88.2% 0.156 90.6)",
+        "tonalRamp": [
+          "#100a00",
+          "#2f2401",
+          "#514002",
+          "#775e05",
+          "#9d7e13",
+          "#c3a13b",
+          "#e0c780",
+          "#ffeebd"
+        ]
+      },
+      "marker-yellow-ink": {
+        "role": "secondary",
+        "displayName": "Marker Yellow Ink",
+        "canonical": "#2c2100",
+        "oklch": "oklch(25.4% 0.052 90.4)",
+        "tonalRamp": [
+          "#0d0b06",
+          "#292518",
+          "#49412e",
+          "#6a6145",
+          "#8e815f",
+          "#afa488",
+          "#d1c9b3",
+          "#f4eedf"
+        ]
+      },
+      "marker-red": {
+        "role": "tertiary",
+        "displayName": "Marker Red",
+        "canonical": "#ff6a5f",
+        "oklch": "oklch(70.8% 0.184 27.0)",
+        "tonalRamp": [
+          "#1b0303",
+          "#45100d",
+          "#73211d",
+          "#a6342e",
+          "#da4942",
+          "#f37d72",
+          "#fdb4ab",
+          "#ffe9e6"
+        ]
+      },
+      "marker-red-ink": {
+        "role": "tertiary",
+        "displayName": "Marker Red Ink",
+        "canonical": "#2e0703",
+        "oklch": "oklch(20.2% 0.065 31.7)",
+        "tonalRamp": [
+          "#110907",
+          "#32201c",
+          "#563a34",
+          "#7d564e",
+          "#a5746a",
+          "#c49a91",
+          "#e2c0b9",
+          "#ffe9e4"
+        ]
+      },
+      "scrim": {
+        "role": "neutral",
+        "displayName": "Night Scrim",
+        "canonical": "rgba(4, 7, 24, 0.68)"
+      },
+      "day-paper": {
+        "role": "neutral",
+        "displayName": "Day Paper",
+        "canonical": "#eef0f6",
+        "oklch": "oklch(95.5% 0.008 271.3)",
+        "tonalRamp": [
+          "#0a0b0f",
+          "#232529",
+          "#404247",
+          "#5f6166",
+          "#808287",
+          "#a3a5aa",
+          "#c7c9cf",
+          "#eceef4"
+        ],
+        "theme": "light"
+      },
+      "day-raised": {
+        "role": "neutral",
+        "displayName": "Day Raised",
+        "canonical": "#ffffff",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ],
+        "theme": "light"
+      },
+      "day-raised-2": {
+        "role": "neutral",
+        "displayName": "Day Raised 2",
+        "canonical": "#e2e6f1",
+        "oklch": "oklch(92.5% 0.015 270.0)",
+        "tonalRamp": [
+          "#090b12",
+          "#22252d",
+          "#3f424b",
+          "#5e616a",
+          "#7f828c",
+          "#a1a5af",
+          "#c5c9d4",
+          "#eaeef9"
+        ],
+        "theme": "light"
+      },
+      "day-raised-3": {
+        "role": "neutral",
+        "displayName": "Day Raised 3",
+        "canonical": "#d2d8ea",
+        "oklch": "oklch(88.3% 0.026 271.1)",
+        "tonalRamp": [
+          "#0a0b0e",
+          "#23252b",
+          "#3f424b",
+          "#5d616e",
+          "#7d8292",
+          "#a0a5b2",
+          "#c5c9d4",
+          "#eceef6"
+        ],
+        "theme": "light"
+      },
+      "day-ink": {
+        "role": "neutral",
+        "displayName": "Day Ink",
+        "canonical": "#0b1130",
+        "oklch": "oklch(19.4% 0.062 271.2)",
+        "tonalRamp": [
+          "#090b12",
+          "#202433",
+          "#3a4157",
+          "#56607f",
+          "#7581a8",
+          "#99a4c5",
+          "#c0c8e3",
+          "#e8eeff"
+        ],
+        "theme": "light"
+      },
+      "day-muted": {
+        "role": "neutral",
+        "displayName": "Day Muted",
+        "canonical": "#48517a",
+        "oklch": "oklch(44.5% 0.068 273.9)",
+        "tonalRamp": [
+          "#090b12",
+          "#202434",
+          "#3b4059",
+          "#575f82",
+          "#7580ab",
+          "#9aa3c8",
+          "#c0c8e5",
+          "#e9eeff"
+        ],
+        "theme": "light"
+      },
+      "day-faint": {
+        "role": "neutral",
+        "displayName": "Day Faint",
+        "canonical": "#5a6390",
+        "oklch": "oklch(51.1% 0.072 274.9)",
+        "tonalRamp": [
+          "#090b13",
+          "#202435",
+          "#3b405a",
+          "#575f83",
+          "#757fae",
+          "#9aa3ca",
+          "#c0c8e6",
+          "#e9eeff"
+        ],
+        "theme": "light"
+      },
+      "day-hairline": {
+        "role": "neutral",
+        "displayName": "Day Hairline",
+        "canonical": "rgba(11, 17, 48, 0.1)",
+        "theme": "light"
+      },
+      "day-hairline-strong": {
+        "role": "neutral",
+        "displayName": "Day Hairline Strong",
+        "canonical": "rgba(11, 17, 48, 0.22)",
+        "theme": "light"
+      },
+      "day-green": {
+        "role": "primary",
+        "displayName": "Day Green",
+        "canonical": "#0a7343",
+        "oklch": "oklch(49.0% 0.116 155.8)",
+        "tonalRamp": [
+          "#020f06",
+          "#0c2c1a",
+          "#1b4d31",
+          "#2a714a",
+          "#3e9664",
+          "#73b78d",
+          "#a5d7b6",
+          "#d6f9e1"
+        ],
+        "theme": "light"
+      },
+      "day-yellow": {
+        "role": "secondary",
+        "displayName": "Day Yellow",
+        "canonical": "#8a6100",
+        "oklch": "oklch(52.2% 0.108 79.7)",
+        "tonalRamp": [
+          "#110a01",
+          "#312206",
+          "#553d10",
+          "#7c5b1c",
+          "#a47a2c",
+          "#c29f65",
+          "#e0c599",
+          "#ffeccd"
+        ],
+        "theme": "light"
+      },
+      "day-red": {
+        "role": "tertiary",
+        "displayName": "Day Red",
+        "canonical": "#b8291f",
+        "oklch": "oklch(51.3% 0.181 29.1)",
+        "tonalRamp": [
+          "#1a0302",
+          "#44110c",
+          "#73231b",
+          "#a5362b",
+          "#d84c3e",
+          "#f27f6f",
+          "#feb3a8",
+          "#ffe9e5"
+        ],
+        "theme": "light"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Event title on the event screen, uppercase."
+      },
+      "numeral": {
+        "displayName": "Numeral",
+        "purpose": "Guest-list count; ranking counts at 40px."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings, sentence case."
+      },
+      "title-card": {
+        "displayName": "Title Card",
+        "purpose": "Event titles on door cards, uppercase."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Event titles in list rows, uppercase."
+      },
+      "name": {
+        "displayName": "Name",
+        "purpose": "Member names on the guest list, uppercase."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Descriptions and messages, at most 65ch."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Date, place and attendance lines."
+      },
+      "tab-label": {
+        "displayName": "Tab Label",
+        "purpose": "Bottom navigation labels."
+      },
+      "display-md": {
+        "displayName": "Display MD",
+        "purpose": "Profile name and stats; wordmark on sign-in screens."
+      },
+      "display-sm": {
+        "displayName": "Display SM",
+        "purpose": "Sign-in, invite and welcome headings; splash wordmark."
+      },
+      "title-compact": {
+        "displayName": "Title Compact",
+        "purpose": "Compact row titles and the list-line count."
+      },
+      "control-lg": {
+        "displayName": "Control LG",
+        "purpose": "Inputs, large buttons, the main RSVP button."
+      },
+      "control": {
+        "displayName": "Control",
+        "purpose": "Chips, small buttons, hints and secondary text."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Timestamps, day headers, status labels."
+      }
+    },
+    "shadows": [
+      {
+        "name": "poster-lift",
+        "value": "0 18px 44px var(--c-shadow)",
+        "purpose": "The whole poster on the event screen."
+      },
+      {
+        "name": "card-poster",
+        "value": "0 8px 24px var(--c-shadow)",
+        "purpose": "Posters on door cards."
+      },
+      {
+        "name": "floating-bar",
+        "value": "0 -10px 30px var(--c-shadow)",
+        "purpose": "The RSVP bar."
+      },
+      {
+        "name": "sheet",
+        "value": "0 -12px 40px var(--c-shadow)",
+        "purpose": "Bottom sheets and dialogs."
+      },
+      {
+        "name": "propose",
+        "value": "0 6px 18px var(--c-shadow)",
+        "purpose": "The propose button in the tab bar."
+      },
+      {
+        "name": "shadow-color",
+        "value": "rgba(2, 4, 16, 0.55) / day: rgba(11, 17, 48, 0.18)",
+        "purpose": "The --c-shadow tint behind every shadow."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Every authored transition and entrance."
+      },
+      {
+        "name": "marker-draw",
+        "value": "stroke-dashoffset 1 to 0, 0.42s, 0.06s delay, ease-out-expo",
+        "purpose": "The tick draws itself when you join a list (the signature)."
+      },
+      {
+        "name": "name-in",
+        "value": "translateX(-10px) + blur(3px) + opacity 0 to rest, 0.36s, ease-out-expo",
+        "purpose": "Your name and face entering the list."
+      },
+      {
+        "name": "sheet-in",
+        "value": "translateY(100%) to 0, 0.32s, ease-out-expo",
+        "purpose": "Bottom sheets opening."
+      },
+      {
+        "name": "toast-in",
+        "value": "translateY(-14px) + opacity, 0.26s, ease-out-expo",
+        "purpose": "Toasts."
+      },
+      {
+        "name": "press",
+        "value": "scale(0.97), 0.16s, ease-out-expo",
+        "purpose": "Every tappable control on press."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "durations collapse to 0.01ms; marks render drawn",
+        "purpose": "prefers-reduced-motion: reduce."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "content",
+        "value": "672px",
+        "purpose": "Max width of the single column (max-w-2xl)."
+      },
+      {
+        "name": "sm",
+        "value": "640px",
+        "purpose": "Chip rows wrap; sheets become centred dialogs."
+      },
+      {
+        "name": "fine-pointer",
+        "value": "(hover: hover) and (pointer: fine)",
+        "purpose": "Rail back/forward controls appear."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "RSVP bar",
+      "kind": "custom",
+      "refersTo": "rsvp-in-selected",
+      "description": "The signature control: fixed at the bottom of the event screen; in, maybe, no with their marks.",
+      "html": "<div class=\"ds-rsvp\" role=\"radiogroup\" aria-label=\"La tua risposta\"><button class=\"ds-rsvp-in is-on\" role=\"radio\" aria-checked=\"true\"><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" fill=\"none\" aria-hidden=\"true\"><path d=\"M3.6 13.1C5.4 14.3 7 16.1 8.6 18.9 11.6 12.4 15.4 7.6 20.6 4.1\" stroke=\"currentColor\" stroke-width=\"3.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>Sei in lista</button><button class=\"ds-rsvp-opt\" role=\"radio\" aria-checked=\"false\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" aria-hidden=\"true\"><path d=\"M13.2 4.3C7.6 3.6 3.6 7.2 3.8 12.1c.2 4.6 4 7.7 8.7 7.6 4.7-.1 8-3.5 7.8-7.9-.2-4.1-3.4-7.2-7.8-7.3-1.4 0-2.6.3-3.6.8\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>Forse</button><button class=\"ds-rsvp-opt\" role=\"radio\" aria-checked=\"false\" aria-label=\"Non vengo\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" aria-hidden=\"true\"><path d=\"M5.2 5.4c4.6 4.2 9 8.8 13.5 13.6M18.8 5.1C14.2 9.6 9.8 14.3 5.4 19.1\" stroke=\"currentColor\" stroke-width=\"2.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>No</button></div>",
+      "css": ".ds-rsvp { display: flex; gap: 8px; padding: 12px 16px; background: var(--c-bg, #0b1130); border-top: 1px solid var(--c-line, rgba(214,222,255,.11)); box-shadow: 0 -10px 30px var(--c-shadow, rgba(2,4,16,.55)); font-family: ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; } .ds-rsvp button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 52px; border-radius: 14px; font-size: 15px; font-weight: 600; cursor: pointer; transition: transform .16s cubic-bezier(.16,1,.3,1), background-color .15s ease, opacity .15s ease; } .ds-rsvp button:active { transform: scale(.97); } .ds-rsvp button:focus-visible { outline: 2px solid var(--c-going, #48e28b); outline-offset: 2px; } .ds-rsvp-in { flex: 1.6; border: 0; font-size: 16px; font-weight: 700; background: var(--c-fg, #f3f1ec); color: var(--c-bg, #0b1130); } .ds-rsvp-in.is-on { background: var(--c-going, #48e28b); color: var(--c-going-ink, #06281a); } .ds-rsvp-opt { flex: 1; background: transparent; color: var(--c-fg, #f3f1ec); border: 1px solid var(--c-line-strong, rgba(214,222,255,.22)); } .ds-rsvp-opt:hover { border-color: var(--c-fg, #f3f1ec); }"
+    },
+    {
+      "name": "Guest list",
+      "kind": "card",
+      "refersTo": "guest-list",
+      "description": "The door list on the event screen: count, ticked names with their +1, who might come.",
+      "html": "<section class=\"ds-list\"><h2 class=\"ds-list-head\"><span class=\"ds-list-n\">7</span><span class=\"ds-list-w\">in lista</span></h2><ul><li><span class=\"ds-tick\"><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" fill=\"none\" aria-hidden=\"true\"><path d=\"M3.6 13.1C5.4 14.3 7 16.1 8.6 18.9 11.6 12.4 15.4 7.6 20.6 4.1\" stroke=\"currentColor\" stroke-width=\"3.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span><span class=\"ds-name\">Marco Rinaldi <small>(tu)</small></span><span class=\"ds-plus\">+1</span></li><li><span class=\"ds-tick\"><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" fill=\"none\" aria-hidden=\"true\"><path d=\"M3.6 13.1C5.4 14.3 7 16.1 8.6 18.9 11.6 12.4 15.4 7.6 20.6 4.1\" stroke=\"currentColor\" stroke-width=\"3.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span><span class=\"ds-name\">Giulia <small>ha proposto</small></span></li><li><span class=\"ds-tick\"><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" fill=\"none\" aria-hidden=\"true\"><path d=\"M3.6 13.1C5.4 14.3 7 16.1 8.6 18.9 11.6 12.4 15.4 7.6 20.6 4.1\" stroke=\"currentColor\" stroke-width=\"3.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span><span class=\"ds-name\">Sara</span><span class=\"ds-plus\">+2</span></li></ul><p class=\"ds-maybe\"><span class=\"ds-circle\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" aria-hidden=\"true\"><path d=\"M13.2 4.3C7.6 3.6 3.6 7.2 3.8 12.1c.2 4.6 4 7.7 8.7 7.6 4.7-.1 8-3.5 7.8-7.9-.2-4.1-3.4-7.2-7.8-7.3-1.4 0-2.6.3-3.6.8\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span><span><b>Forse:</b> Davide, Chiara M.</span></p></section>",
+      "css": ".ds-list { background: var(--c-elev, #121a3c); color: var(--c-fg, #f3f1ec); border: 1px solid var(--c-line, rgba(214,222,255,.11)); border-radius: 18px; padding: 20px 16px 16px; font-family: ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; } .ds-list-head { display: flex; align-items: baseline; gap: 8px; margin: 0; } .ds-list-n { font-family: var(--font-archivo, \"Archivo\"), ui-sans-serif, system-ui, sans-serif; font-stretch: 62%; font-feature-settings: \"tnum\" 1, \"lnum\" 1; font-size: 56px; font-weight: 800; line-height: .8; } .ds-list-w { font-family: var(--font-archivo, \"Archivo\"), ui-sans-serif, system-ui, sans-serif; font-stretch: 72%; font-feature-settings: \"tnum\" 1, \"lnum\" 1; font-size: 20px; font-weight: 800; text-transform: uppercase; } .ds-list ul { list-style: none; margin: 16px 0 0; padding: 0; border-top: 1px solid var(--c-line, rgba(214,222,255,.11)); } .ds-list li { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--c-line, rgba(214,222,255,.11)); } .ds-tick { color: var(--c-going, #48e28b); display: inline-flex; } .ds-name { font-family: var(--font-archivo, \"Archivo\"), ui-sans-serif, system-ui, sans-serif; font-stretch: 72%; font-feature-settings: \"tnum\" 1, \"lnum\" 1; flex: 1; font-size: 18px; font-weight: 700; text-transform: uppercase; } .ds-name small { font-family: ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; font-size: 13px; font-weight: 600; text-transform: none; color: var(--c-muted, #aab3d6); margin-left: 6px; } .ds-plus { font-family: var(--font-archivo, \"Archivo\"), ui-sans-serif, system-ui, sans-serif; font-stretch: 72%; font-feature-settings: \"tnum\" 1, \"lnum\" 1; font-size: 18px; font-weight: 800; color: var(--c-going, #48e28b); } .ds-maybe { display: flex; gap: 8px; margin: 12px 0 0; font-size: 14px; color: var(--c-muted, #aab3d6); } .ds-maybe b { color: var(--c-fg, #f3f1ec); } .ds-circle { color: var(--c-maybe, #ffd34a); display: inline-flex; }"
+    },
+    {
+      "name": "Door card",
+      "kind": "card",
+      "refersTo": "title-card",
+      "description": "Rail item on the board: faces and count first, then the title, then the poster whole.",
+      "html": "<a class=\"ds-door\" href=\"#\"><span class=\"ds-door-count\"><span class=\"ds-faces\"><i style=\"background:#6d3a6e\">M</i><i style=\"background:#3a6a6e\">G</i><i style=\"background:#5a3a7e\">L</i></span><b>7</b> in lista · 2 forse</span><span class=\"ds-door-title\">Amelie Lens all’alba</span><span class=\"ds-door-meta\">sab 7 nov, 23:30 · Brancaleone</span><span class=\"ds-door-poster\"></span></a>",
+      "css": ".ds-door { display: flex; flex-direction: column; width: 260px; color: var(--c-fg, #f3f1ec); text-decoration: none; font-family: ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; transition: transform .16s cubic-bezier(.16,1,.3,1), background-color .15s ease, opacity .15s ease; } .ds-door:active { transform: scale(.97); } .ds-door:focus-visible { outline: 2px solid var(--c-going, #48e28b); outline-offset: 2px; border-radius: 10px; } .ds-door-count { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--c-muted, #aab3d6); } .ds-door-count b { font-family: var(--font-archivo, \"Archivo\"), ui-sans-serif, system-ui, sans-serif; font-stretch: 72%; font-feature-settings: \"tnum\" 1, \"lnum\" 1; font-size: 15px; font-weight: 800; color: var(--c-fg, #f3f1ec); } .ds-faces { display: inline-flex; } .ds-faces i { font-family: var(--font-archivo, \"Archivo\"), ui-sans-serif, system-ui, sans-serif; font-stretch: 72%; font-feature-settings: \"tnum\" 1, \"lnum\" 1; font-style: normal; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 999px; font-size: 10px; font-weight: 700; color: #f3f1ec; box-shadow: 0 0 0 2px var(--c-bg, #0b1130); margin-left: -8px; } .ds-faces i:first-child { margin-left: 0; } .ds-door-title { font-family: var(--font-archivo, \"Archivo\"), ui-sans-serif, system-ui, sans-serif; font-stretch: 62%; font-feature-settings: \"tnum\" 1, \"lnum\" 1; margin-top: 10px; font-size: 25px; font-weight: 800; line-height: .98; text-transform: uppercase; } .ds-door-meta { margin-top: 6px; font-size: 13px; color: var(--c-muted, #aab3d6); } .ds-door-poster { margin-top: 8px; aspect-ratio: 4 / 5; border-radius: 10px; background: linear-gradient(135deg, #2a0f5c, #6d2df0); box-shadow: 0 8px 24px var(--c-shadow, rgba(2,4,16,.55)); }"
+    },
+    {
+      "name": "Primary button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one strong action on a screen: chalk on night.",
+      "html": "<button class=\"ds-btn-primary\">Pubblica evento</button>",
+      "css": ".ds-btn-primary { font-family: ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; height: 44px; padding: 0 16px; border: 0; border-radius: 12px; background: var(--c-invert, #f3f1ec); color: var(--c-invert-fg, #0b1130); font-size: 15px; font-weight: 600; cursor: pointer; transition: transform .16s cubic-bezier(.16,1,.3,1), background-color .15s ease, opacity .15s ease; } .ds-btn-primary:hover { opacity: .9; } .ds-btn-primary:active { transform: scale(.97); } .ds-btn-primary:focus-visible { outline: 2px solid var(--c-going, #48e28b); outline-offset: 2px; }"
+    },
+    {
+      "name": "Going button",
+      "kind": "button",
+      "refersTo": "button-going",
+      "description": "Confirms you are in; marker green with its dark ink.",
+      "html": "<button class=\"ds-btn-going\"><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" fill=\"none\" aria-hidden=\"true\"><path d=\"M3.6 13.1C5.4 14.3 7 16.1 8.6 18.9 11.6 12.4 15.4 7.6 20.6 4.1\" stroke=\"currentColor\" stroke-width=\"3.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>Mettimi in lista</button>",
+      "css": ".ds-btn-going { font-family: ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border: 0; border-radius: 12px; background: var(--c-going, #48e28b); color: var(--c-going-ink, #06281a); font-size: 15px; font-weight: 600; cursor: pointer; transition: transform .16s cubic-bezier(.16,1,.3,1), background-color .15s ease, opacity .15s ease; } .ds-btn-going:hover { opacity: .9; } .ds-btn-going:active { transform: scale(.97); } .ds-btn-going:focus-visible { outline: 2px solid var(--c-going, #48e28b); outline-offset: 2px; }"
+    },
+    {
+      "name": "Outline button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary actions: a hairline-strong border on the ground.",
+      "html": "<button class=\"ds-btn-outline\">Vedi tutte le risposte</button>",
+      "css": ".ds-btn-outline { font-family: ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; height: 44px; padding: 0 16px; border: 1px solid var(--c-line-strong, rgba(214,222,255,.22)); border-radius: 12px; background: transparent; color: var(--c-fg, #f3f1ec); font-size: 15px; font-weight: 600; cursor: pointer; transition: transform .16s cubic-bezier(.16,1,.3,1), background-color .15s ease, opacity .15s ease; } .ds-btn-outline:hover { background: var(--c-elev-2, #1a2450); } .ds-btn-outline:active { transform: scale(.97); } .ds-btn-outline:focus-visible { outline: 2px solid var(--c-going, #48e28b); outline-offset: 2px; }"
+    },
+    {
+      "name": "Filter chips",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Category and date filters; the active chip inverts to chalk.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip is-on\" aria-pressed=\"true\">Tutti</button><button class=\"ds-chip\" aria-pressed=\"false\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><circle cx=\"12\" cy=\"12\" r=\"2\"/><path d=\"M6 12c0-1.7.7-3.2 1.8-4.2\"/><path d=\"M18 12c0 1.7-.7 3.2-1.8 4.2\"/></svg>Discoteca</button></div>",
+      "css": ".ds-chips { display: flex; gap: 8px; flex-wrap: wrap; } .ds-chip { font-family: ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--c-line-strong, rgba(214,222,255,.22)); background: transparent; color: var(--c-fg, #f3f1ec); font-size: 14px; font-weight: 600; cursor: pointer; transition: transform .16s cubic-bezier(.16,1,.3,1), background-color .15s ease, opacity .15s ease; } .ds-chip:hover { border-color: rgba(243,241,236,.6); } .ds-chip.is-on { background: var(--c-fg, #f3f1ec); color: var(--c-bg, #0b1130); border-color: var(--c-fg, #f3f1ec); } .ds-chip:focus-visible { outline: 2px solid var(--c-going, #48e28b); outline-offset: 2px; }"
+    },
+    {
+      "name": "Text field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Raised-night field; the border turns green on focus.",
+      "html": "<label class=\"ds-field\"><span>Titolo</span><input class=\"ds-input\" placeholder=\"Es. Amelie Lens al Brancaleone\"></label>",
+      "css": ".ds-field { font-family: ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; display: grid; gap: 6px; color: var(--c-fg, #f3f1ec); font-size: 14px; font-weight: 600; } .ds-input { font-family: ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; height: 48px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--c-line, rgba(214,222,255,.11)); background: var(--c-elev, #121a3c); color: var(--c-fg, #f3f1ec); font-size: 16px; outline: none; transition: border-color .15s ease; } .ds-input::placeholder { color: var(--c-faint, #7c87b3); } .ds-input:focus { border-color: rgba(72,226,139,.7); }"
+    },
+    {
+      "name": "Tab bar",
+      "kind": "nav",
+      "refersTo": "tab-bar",
+      "description": "Five slots with the chalk propose square in the middle; active tab gets a green bar.",
+      "html": "<nav class=\"ds-tabs\" aria-label=\"Navigazione principale\"><a class=\"ds-tab is-on\" href=\"#\" aria-current=\"page\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8\"/><path d=\"M3 10a2 2 0 0 1 .7-1.5l7-6a2 2 0 0 1 2.6 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/></svg>Bacheca</a><a class=\"ds-tab\" href=\"#\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M16 2v4M8 2v4M3 10h18\"/></svg>Calendario</a><span class=\"ds-tab-mid\"><a class=\"ds-propose\" href=\"#\" aria-label=\"Proponi un evento\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M12 5v14M5 12h14\"/></svg></a></span><a class=\"ds-tab\" href=\"#\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M10.3 21a1.9 1.9 0 0 0 3.4 0\"/><path d=\"M3.3 15.3A1 1 0 0 0 4 17h16a1 1 0 0 0 .7-1.7C19.4 14 18 12.5 18 8A6 6 0 0 0 6 8c0 4.5-1.4 6-2.7 7.3\"/></svg>Attività</a><a class=\"ds-tab\" href=\"#\"><span class=\"ds-avatar\">M</span>Profilo</a></nav>",
+      "css": ".ds-tabs { font-family: ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif; display: grid; grid-template-columns: repeat(5, 1fr); height: 64px; background: var(--c-bg, #0b1130); border-top: 1px solid var(--c-line, rgba(214,222,255,.11)); } .ds-tab { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px; font-weight: 600; color: var(--c-faint, #7c87b3); text-decoration: none; } .ds-tab:hover { color: var(--c-muted, #aab3d6); } .ds-tab.is-on { color: var(--c-fg, #f3f1ec); } .ds-tab.is-on::before { content: \"\"; position: absolute; top: 0; width: 24px; height: 3px; border-radius: 0 0 999px 999px; background: var(--c-going, #48e28b); } .ds-tab:focus-visible, .ds-propose:focus-visible { outline: 2px solid var(--c-going, #48e28b); outline-offset: 2px; } .ds-tab-mid { display: flex; align-items: center; justify-content: center; } .ds-propose { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 14px; background: var(--c-fg, #f3f1ec); color: var(--c-bg, #0b1130); box-shadow: 0 6px 18px var(--c-shadow, rgba(2,4,16,.55)); } .ds-avatar { font-family: var(--font-archivo, \"Archivo\"), ui-sans-serif, system-ui, sans-serif; font-stretch: 72%; font-feature-settings: \"tnum\" 1, \"lnum\" 1; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 999px; background: #6d3a6e; color: #f3f1ec; font-size: 10px; font-weight: 700; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Door List",
+    "overview": "Every event is the guest list at a club door, read at night. The friends who are in come first, ticked in marker with their +1, and the poster follows whole beneath. The board is a stack of those lists: who you are already down for, where the group is going this weekend, which nights have the longest list, what was just proposed, then the full programme by day.\n\nThe world is night blue, not black: the ground and every raised surface step through the same blue, and type is chalk white. Colour is reserved for the three marker inks, green for in, yellow for maybe, red for no, so a glance at any screen says who is going. Names, counts and titles speak in a narrow uppercase grotesk, the voice of a list written at the door; anything meant to be read as sentences stays in the phone's own face. The density is that of a well-kept list: rows and hairlines, few boxes, nothing decorative.\n\nMotion has one authored moment: putting yourself on the list. The marker tick draws itself on the button, your face slides into the list line and your name writes into the list. Everything else responds to touch and stays quiet.",
+    "keyCharacteristics": [
+      "Night-blue ground and chalk type, with a full day theme for bright light.",
+      "Three marker inks with fixed meanings, each paired with a drawn mark and a word.",
+      "Narrow uppercase grotesk (self-hosted Archivo) for names, counts and titles; system face for reading.",
+      "Rows and 1px hairlines instead of cards; the guest list is the one framed object.",
+      "Posters always whole, never cropped under a gradient or overlaid with text.",
+      "One signature motion: the tick that draws itself when you join a list."
+    ],
+    "rules": [
+      {
+        "name": "The Three Inks Rule",
+        "body": "Green, yellow and red mean in, maybe and no, and nothing else. A status colour never decorates, and every ink travels with its mark (tick, circle, cross) and a word, so the meaning survives without colour.",
+        "section": "colors"
+      },
+      {
+        "name": "The Night Ground Rule",
+        "body": "The ground is night blue, never neutral black; raised surfaces step up in the same blue, never in grey.",
+        "section": "colors"
+      },
+      {
+        "name": "The Fifteen Steps Rule",
+        "body": "Every size comes from the ramp above (11, 12, 13, 14, 15, 16, 17, 18, 19, 23, 25, 27, 32, 40, 56px); no half pixels, no near-duplicates.",
+        "section": "typography"
+      },
+      {
+        "name": "The Door Voice Rule",
+        "body": "Names, counts and event titles are set in the narrow uppercase grotesk; interface headings use the same face in sentence case; anything read as sentences uses the system face.",
+        "section": "typography"
+      },
+      {
+        "name": "The Count Comes First Rule",
+        "body": "On every event surface the faces and \"N in lista\" come before the poster: first on door cards, right under the title on the event screen.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat Board Rule",
+        "body": "Rows, sections and lists never cast shadows; only posters and floating bars and sheets do. No glass, no blur, no glow.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Whole Poster Rule",
+        "body": "Posters are shown whole: filled only when their ratio is close to 4:5, otherwise contained on the night ground. Never cropped under a gradient, never overlaid with text.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do pair every status ink with its mark and its word: tick and \"Sei in lista\", circle and \"Forse\", cross and \"No\".",
+      "Do put the faces and \"N in lista\" before the poster on every event surface.",
+      "Do separate rows with 1px Hairline dividers instead of boxing each item.",
+      "Do set event titles uppercase in Archivo at 62% width and interface headings in sentence case at 72% width.",
+      "Do keep the poster whole: fill only near 4:5, otherwise contain it on the night ground.",
+      "Do keep the tick-draw for the moment someone joins a list; every other mark is static.",
+      "Do theme the browser surfaces from the palette: green selection, caret and focus ring, raised-night scrollbars, tabular figures."
+    ],
+    "donts": [
+      "Don't use emoji or Unicode glyphs as icons in the interface; use drawn Lucide icons (1.8 to 2.2 stroke) or the marker marks.",
+      "Don't use glass, backdrop blur or coloured glows.",
+      "Don't put a label above a heading: the category and the countdown sit beside the date or below the poster.",
+      "Don't use green, yellow or red for decoration, links or emphasis.",
+      "Don't use neutral black or grey grounds; raised surfaces step up in blue.",
+      "Don't crop posters under a gradient or lay text over them."
+    ]
+  }
+}

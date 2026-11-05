@@ -4,7 +4,7 @@ import { isEventKey, updateCache } from '@/lib/query'
 import type { EventRaw, EventView, RsvpStatus } from '@/lib/types'
 
 export const EVENT_SELECT =
-  'id,created_by,title,description,category,starts_at,ends_at,effective_end,location_name,address,external_url,image_path,is_cancelled,created_at,updated_at,' +
+  'id,created_by,title,description,category,starts_at,ends_at,effective_end,city,location_name,address,external_url,image_path,is_cancelled,created_at,updated_at,' +
   'rsvps(user_id,status,guests),event_likes(user_id),saved_events(user_id),comments(count)'
 
 /** Calcola contatori e stato personale a partire dai dati grezzi. */
@@ -172,9 +172,11 @@ export function buildSections(events: EventView[], now = new Date()) {
     weekend: active
       .filter((e) => happensIn(e, wkStart, wkEnd))
       .sort((a, b) => Number(new Date(a.starts_at) < wkStart) - Number(new Date(b.starts_at) < wkStart)),
+    // "Dove vanno tutti": per lunghezza della lista (il numero che si vede),
+    // a parità contano forse, like e messaggi, poi la data.
     popular: active
-      .filter((e) => e.score > 0)
-      .sort((a, b) => b.score - a.score || a.starts_at.localeCompare(b.starts_at))
+      .filter((e) => e.people > 0)
+      .sort((a, b) => b.people - a.people || b.score - a.score || a.starts_at.localeCompare(b.starts_at))
       .slice(0, 8),
     recent: active
       .filter((e) => new Date(e.created_at).getTime() >= weekAgo)
@@ -260,7 +262,7 @@ export function matchesSearch(e: EventView, query: string): boolean {
   const words = normalizeText(query).split(/\s+/).filter(Boolean)
   if (words.length === 0) return true
   const haystack = normalizeText(
-    [e.title, e.description, e.location_name, e.address, e.category].filter(Boolean).join(' '),
+    [e.title, e.description, e.location_name, e.address, e.city, e.category].filter(Boolean).join(' '),
   )
   return words.every((w) => haystack.includes(w))
 }

@@ -83,8 +83,8 @@ export function Feedback() {
           <div
             key={t.id}
             className={cn(
-              'pointer-events-auto flex w-full max-w-sm animate-toast-in items-center gap-3 rounded-2xl px-4 py-3 text-[14px] font-medium shadow-2xl',
-              t.tone === 'error' ? 'bg-no text-white' : 'bg-invert text-invert-fg',
+              'pointer-events-auto flex w-full max-w-sm animate-toast-in items-center gap-3 rounded-[14px] px-4 py-3 text-[14px] font-medium shadow-[0_10px_30px_var(--c-shadow)]',
+              t.tone === 'error' ? 'bg-no text-no-ink' : 'bg-invert text-invert-fg',
             )}
             role={t.tone === 'error' ? 'alert' : 'status'}
           >
@@ -110,7 +110,7 @@ export function Feedback() {
       <Sheet open={!!confirm} onClose={() => closeConfirm(false)}>
         {confirm ? (
           <div className="pt-2 text-center">
-            <h2 className="text-[18px] font-semibold">{confirm.title}</h2>
+            <h2 className="font-list text-[23px] font-bold leading-tight">{confirm.title}</h2>
             {confirm.message ? <p className="mx-auto mt-2 max-w-xs text-[14px] text-muted">{confirm.message}</p> : null}
             <div className="mt-6 grid gap-2">
               <Button variant={confirm.destructive ? 'danger' : 'primary'} size="lg" onClick={() => closeConfirm(true)}>

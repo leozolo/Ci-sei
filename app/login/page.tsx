@@ -125,8 +125,8 @@ export default function LoginPage() {
           L&apos;app non è ancora collegata a Supabase: aggiungi le variabili d&apos;ambiente (vedi la guida) e pubblica di nuovo.
         </Notice>
       ) : (
-        <div className="rounded-[28px] bg-elev p-5">
-          <h1 className="text-[20px] font-bold">{titles[mode]}</h1>
+        <div className="rounded-[16px] border border-line bg-elev p-5">
+          <h1 className="font-list text-[27px] font-extrabold leading-tight">{titles[mode]}</h1>
           {mode === 'create' ? (
             <p className="mt-1 text-[14px] text-muted">Sei il primo: il tuo account sarà l&apos;amministratore e potrai invitare gli amici.</p>
           ) : null}

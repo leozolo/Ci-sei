@@ -52,7 +52,7 @@ export default function NotificationsPage() {
     <main>
       <PageHeader title="Attività" />
       <PageBody>
-        <div className="rounded-[20px] bg-elev px-4">
+        <div className="rounded-[16px] border border-line bg-elev px-4">
           <PushToggle />
         </div>
 
@@ -77,12 +77,12 @@ export default function NotificationsPage() {
                     <Link href={href} className={cn('press -mx-2 flex gap-3 rounded-[20px] p-2.5', fresh ? 'bg-elev' : 'hover:bg-elev')}>
                       <span className="relative shrink-0">
                         <Avatar id={n.actor_id} size={42} />
-                        {fresh ? <span className="absolute -left-0.5 -top-0.5 size-3 rounded-full bg-fg ring-2 ring-bg" aria-label="Nuova" /> : null}
+                        {fresh ? <span className="absolute -left-0.5 -top-0.5 size-3 rounded-full bg-going ring-2 ring-bg" aria-label="Nuova" /> : null}
                       </span>
-                      <span className="min-w-0 flex-1 text-[14.5px] leading-snug">
+                      <span className="min-w-0 flex-1 text-[14px] leading-snug">
                         <span className="font-semibold">{actor}</span> {action}
                         {quote ? <span className="mt-1 line-clamp-2 block text-muted">“{quote}”</span> : null}
-                        <span className="mt-1 block text-[12.5px] text-faint">{relativeTime(n.created_at)}</span>
+                        <span className="mt-1 block text-[12px] text-faint">{relativeTime(n.created_at)}</span>
                       </span>
                       {n.event ? (
                         <Poster event={n.event} className="aspect-[4/5] w-11 shrink-0 self-start rounded-[10px]" />

@@ -2,12 +2,13 @@
   "name": "ci-sei",
   "version": "1.0.0",
   "private": true,
-  "description": "Bacheca privata degli eventi per un gruppo di amici (Next.js + Supabase, PWA).",
+  "description": "Club dei clubbers: la bacheca privata delle serate del gruppo (Next.js + Supabase, PWA).",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "icons": "node scripts/icons.mjs"
   },
   "engines": {
     "node": ">=20.9.0"
@@ -27,6 +28,7 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@types/web-push": "^3.6.3",
+    "sharp": "^0.34.0 || ^0.35.0",
     "tailwindcss": "^4.1.0",
     "typescript": "^5.9.0"
   }

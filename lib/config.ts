@@ -1,4 +1,10 @@
-export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME?.trim() || 'Ci sei?'
+export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME?.trim() || 'Club dei clubbers'
+
+/** Nome breve per la schermata Home (massimo ~12 caratteri). */
+export const APP_SHORT_NAME = process.env.NEXT_PUBLIC_APP_SHORT_NAME?.trim() || 'Clubbers'
+
+/** Città predefinita per i nuovi eventi (altre città si aggiungono dal modulo). */
+export const DEFAULT_CITY = process.env.NEXT_PUBLIC_DEFAULT_CITY?.trim() || 'Roma'
 
 export const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
 export const SUPABASE_KEY =

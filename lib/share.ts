@@ -13,7 +13,7 @@ export function placeText(e: Pick<EventRow, 'location_name' | 'address'>): strin
 
 export function shareText(e: ShareEvent): string {
   const place = placeText(e)
-  return [`*${e.title}*`, `📅 ${whenLong(e)}`, place ? `📍 ${place}` : '', `Ci sei? 👉 ${eventLink(e.id)}`]
+  return [`*${e.title}*`, `📅 ${whenLong(e)}`, place ? `📍 ${place}` : '', `Ci sei? Mettiti in lista 👉 ${eventLink(e.id)}`]
     .filter(Boolean)
     .join('\n')
 }

@@ -18,7 +18,7 @@ function initials(name: string, single: boolean): string {
 function colorFor(seed: string): string {
   let h = 0
   for (const ch of seed) h = (h * 31 + ch.charCodeAt(0)) >>> 0
-  return `hsl(${h % 360} 24% 30%)`
+  return `hsl(${h % 360} 34% 34%)`
 }
 
 export function Avatar({
@@ -45,7 +45,7 @@ export function Avatar({
   return (
     <span
       className={cn(
-        'relative inline-flex shrink-0 select-none items-center justify-center overflow-hidden rounded-full font-semibold text-white',
+        'relative inline-flex shrink-0 select-none items-center justify-center overflow-hidden rounded-full font-list font-bold text-[#f3f1ec]',
         className,
       )}
       style={{
@@ -79,11 +79,14 @@ export function AvatarStack({
   max = 4,
   size = 24,
   ring = 'ring-bg',
+  enterId,
 }: {
   ids: string[]
   max?: number
   size?: number
   ring?: string
+  /** il volto appena entrato in lista: entra con un piccolo movimento */
+  enterId?: string
 }) {
   if (ids.length === 0) return null
   const shown = ids.slice(0, max)
@@ -91,14 +94,14 @@ export function AvatarStack({
   return (
     <span className="flex items-center" aria-hidden>
       {shown.map((id, i) => (
-        <span key={id} className={cn('rounded-full ring-2', ring, i > 0 && '-ml-2')}>
+        <span key={id} className={cn('rounded-full ring-2', ring, i > 0 && '-ml-2', id === enterId && 'animate-name-in')}>
           <Avatar id={id} size={size} className="block" compact />
         </span>
       ))}
       {extra > 0 ? (
         <span
-          className={cn('-ml-2 inline-flex items-center justify-center rounded-full bg-elev-3 font-semibold text-fg ring-2', ring)}
-          style={{ width: size, height: size, fontSize: Math.max(10, Math.round(size * 0.36)) }}
+          className={cn('-ml-2 inline-flex items-center justify-center rounded-full bg-elev-3 font-list font-bold text-fg ring-2', ring)}
+          style={{ width: size, height: size, fontSize: Math.max(10, Math.round(size * 0.4)) }}
         >
           +{extra}
         </span>

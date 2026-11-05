@@ -27,7 +27,7 @@ function SplitList({ events, emptyTitle, emptyText }: { events: EventView[]; emp
     <div className="space-y-6">
       {upcoming.length ? (
         <section>
-          <h3 className="mb-1 text-[14px] font-semibold text-muted">In arrivo</h3>
+          <h2 className="mb-1 text-[14px] font-semibold text-muted">In arrivo</h2>
           <div className="space-y-1">
             {upcoming.map((e) => (
               <EventRow key={e.id} event={e} />
@@ -37,7 +37,7 @@ function SplitList({ events, emptyTitle, emptyText }: { events: EventView[]; emp
       ) : null}
       {past.length ? (
         <section>
-          <h3 className="mb-1 text-[14px] font-semibold text-muted">Passati</h3>
+          <h2 className="mb-1 text-[14px] font-semibold text-muted">Passati</h2>
           <div className="space-y-1">
             {past.map((e) => (
               <EventRow key={e.id} event={e} />
@@ -108,7 +108,7 @@ export default function ProfilePage() {
       <PageBody>
         <div className="flex flex-col items-center pt-2 text-center">
           <Avatar id={id} person={person} size={96} />
-          <h1 className="mt-4 text-[24px] font-bold tracking-[-0.02em]">{person?.display_name ?? '…'}</h1>
+          <h1 className="mt-4 font-list text-[32px] font-extrabold uppercase leading-none">{person?.display_name ?? '…'}</h1>
           <p className="mt-1 text-[14px] text-muted">
             {person?.role === 'admin' ? 'Amministratore, ' : ''}
             {person ? `nel gruppo da ${monthYear.format(new Date(person.created_at))}` : ''}
@@ -126,14 +126,14 @@ export default function ProfilePage() {
             { n: stats.going, l: stats.going === 1 ? 'partecipazione' : 'partecipazioni' },
             { n: stats.upcoming, l: 'in arrivo' },
           ].map((s) => (
-            <div key={s.l} className="rounded-[18px] bg-elev px-2 py-3">
-              <dd className="font-display text-[22px] font-semibold tabular-nums">{s.n}</dd>
+            <div key={s.l} className="rounded-[14px] border border-line bg-elev px-2 py-3">
+              <dd className="font-poster text-[32px] font-extrabold leading-none tabular-nums">{s.n}</dd>
               <dt className="mt-0.5 text-[12px] text-muted">{capitalize(s.l)}</dt>
             </div>
           ))}
         </dl>
 
-        <div className="mt-6 flex gap-1 rounded-full bg-elev p-1" role="tablist">
+        <div className="mt-6 flex gap-1 rounded-full border border-line bg-elev p-1" role="tablist">
           {tabs.map((t) => (
             <button
               key={t.id}

@@ -66,14 +66,14 @@ export default function SearchPage() {
           ) : null}
         </div>
 
-        <div className="no-scrollbar -mx-4 mt-3 flex gap-2 overflow-x-auto px-4">
+        <div className="no-scrollbar relative -mx-4 mt-3 flex gap-2 overflow-x-auto px-4 sm:flex-wrap sm:overflow-visible">
           <Chip active={includePast} onClick={() => setIncludePast((v) => !v)}>
             Anche passati
           </Chip>
           <span className="my-1.5 w-px shrink-0 bg-line-strong" aria-hidden />
           {CATEGORIES.map((c) => (
             <Chip key={c.id} active={category === c.id} onClick={() => setCategory(category === c.id ? null : c.id)}>
-              <span aria-hidden>{c.emoji}</span>
+              <c.icon className="size-4" strokeWidth={1.9} aria-hidden />
               {c.label}
             </Chip>
           ))}

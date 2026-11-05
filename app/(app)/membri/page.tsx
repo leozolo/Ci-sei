@@ -14,17 +14,17 @@ export default function MembersPage() {
     <main>
       <PageHeader back title={`Membri (${active.length})`} />
       <PageBody>
-        <ul className="divide-y divide-line rounded-[20px] bg-elev px-4">
+        <ul className="divide-y divide-line rounded-[16px] border border-line bg-elev px-4">
           {active.map((m) => (
             <li key={m.id}>
               <Link href={`/u/${m.id}`} className="flex items-center gap-3 py-3">
                 <Avatar person={m} size={42} />
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[15px] font-semibold">
+                  <span className="block truncate font-list text-[18px] font-bold uppercase">
                     {m.display_name}
-                    {m.id === me.id ? <span className="font-normal text-muted"> (tu)</span> : null}
+                    {m.id === me.id ? <span className="font-sans text-[13px] font-normal normal-case text-muted"> (tu)</span> : null}
                   </span>
-                  {m.role === 'admin' ? <span className="block text-[12.5px] text-muted">Amministratore</span> : null}
+                  {m.role === 'admin' ? <span className="block text-[12px] text-muted">Amministratore</span> : null}
                 </span>
                 <LuChevronRight className="size-5 text-faint" />
               </Link>

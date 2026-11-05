@@ -10,6 +10,8 @@ import { FieldHint, FieldLabel, Switch, TextArea, TextField, inputClass } from '
 import { toast } from '@/components/ui/feedback'
 import { createEvent, errorMessage, updateEvent } from '@/lib/actions'
 import { CATEGORIES } from '@/lib/categories'
+import { normalizeCity } from '@/lib/city'
+import { DEFAULT_CITY } from '@/lib/config'
 import { cn } from '@/lib/cn'
 import { addDays, combineLocal, toDateInput, toTimeInput } from '@/lib/format'
 import { invalidate, isEventKey } from '@/lib/query'
@@ -49,6 +51,7 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
   const [endTime, setEndTime] = useState(end ? toTimeInput(end) : '')
   const [locationName, setLocationName] = useState(event?.location_name ?? '')
   const [address, setAddress] = useState(event?.address ?? '')
+  const [city, setCity] = useState(event?.city ?? DEFAULT_CITY)
   const [description, setDescription] = useState(event?.description ?? '')
   const [alsoGoing, setAlsoGoing] = useState(true)
 
@@ -112,6 +115,7 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
         setAddress(p.address)
         filled++
       }
+      if (p.city && (!city.trim() || city === DEFAULT_CITY)) setCity(normalizeCity(p.city))
       if (p.startDate && !date) {
         const s = splitIsoLocal(p.startDate)
         if (s.date) {
@@ -179,6 +183,7 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
         category,
         starts_at: startAt!.toISOString(),
         ends_at: endAt ? endAt.toISOString() : null,
+        city: normalizeCity(city),
         location_name: locationName.trim() || null,
         address: address.trim() || null,
         external_url: url || null,
@@ -274,9 +279,9 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
         {preview || hasExistingPoster ? (
           <div className="relative w-full max-w-[260px]">
             {preview ? (
-              <img src={preview} alt="Anteprima locandina" className="aspect-[4/5] w-full rounded-[22px] bg-elev-2 object-cover" />
+              <img src={preview} alt="Anteprima locandina" className="aspect-[4/5] w-full rounded-[12px] bg-elev-2 object-cover" />
             ) : event ? (
-              <Poster event={event} className="aspect-[4/5] w-full rounded-[22px]" />
+              <Poster event={event} className="aspect-[4/5] w-full rounded-[12px]" />
             ) : null}
             <div className="absolute inset-x-3 bottom-3 flex gap-2">
               <Button size="sm" variant="primary" onClick={() => fileInput.current?.click()}>
@@ -291,11 +296,11 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
           <button
             type="button"
             onClick={() => fileInput.current?.click()}
-            className="press flex aspect-[4/5] w-full max-w-[260px] flex-col items-center justify-center gap-2 rounded-[22px] border-2 border-dashed border-line-strong text-muted hover:text-fg"
+            className="press flex aspect-[4/5] w-full max-w-[260px] flex-col items-center justify-center gap-2 rounded-[12px] border-2 border-dashed border-line-strong text-muted hover:border-fg/60 hover:text-fg"
           >
             <LuImagePlus className="size-8" />
             <span className="text-[14px] font-semibold">Aggiungi la locandina</span>
-            <span className="text-[12.5px]">foto o screenshot</span>
+            <span className="text-[12px]">foto o screenshot</span>
           </button>
         )}
         {errors.image ? <FieldHint error>{errors.image}</FieldHint> : null}
@@ -324,11 +329,11 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
               onClick={() => setCategory(c.id)}
               aria-pressed={category === c.id}
               className={cn(
-                'press inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-[14px] font-semibold',
-                category === c.id ? 'bg-invert text-invert-fg' : 'bg-elev-2 text-fg hover:bg-elev-3',
+                'press inline-flex h-10 items-center gap-1.5 rounded-full border px-4 text-[14px] font-semibold',
+                category === c.id ? 'border-fg bg-fg text-bg' : 'border-line-strong text-fg hover:border-fg/60',
               )}
             >
-              <span aria-hidden>{c.emoji}</span>
+              <c.icon className="size-4" strokeWidth={1.9} aria-hidden />
               {c.one}
             </button>
           ))}
@@ -358,7 +363,7 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
 
         <div id="campo-end" className="mt-2">
           {hasEnd ? (
-            <div className="rounded-[20px] bg-elev p-3">
+            <div className="rounded-[14px] border border-line bg-elev p-3">
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-[14px] font-semibold">Fine</span>
                 <button
@@ -420,10 +425,20 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
         <TextField
           id="indirizzo"
           aria-label="Indirizzo"
-          placeholder="Indirizzo (via, città)"
+          placeholder="Indirizzo (via e numero)"
           value={address}
           maxLength={300}
           onChange={(e) => setAddress(e.target.value)}
+        />
+        <TextField
+          id="citta"
+          label="Città"
+          value={city}
+          maxLength={60}
+          autoCapitalize="words"
+          onChange={(e) => setCity(e.target.value)}
+          onBlur={() => setCity((v) => normalizeCity(v))}
+          hint="Per gli eventi fuori città: scrivi un'altra città e comparirà il filtro per città in bacheca."
         />
       </div>
 
@@ -439,8 +454,8 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
       />
 
       {!editing ? (
-        <div className="rounded-[20px] bg-elev px-4">
-          <Switch checked={alsoGoing} onChange={setAlsoGoing} label="Partecipo anch'io" description="Segna subito la tua presenza." />
+        <div className="rounded-[14px] border border-line bg-elev px-4">
+          <Switch checked={alsoGoing} onChange={setAlsoGoing} label="Mettimi in lista" description="Segna subito la tua presenza." />
         </div>
       ) : null}
 

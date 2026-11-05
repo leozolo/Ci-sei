@@ -130,13 +130,13 @@ export function Comments({ eventId }: { eventId: string }) {
           <Avatar id={c.user_id} size={nested ? 28 : 34} />
         </Link>
         <div className="min-w-0 flex-1">
-          <div className="inline-block max-w-full rounded-[18px] rounded-tl-[6px] bg-elev px-3.5 py-2.5">
-            <p className="text-[13px] font-semibold">{name}</p>
+          <div className="inline-block max-w-full rounded-[14px] rounded-tl-[4px] border border-line bg-elev px-3.5 py-2.5">
+            <p className="font-list text-[14px] font-bold uppercase tracking-[0.01em]">{name}</p>
             <p className="whitespace-pre-wrap break-words text-[15px] leading-snug">
               <Linkify text={c.body} />
             </p>
           </div>
-          <div className="mt-1 flex items-center gap-4 px-2 text-[12.5px] text-muted">
+          <div className="mt-1 flex items-center gap-4 px-2 text-[12px] text-muted">
             <span>{pending ? 'invio…' : relativeTime(c.created_at)}</span>
             {!pending ? (
               <button type="button" onClick={() => reply(c)} className="font-semibold hover:text-fg">
@@ -156,10 +156,10 @@ export function Comments({ eventId }: { eventId: string }) {
 
   return (
     <section id="commenti" className="scroll-mt-20" aria-labelledby="commenti-titolo">
-      <h2 id="commenti-titolo" className="font-display text-[17px] font-semibold tracking-[-0.02em]">
+      <h2 id="commenti-titolo" className="font-list text-[23px] font-extrabold leading-none">
         Messaggi{comments && comments.length ? <span className="ml-2 text-muted">{comments.length}</span> : null}
       </h2>
-      <p className="mt-1 text-[13.5px] text-muted">Per organizzarvi: passaggi, orari, biglietti, domande.</p>
+      <p className="mt-1 text-[13px] text-muted">Per organizzarvi: passaggi, orari, biglietti, domande.</p>
 
       {isLoading ? (
         <div className="mt-4 space-y-3" aria-hidden>
@@ -177,7 +177,7 @@ export function Comments({ eventId }: { eventId: string }) {
         </ul>
       ) : null}
 
-      <div className="mt-4 rounded-[22px] bg-elev p-1.5">
+      <div className="mt-4 rounded-[16px] border border-line bg-elev p-1.5">
         {replyTo ? (
           <div className="flex items-center justify-between gap-2 px-3 pb-1 pt-1.5 text-[13px] text-muted">
             <span className="truncate">
@@ -210,7 +210,7 @@ export function Comments({ eventId }: { eventId: string }) {
             onClick={() => void send()}
             disabled={!text.trim() || sending}
             aria-label="Invia"
-            className="press mb-0.5 mr-0.5 inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-invert text-invert-fg disabled:opacity-30"
+            className="press mb-0.5 mr-0.5 inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-fg text-bg disabled:opacity-30"
           >
             <LuArrowUp className="size-5" strokeWidth={2.6} />
           </button>
@@ -218,7 +218,7 @@ export function Comments({ eventId }: { eventId: string }) {
       </div>
 
       {!text && !replyTo ? (
-        <div className="no-scrollbar -mx-4 mt-2.5 flex gap-2 overflow-x-auto px-4">
+        <div className="no-scrollbar relative -mx-4 mt-2.5 flex gap-2 overflow-x-auto px-4 sm:flex-wrap sm:overflow-visible">
           {SUGGESTIONS.map((s) => (
             <button
               key={s}
@@ -230,7 +230,7 @@ export function Comments({ eventId }: { eventId: string }) {
                   input.current?.focus()
                 })
               }}
-              className="press shrink-0 rounded-full border border-line-strong px-3.5 py-1.5 text-[13px] text-muted hover:text-fg"
+              className="press shrink-0 rounded-full border border-line-strong px-3.5 py-1.5 text-[13px] text-muted hover:border-fg hover:text-fg"
             >
               {s}
             </button>

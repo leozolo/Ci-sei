@@ -6,7 +6,8 @@ import { useEffect, useMemo, useRef, type ReactNode } from 'react'
 import { LuBell, LuCalendarDays, LuHouse, LuPlus } from 'react-icons/lu'
 import { AppContext, useApp, type AppContextValue } from '@/components/app-context'
 import { Avatar } from '@/components/avatar'
-import { Mark } from '@/components/brand'
+import { Mark, Wordmark } from '@/components/brand'
+import { TICK_PATH } from '@/components/marker'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/feedback'
 import { cn } from '@/lib/cn'
@@ -165,10 +166,15 @@ function MemberApp({
     [me, email, members, memberMap, unread, refreshMe],
   )
 
+  // la pagina di un evento ha la sua barra in basso (Mettimi in lista)
+  const eventDetail = /^\/eventi\/[0-9a-f-]{36}$/i.test(pathname)
+
   return (
     <AppContext.Provider value={value}>
-      <div className="min-h-dvh pb-[calc(env(safe-area-inset-bottom)+5.5rem)]">{children}</div>
-      <BottomNav />
+      <div className={cn('min-h-dvh', eventDetail ? 'pb-[calc(env(safe-area-inset-bottom)+6rem)]' : 'pb-[calc(env(safe-area-inset-bottom)+5.5rem)]')}>
+        {children}
+      </div>
+      {eventDetail ? null : <BottomNav />}
     </AppContext.Provider>
   )
 }
@@ -185,19 +191,19 @@ function BottomNav() {
 
   const linkClass = (active: boolean) =>
     cn(
-      'press flex flex-col items-center justify-center gap-1 text-[10.5px] font-semibold',
+      'press relative flex flex-col items-center justify-center gap-1 text-[11px] font-semibold',
       active ? 'text-fg' : 'text-faint hover:text-muted',
     )
 
+  const activeMark = <span className="absolute top-0 h-[3px] w-6 rounded-b-full bg-going" aria-hidden />
+
   return (
-    <nav
-      aria-label="Navigazione principale"
-      className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg/85 backdrop-blur-xl"
-    >
+    <nav aria-label="Navigazione principale" className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg">
       <div className="mx-auto grid h-16 max-w-2xl grid-cols-5">
         {items.map(({ href, label, icon: Icon, active }) => (
           <Link key={href} href={href} className={linkClass(active)} aria-current={active ? 'page' : undefined}>
-            <Icon className="size-6" strokeWidth={active ? 2.4 : 2} />
+            {active ? activeMark : null}
+            <Icon className="size-6" strokeWidth={active ? 2.2 : 1.8} />
             {label}
           </Link>
         ))}
@@ -205,17 +211,18 @@ function BottomNav() {
           <Link
             href="/eventi/nuovo"
             aria-label="Proponi un evento"
-            className="press flex size-12 items-center justify-center rounded-full bg-invert text-invert-fg shadow-lg"
+            className="press flex size-12 items-center justify-center rounded-[14px] bg-fg text-bg shadow-[0_6px_18px_var(--c-shadow)]"
           >
             <LuPlus className="size-6" strokeWidth={2.6} />
           </Link>
         </div>
         {itemsRight.map(({ href, label, icon: Icon, active }) => (
           <Link key={href} href={href} className={linkClass(active)} aria-current={active ? 'page' : undefined}>
+            {active ? activeMark : null}
             <span className="relative">
-              <Icon className="size-6" strokeWidth={active ? 2.4 : 2} />
+              <Icon className="size-6" strokeWidth={active ? 2.2 : 1.8} />
               {unread > 0 ? (
-                <span className="absolute -right-2 -top-1.5 min-w-[18px] rounded-full bg-invert px-1 text-center text-[11px] font-bold leading-[18px] text-invert-fg ring-2 ring-bg">
+                <span className="absolute -right-2.5 -top-1.5 min-w-[18px] rounded-full bg-going px-1 text-center font-list text-[12px] font-extrabold leading-[18px] text-going-ink ring-2 ring-bg">
                   {unread > 99 ? '99+' : unread}
                 </span>
               ) : null}
@@ -224,6 +231,7 @@ function BottomNav() {
           </Link>
         ))}
         <Link href={`/u/${me.id}`} className={linkClass(profileActive)} aria-current={profileActive ? 'page' : undefined}>
+          {profileActive ? activeMark : null}
           <span className={cn('rounded-full ring-2', profileActive ? 'ring-fg' : 'ring-transparent')}>
             <Avatar person={me} size={24} className="block" />
           </span>
@@ -236,8 +244,11 @@ function BottomNav() {
 
 export function Splash({ failed, onRetry }: { failed?: boolean; onRetry?: () => void }) {
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center gap-6 px-8 text-center">
-      <Mark size={72} className={cn('text-fg', !failed && 'animate-pulse')} />
+    <div className="flex min-h-dvh flex-col items-center justify-center gap-5 px-8 text-center">
+      <svg viewBox="0 0 24 24" fill="none" className={cn('size-16 text-going', !failed && 'marker-draw')} aria-hidden>
+        <path d={TICK_PATH} pathLength={1} stroke="currentColor" strokeWidth={3.2} strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      <Wordmark className="text-[27px]" />
       {failed ? (
         <div>
           <p className="text-[15px] text-muted">Non riesco a collegarmi. Controlla la connessione.</p>
@@ -253,8 +264,8 @@ export function Splash({ failed, onRetry }: { failed?: boolean; onRetry?: () => 
 function SetupNeeded() {
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-4 px-6">
-      <Mark size={56} className="text-fg" />
-      <h1 className="font-display text-[22px] font-semibold">Manca un passaggio</h1>
+      <Mark size={56} />
+      <h1 className="font-list text-[27px] font-extrabold">Manca un passaggio</h1>
       <p className="text-[15px] text-muted">
         L&apos;app non è ancora collegata al database. Inserisci le variabili <code>NEXT_PUBLIC_SUPABASE_URL</code> e{' '}
         <code>NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY</code> nelle impostazioni del progetto su Vercel, poi pubblica di nuovo.
