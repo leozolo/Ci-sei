@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { LuArchive, LuSearch } from 'react-icons/lu'
 import { useApp } from '@/components/app-context'
-import { Wordmark } from '@/components/brand'
+import { Credit, Wordmark } from '@/components/brand'
 import { DoorCard, EventRow, InListRow, Rail, RankRow, SectionTitle } from '@/components/event/cards'
 import { CityChips, FilterBar } from '@/components/filters'
 import { EmptyState, ListSkeleton } from '@/components/page-header'
@@ -217,6 +217,9 @@ export default function HomePage() {
           </section>
         </>
       )}
+
+      {/* la firma, in fondo alla bacheca */}
+      {events ? <Credit className="mx-auto mt-6 max-w-2xl px-4" /> : null}
     </main>
   )
 }

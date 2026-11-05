@@ -34,3 +34,15 @@ export function Wordmark({ className }: { className?: string }) {
     <span className={cn('font-poster font-extrabold uppercase leading-none tracking-[0.005em]', className)}>{APP_NAME}</span>
   )
 }
+
+/**
+ * La firma di chi ha disegnato l'app, in fondo alla bacheca: nel carattere normale
+ * del telefono e uguale in tutte le lingue, come una firma.
+ */
+export function Credit({ className }: { className?: string }) {
+  return (
+    <p lang="en" className={cn('text-center text-[12px] text-faint', className)}>
+      designed by <span className="text-muted">L.&nbsp;Zolovkin</span>
+    </p>
+  )
+}
