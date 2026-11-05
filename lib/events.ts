@@ -1,5 +1,6 @@
 import { sb } from '@/lib/supabase/client'
 import { addDays, dayKey, startOfDay, weekendRange } from '@/lib/format'
+import { msgs } from '@/lib/i18n/core'
 import { isEventKey, updateCache } from '@/lib/query'
 import type { EventRaw, EventView, RsvpStatus } from '@/lib/types'
 
@@ -217,13 +218,26 @@ export function groupByDay(events: EventView[], now = new Date(), descending = f
 
 export type WhenFilter = 'all' | 'today' | 'tomorrow' | 'weekend' | 'week' | 'month' | `day:${string}`
 
+/** Etichette dei filtri per data, lette nella lingua corrente. */
 export const WHEN_LABELS: Record<string, string> = {
-  all: 'Sempre',
-  today: 'Oggi',
-  tomorrow: 'Domani',
-  weekend: 'Questo weekend',
-  week: 'Prossimi 7 giorni',
-  month: 'Prossimi 30 giorni',
+  get all() {
+    return msgs().filters.when.all
+  },
+  get today() {
+    return msgs().filters.when.today
+  },
+  get tomorrow() {
+    return msgs().filters.when.tomorrow
+  },
+  get weekend() {
+    return msgs().filters.when.weekend
+  },
+  get week() {
+    return msgs().filters.when.week
+  },
+  get month() {
+    return msgs().filters.when.month
+  },
 }
 
 export function whenRange(filter: WhenFilter, now = new Date()): [Date, Date] | null {

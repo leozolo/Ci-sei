@@ -8,10 +8,13 @@ import { Button } from '@/components/ui/button'
 import { TextField } from '@/components/ui/field'
 import { toast } from '@/components/ui/feedback'
 import { authErrorMessage } from '@/lib/auth-errors'
+import { useI18n } from '@/lib/i18n/react'
 import { sb } from '@/lib/supabase/client'
 
 export default function ResetPasswordPage() {
   const router = useRouter()
+  const { m } = useI18n()
+  const t = m.newPassword
   const [hasSession, setHasSession] = useState<boolean | null>(null)
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
@@ -28,11 +31,11 @@ export default function ResetPasswordPage() {
     e.preventDefault()
     setError(null)
     if (password.length < 8) {
-      setError('Usa almeno 8 caratteri.')
+      setError(t.tooShort)
       return
     }
     if (password !== confirm) {
-      setError('Le due password non coincidono.')
+      setError(t.mismatch)
       return
     }
     setBusy(true)
@@ -42,7 +45,7 @@ export default function ResetPasswordPage() {
       setError(authErrorMessage(err))
       return
     }
-    toast.success('Password aggiornata')
+    toast.success(t.updated)
     router.replace('/')
   }
 
@@ -57,9 +60,9 @@ export default function ResetPasswordPage() {
   if (!hasSession) {
     return (
       <AuthScreen>
-        <Notice tone="error">Il link non è più valido. Richiedine uno nuovo dalla pagina di accesso.</Notice>
+        <Notice tone="error">{t.invalidLink}</Notice>
         <Link href="/login" className="mt-4 block text-center font-semibold underline underline-offset-4">
-          Vai all&apos;accesso
+          {t.goToLogin}
         </Link>
       </AuthScreen>
     )
@@ -68,13 +71,13 @@ export default function ResetPasswordPage() {
   return (
     <AuthScreen>
       <div className="rounded-[16px] border border-line bg-elev p-5">
-        <h1 className="font-list text-[27px] font-extrabold leading-tight">Nuova password</h1>
+        <h1 className="font-list text-[27px] font-extrabold leading-tight">{t.title}</h1>
         <form onSubmit={submit} className="mt-5 space-y-3" noValidate>
-          <TextField id="nuova" label="Nuova password" type="password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          <TextField id="conferma" label="Ripeti la password" type="password" autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
+          <TextField id="nuova" label={t.field} type="password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <TextField id="conferma" label={t.repeat} type="password" autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
           {error ? <Notice tone="error">{error}</Notice> : null}
           <Button type="submit" size="lg" className="w-full" loading={busy}>
-            Salva la password
+            {t.save}
           </Button>
         </form>
       </div>

@@ -9,6 +9,8 @@ import { EmptyState, ListSkeleton, PageBody, PageHeader } from '@/components/pag
 import { inputClass } from '@/components/ui/field'
 import { CATEGORIES } from '@/lib/categories'
 import { cn } from '@/lib/cn'
+import { plural } from '@/lib/i18n/core'
+import { useI18n } from '@/lib/i18n/react'
 import { fetchPast, fetchUpcoming, matchesSearch } from '@/lib/events'
 import { useQuery } from '@/lib/query'
 
@@ -18,6 +20,7 @@ export default function SearchPage() {
   const [category, setCategory] = useState<string | null>(null)
   const [includePast, setIncludePast] = useState(false)
   const input = useRef<HTMLInputElement>(null)
+  const { m } = useI18n()
 
   useEffect(() => {
     input.current?.focus()
@@ -37,7 +40,7 @@ export default function SearchPage() {
 
   return (
     <main>
-      <PageHeader back title="Cerca" />
+      <PageHeader back title={m.search.title} />
       <PageBody>
         <div className="relative">
           <LuSearch className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-faint" />
@@ -45,10 +48,10 @@ export default function SearchPage() {
             ref={input}
             type="search"
             enterKeyHint="search"
-            placeholder="Titolo, locale, zona, artista…"
+            placeholder={m.search.placeholder}
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            aria-label="Cerca eventi"
+            aria-label={m.board.searchAria}
             className={cn(inputClass, 'h-12 pl-12 pr-11')}
           />
           {q ? (
@@ -58,7 +61,7 @@ export default function SearchPage() {
                 setQ('')
                 input.current?.focus()
               }}
-              aria-label="Cancella ricerca"
+              aria-label={m.search.clear}
               className="absolute right-2 top-1/2 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-full text-muted hover:bg-elev-3"
             >
               <LuX className="size-4" />
@@ -68,7 +71,7 @@ export default function SearchPage() {
 
         <div className="no-scrollbar relative -mx-4 mt-3 flex gap-2 overflow-x-auto px-4 sm:flex-wrap sm:overflow-visible">
           <Chip active={includePast} onClick={() => setIncludePast((v) => !v)}>
-            Anche passati
+            {m.search.includePast}
           </Chip>
           <span className="my-1.5 w-px shrink-0 bg-line-strong" aria-hidden />
           {CATEGORIES.map((c) => (
@@ -81,13 +84,13 @@ export default function SearchPage() {
 
         <div className="mt-5">
           {!active ? (
-            <p className="py-10 text-center text-[14px] text-muted">Scrivi qualcosa o scegli una categoria.</p>
+            <p className="py-10 text-center text-[14px] text-muted">{m.search.prompt}</p>
           ) : loading && results.length === 0 ? (
             <ListSkeleton rows={3} />
           ) : results.length ? (
             <>
               <p className="mb-2 text-[13px] text-muted">
-                {results.length} {results.length === 1 ? 'risultato' : 'risultati'}
+                {plural(m.search.results, results.length)}
               </p>
               <div className="space-y-1">
                 {results.map((e) => (
@@ -96,8 +99,8 @@ export default function SearchPage() {
               </div>
             </>
           ) : (
-            <EmptyState title="Nessun evento trovato">
-              {includePast ? 'Prova con parole diverse.' : 'Prova con parole diverse o includi gli eventi passati.'}
+            <EmptyState title={m.search.noneTitle}>
+              {includePast ? m.search.noneBody : m.search.noneBodyPast}
             </EmptyState>
           )}
         </div>

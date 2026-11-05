@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react'
 import { EventForm } from '@/components/event/event-form'
 import { PageBody, PageHeader } from '@/components/page-header'
+import { useI18n } from '@/lib/i18n/react'
 
 export default function NewEventPage() {
+  const { m } = useI18n()
   const [ready, setReady] = useState(false)
   const [defaultDate, setDefaultDate] = useState<string | undefined>(undefined)
 
@@ -16,7 +18,7 @@ export default function NewEventPage() {
 
   return (
     <main>
-      <PageHeader back title="Proponi un evento" />
+      <PageHeader back title={m.nav.propose} />
       <PageBody className="pt-2">{ready ? <EventForm defaultDate={defaultDate} /> : null}</PageBody>
     </main>
   )

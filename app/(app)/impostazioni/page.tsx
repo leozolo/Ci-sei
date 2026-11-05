@@ -5,24 +5,22 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState, type ReactNode } from 'react'
 import { LuArchive, LuChevronRight, LuLogOut, LuShieldCheck, LuUsers } from 'react-icons/lu'
 import { useApp } from '@/components/app-context'
+import { LanguageSelect } from '@/components/language-select'
 import { PageBody, PageHeader } from '@/components/page-header'
 import { InstallHint, PushToggle } from '@/components/pwa'
 import { Switch } from '@/components/ui/field'
 import { confirmDialog, toast } from '@/components/ui/feedback'
-import { errorMessage, updateNotifyPrefs } from '@/lib/actions'
+import { errorMessage, updateLocale, updateNotifyPrefs } from '@/lib/actions'
 import { cn } from '@/lib/cn'
 import { APP_NAME } from '@/lib/config'
+import type { Locale } from '@/lib/i18n/locales'
+import { useI18n } from '@/lib/i18n/react'
 import { clearCache } from '@/lib/query'
 import { sb } from '@/lib/supabase/client'
 import { applyTheme, readThemePref, type ThemePref } from '@/lib/theme'
 import type { NotifyPrefKey } from '@/lib/types'
 
-const PREFS: { key: NotifyPrefKey; label: string; description: string }[] = [
-  { key: 'new_event', label: 'Nuovi eventi', description: 'Quando qualcuno propone un evento.' },
-  { key: 'comments', label: 'Messaggi', description: 'Messaggi sugli eventi che segui e risposte ai tuoi.' },
-  { key: 'event_updates', label: 'Cambi di programma', description: 'Data, ora o luogo cambiati, eventi annullati.' },
-  { key: 'friend_going', label: 'Amici che partecipano', description: 'Quando qualcuno si aggiunge a un evento a cui vai.' },
-]
+const PREFS: NotifyPrefKey[] = ['new_event', 'comments', 'event_updates', 'friend_going']
 
 function Group({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -46,6 +44,7 @@ function LinkRow({ href, icon, children }: { href: string; icon: ReactNode; chil
 export default function SettingsPage() {
   const { me, email, refreshMe } = useApp()
   const router = useRouter()
+  const { m } = useI18n()
   const [prefs, setPrefs] = useState(me.notify_prefs ?? {})
   const [theme, setTheme] = useState<ThemePref>('dark')
 
@@ -63,8 +62,18 @@ export default function SettingsPage() {
     }
   }
 
+  // la lingua cambia subito sullo schermo; qui la salviamo nel profilo
+  const saveLocale = async (locale: Locale) => {
+    try {
+      await updateLocale(me.id, locale)
+      void refreshMe()
+    } catch (err) {
+      toast.error(errorMessage(err))
+    }
+  }
+
   const logout = async () => {
-    const ok = await confirmDialog({ title: 'Uscire dall’account?', confirmLabel: 'Esci' })
+    const ok = await confirmDialog({ title: m.settings.logoutTitle, confirmLabel: m.settings.logout })
     if (!ok) return
     await sb().auth.signOut()
     clearCache()
@@ -73,35 +82,42 @@ export default function SettingsPage() {
 
   return (
     <main>
-      <PageHeader back={`/u/${me.id}`} title="Impostazioni" />
+      <PageHeader back={`/u/${me.id}`} title={m.settings.title} />
       <PageBody>
         <p className="px-1 text-[14px] text-muted">
-          Accesso con <span className="font-semibold text-fg">{email ?? 'account Google'}</span>
+          {m.settings.signedInAs} <span className="font-semibold text-fg">{email ?? m.settings.googleAccount}</span>
         </p>
 
-        <Group title="Notifiche">
+        <Group title={m.language.label}>
+          <div className="flex items-center justify-between gap-4 py-3">
+            <p className="min-w-0 text-[13px] leading-snug text-muted">{m.language.hint}</p>
+            <LanguageSelect id="lingua" onChange={(l) => void saveLocale(l)} className="shrink-0" />
+          </div>
+        </Group>
+
+        <Group title={m.settings.notifications}>
           <div className="border-b border-line">
             <PushToggle />
           </div>
-          {PREFS.map((p) => (
-            <div key={p.key} className="border-b border-line last:border-0">
+          {PREFS.map((key) => (
+            <div key={key} className="border-b border-line last:border-0">
               <Switch
-                checked={prefs[p.key] !== false}
-                onChange={(v) => void togglePref(p.key, v)}
-                label={p.label}
-                description={p.description}
+                checked={prefs[key] !== false}
+                onChange={(v) => void togglePref(key, v)}
+                label={m.settings.prefs[key].label}
+                description={m.settings.prefs[key].description}
               />
             </div>
           ))}
         </Group>
 
-        <Group title="Aspetto">
-          <div className="flex gap-1 py-3" role="radiogroup" aria-label="Tema">
+        <Group title={m.settings.appearance}>
+          <div className="flex gap-1 py-3" role="radiogroup" aria-label={m.settings.theme}>
             {(
               [
-                ['dark', 'Scuro'],
-                ['light', 'Chiaro'],
-                ['system', 'Come il telefono'],
+                ['dark', m.settings.themeDark],
+                ['light', m.settings.themeLight],
+                ['system', m.settings.themeSystem],
               ] as const
             ).map(([value, label]) => (
               <button
@@ -124,16 +140,16 @@ export default function SettingsPage() {
           </div>
         </Group>
 
-        <Group title="Gruppo">
+        <Group title={m.settings.group}>
           <LinkRow href="/membri" icon={<LuUsers className="size-5" />}>
-            Membri
+            {m.settings.members}
           </LinkRow>
           <LinkRow href="/archivio" icon={<LuArchive className="size-5" />}>
-            Eventi passati
+            {m.board.pastEvents}
           </LinkRow>
           {me.role === 'admin' ? (
             <LinkRow href="/admin" icon={<LuShieldCheck className="size-5" />}>
-              Inviti e membri (amministratore)
+              {m.settings.adminLink}
             </LinkRow>
           ) : null}
         </Group>
@@ -147,7 +163,7 @@ export default function SettingsPage() {
           onClick={() => void logout()}
           className="press mt-7 flex w-full items-center justify-center gap-2 rounded-[16px] border border-line bg-elev py-3.5 text-[15px] font-semibold text-no"
         >
-          <LuLogOut className="size-5" /> Esci
+          <LuLogOut className="size-5" /> {m.settings.logout}
         </button>
         <p className="mt-6 text-center text-[12px] text-faint">{APP_NAME}</p>
       </PageBody>

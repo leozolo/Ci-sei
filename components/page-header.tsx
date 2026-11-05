@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { LuChevronLeft } from 'react-icons/lu'
 import { IconButton } from '@/components/ui/button'
 import { cn } from '@/lib/cn'
+import { useI18n } from '@/lib/i18n/react'
 
 /** Intestazione fissa in alto con "indietro", titolo e azioni. */
 export function PageHeader({
@@ -19,6 +20,7 @@ export function PageHeader({
   className?: string
 }) {
   const router = useRouter()
+  const { m } = useI18n()
   const goBack = () => {
     if (window.history.length > 1) router.back()
     else router.push(typeof back === 'string' ? back : '/')
@@ -27,7 +29,7 @@ export function PageHeader({
     <header className={cn('pt-safe sticky top-0 z-30 bg-bg', className)}>
       <div className="mx-auto flex h-14 max-w-2xl items-center gap-1 px-2">
         {back ? (
-          <IconButton label="Indietro" onClick={goBack}>
+          <IconButton label={m.common.back} onClick={goBack}>
             <LuChevronLeft className="size-6" />
           </IconButton>
         ) : (

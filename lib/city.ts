@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { DEFAULT_CITY } from '@/lib/config'
+import { getLocale } from '@/lib/i18n/core'
+import type { Locale } from '@/lib/i18n/locales'
 import type { EventView } from '@/lib/types'
 
 /*
@@ -17,6 +19,48 @@ function read(): string {
   } catch {
     return ALL_CITIES
   }
+}
+
+/*
+ * Il nome della città resta come l'ha scritto chi ha proposto l'evento;
+ * solo per mostrarlo, le città più comuni hanno il nome in inglese e russo.
+ */
+const CITY_NAMES: Record<string, Partial<Record<Locale, string>>> = {
+  roma: { en: 'Rome', ru: 'Рим' },
+  ostia: { ru: 'Остия' },
+  fiumicino: { ru: 'Фьюмичино' },
+  milano: { en: 'Milan', ru: 'Милан' },
+  napoli: { en: 'Naples', ru: 'Неаполь' },
+  torino: { en: 'Turin', ru: 'Турин' },
+  firenze: { en: 'Florence', ru: 'Флоренция' },
+  venezia: { en: 'Venice', ru: 'Венеция' },
+  bologna: { ru: 'Болонья' },
+  genova: { en: 'Genoa', ru: 'Генуя' },
+  padova: { en: 'Padua', ru: 'Падуя' },
+  verona: { ru: 'Верона' },
+  pisa: { ru: 'Пиза' },
+  siena: { ru: 'Сиена' },
+  bari: { ru: 'Бари' },
+  palermo: { ru: 'Палермо' },
+  catania: { ru: 'Катания' },
+  cagliari: { ru: 'Кальяри' },
+  londra: { en: 'London', ru: 'Лондон' },
+  parigi: { en: 'Paris', ru: 'Париж' },
+  berlino: { en: 'Berlin', ru: 'Берлин' },
+  barcellona: { en: 'Barcelona', ru: 'Барселона' },
+  madrid: { ru: 'Мадрид' },
+  lisbona: { en: 'Lisbon', ru: 'Лиссабон' },
+  amsterdam: { ru: 'Амстердам' },
+  praga: { en: 'Prague', ru: 'Прага' },
+  vienna: { ru: 'Вена' },
+  ibiza: { ru: 'Ибица' },
+  mosca: { en: 'Moscow', ru: 'Москва' },
+  'san pietroburgo': { en: 'Saint Petersburg', ru: 'Санкт-Петербург' },
+}
+
+/** "Roma" → "Rome", "Рим". Le altre città restano come sono state scritte. */
+export function cityLabel(city: string, locale: Locale = getLocale()): string {
+  return CITY_NAMES[city.trim().toLocaleLowerCase('it-IT')]?.[locale] ?? city
 }
 
 export function normalizeCity(value: string): string {

@@ -1,3 +1,4 @@
+import { msgs } from '@/lib/i18n/core'
 import { sb } from '@/lib/supabase/client'
 
 export type PushSupport = 'ok' | 'unsupported' | 'ios-install'
@@ -63,7 +64,7 @@ export async function enablePush(publicKey: string): Promise<'on' | 'denied'> {
   const permission = await Notification.requestPermission()
   if (permission !== 'granted') return 'denied'
   const reg = await registration()
-  if (!reg) throw new Error('Service worker non disponibile')
+  if (!reg) throw new Error(msgs().errors.pushUnavailable)
   await navigator.serviceWorker.ready
   let sub = await reg.pushManager.getSubscription()
   if (!sub) {

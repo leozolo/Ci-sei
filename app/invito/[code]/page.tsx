@@ -10,25 +10,22 @@ import { TextField } from '@/components/ui/field'
 import { inviteErrorMessage, joinGroup } from '@/lib/actions'
 import { authErrorMessage } from '@/lib/auth-errors'
 import { GOOGLE_AUTH, PENDING_INVITE_KEY } from '@/lib/config'
+import { fmt, getLocale } from '@/lib/i18n/core'
+import type { Messages } from '@/lib/i18n/messages/it'
+import { useI18n } from '@/lib/i18n/react'
 import { clearCache } from '@/lib/query'
 import { sb } from '@/lib/supabase/client'
 
 interface InviteInfo {
   valid: boolean
   inviter?: string | null
-  reason?: 'not_found' | 'revoked' | 'expired' | 'used'
-}
-
-const REASONS: Record<string, string> = {
-  not_found: 'Questo link d’invito non esiste. Controlla di averlo copiato tutto.',
-  revoked: 'Questo link d’invito è stato disattivato.',
-  expired: 'Questo link d’invito è scaduto.',
-  used: 'Questo link d’invito è già stato usato.',
+  reason?: keyof Messages['invite']['reasons']
 }
 
 export default function InvitePage() {
   const { code } = useParams<{ code: string }>()
   const router = useRouter()
+  const { m } = useI18n()
   const [info, setInfo] = useState<InviteInfo | null>(null)
   const [session, setSession] = useState<Session | null | undefined>(undefined)
   const [mode, setMode] = useState<'signup' | 'login'>('signup')
@@ -84,11 +81,11 @@ export default function InvitePage() {
     setError(null)
     setNotice(null)
     if (mode === 'signup' && !name.trim()) {
-      setError('Scrivi il tuo nome o nickname: è quello che vedranno gli amici.')
+      setError(m.invite.nameRequired)
       return
     }
     if (mode === 'signup' && password.length < 8) {
-      setError('La password deve avere almeno 8 caratteri.')
+      setError(m.auth.passwordShort)
       return
     }
     setBusy(true)
@@ -103,7 +100,7 @@ export default function InvitePage() {
         email: email.trim(),
         password,
         options: {
-          data: { display_name: name.trim() },
+          data: { display_name: name.trim(), locale: getLocale() },
           emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(`/invito/${code}`)}`,
         },
       })
@@ -111,7 +108,7 @@ export default function InvitePage() {
       if (data.session) {
         await join(name.trim())
       } else {
-        setNotice('Ti abbiamo mandato un’email: apri il link di conferma, tornerai qui e potrai entrare.')
+        setNotice(m.invite.confirmSent)
         setBusy(false)
       }
     } catch (err) {
@@ -131,25 +128,25 @@ export default function InvitePage() {
   if (!info.valid) {
     return (
       <AuthScreen>
-        <Notice tone="error">{REASONS[info.reason ?? 'not_found']}</Notice>
+        <Notice tone="error">{m.invite.reasons[info.reason ?? 'not_found'] ?? m.invite.reasons.not_found}</Notice>
         <p className="mt-4 text-center text-[14px] text-muted">
-          Chiedi un nuovo link a chi ti ha invitato. Hai già un account?{' '}
+          {m.invite.askNew}{' '}
           <Link href="/login" className="font-semibold text-fg underline underline-offset-4">
-            Accedi
+            {m.auth.login}
           </Link>
         </p>
       </AuthScreen>
     )
   }
 
-  const invitedBy = info.inviter ? `${info.inviter} ti ha invitato nel gruppo.` : 'Sei stato invitato nel gruppo.'
+  const invitedBy = info.inviter ? fmt(m.invite.invitedBy, { name: info.inviter }) : m.invite.invited
 
   if (session) {
     return (
       <AuthScreen subtitle={invitedBy}>
         <div className="rounded-[16px] border border-line bg-elev p-5">
-          <h1 className="font-list text-[27px] font-extrabold leading-tight">Entra nel gruppo</h1>
-          <p className="mt-1 text-[14px] text-muted">Con l&apos;account {session.user.email}.</p>
+          <h1 className="font-list text-[27px] font-extrabold leading-tight">{m.invite.joinTitle}</h1>
+          <p className="mt-1 text-[14px] text-muted">{fmt(m.invite.withAccount, { email: session.user.email ?? '' })}</p>
           <form
             className="mt-5 space-y-3"
             onSubmit={(e) => {
@@ -157,10 +154,10 @@ export default function InvitePage() {
               void join(name.trim() || null)
             }}
           >
-            <TextField id="nome" label="Come ti chiami nel gruppo?" value={name} maxLength={40} onChange={(e) => setName(e.target.value)} />
+            <TextField id="nome" label={m.invite.groupName} value={name} maxLength={40} onChange={(e) => setName(e.target.value)} />
             {error ? <Notice tone="error">{error}</Notice> : null}
             <Button type="submit" size="lg" className="w-full" loading={busy}>
-              Entra
+              {m.invite.enter}
             </Button>
           </form>
           <button
@@ -168,7 +165,7 @@ export default function InvitePage() {
             onClick={() => void sb().auth.signOut().then(() => setSession(null))}
             className="mt-4 w-full text-center text-[14px] text-muted underline-offset-4 hover:underline"
           >
-            Non sei tu? Usa un altro account
+            {m.invite.notYou}
           </button>
         </div>
       </AuthScreen>
@@ -181,20 +178,20 @@ export default function InvitePage() {
         <div className="flex gap-1 rounded-full bg-elev-2 p-1" role="tablist">
           {(
             [
-              ['signup', 'Sono nuovo'],
-              ['login', 'Ho già un account'],
+              ['signup', m.invite.tabNew],
+              ['login', m.invite.tabLogin],
             ] as const
-          ).map(([m, label]) => (
+          ).map(([tab, label]) => (
             <button
-              key={m}
+              key={tab}
               type="button"
               role="tab"
-              aria-selected={mode === m}
+              aria-selected={mode === tab}
               onClick={() => {
-                setMode(m)
+                setMode(tab)
                 setError(null)
               }}
-              className={`press h-9 flex-1 rounded-full text-[14px] font-semibold ${mode === m ? 'bg-invert text-invert-fg' : 'text-muted'}`}
+              className={`press h-9 flex-1 rounded-full text-[14px] font-semibold ${mode === tab ? 'bg-invert text-invert-fg' : 'text-muted'}`}
             >
               {label}
             </button>
@@ -203,11 +200,11 @@ export default function InvitePage() {
 
         <form onSubmit={submit} className="mt-5 space-y-3" noValidate>
           {mode === 'signup' ? (
-            <TextField id="nome" label="Nome o nickname" autoComplete="nickname" value={name} maxLength={40} onChange={(e) => setName(e.target.value)} />
+            <TextField id="nome" label={m.auth.name} autoComplete="nickname" value={name} maxLength={40} onChange={(e) => setName(e.target.value)} />
           ) : null}
           <TextField
             id="email"
-            label="Email"
+            label={m.auth.email}
             type="email"
             inputMode="email"
             autoComplete="email"
@@ -217,17 +214,17 @@ export default function InvitePage() {
           />
           <TextField
             id="password"
-            label="Password"
+            label={m.auth.password}
             type="password"
             autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            hint={mode === 'signup' ? 'Almeno 8 caratteri.' : undefined}
+            hint={mode === 'signup' ? m.auth.passwordHint : undefined}
           />
           {error ? <Notice tone="error">{error}</Notice> : null}
           {notice ? <Notice tone="success">{notice}</Notice> : null}
           <Button type="submit" size="lg" className="w-full" loading={busy} disabled={!email.trim() || !password}>
-            {mode === 'signup' ? 'Registrati ed entra' : 'Accedi ed entra'}
+            {mode === 'signup' ? m.invite.signupEnter : m.invite.loginEnter}
           </Button>
         </form>
 

@@ -1,5 +1,6 @@
 import type { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react'
 import { cn } from '@/lib/cn'
+import { msgs } from '@/lib/i18n/core'
 
 export const inputClass =
   'w-full rounded-[12px] border border-line bg-elev px-4 text-[16px] text-fg outline-none transition-colors placeholder:text-faint focus:border-going/70 disabled:opacity-60'
@@ -8,7 +9,7 @@ export function FieldLabel({ htmlFor, children, optional }: { htmlFor?: string; 
   return (
     <label htmlFor={htmlFor} className="mb-1.5 flex items-baseline gap-2 text-[14px] font-semibold text-fg">
       {children}
-      {optional ? <span className="text-[13px] font-normal text-faint">facoltativo</span> : null}
+      {optional ? <span className="text-[13px] font-normal text-faint">{msgs().common.optional}</span> : null}
     </label>
   )
 }

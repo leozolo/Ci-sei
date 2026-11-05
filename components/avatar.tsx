@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useAppMaybe } from '@/components/app-context'
 import { useImageUrl } from '@/components/media'
 import { cn } from '@/lib/cn'
+import { msgs } from '@/lib/i18n/core'
 import type { Member } from '@/lib/types'
 
 type AvatarPerson = Pick<Member, 'id' | 'display_name' | 'avatar_url'>
@@ -37,7 +38,7 @@ export function Avatar({
 }) {
   const app = useAppMaybe()
   const p = person ?? (id ? app?.memberMap.get(id) : undefined) ?? null
-  const name = p?.display_name ?? 'Ex membro'
+  const name = p?.display_name ?? msgs().common.exMember
   const url = useImageUrl('avatars', p?.avatar_url ?? null)
   const [failed, setFailed] = useState<string | null>(null)
   const showImage = !!url && failed !== url

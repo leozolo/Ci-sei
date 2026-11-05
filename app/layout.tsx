@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from 'next'
+import { Roboto_Flex } from 'next/font/google'
 import localFont from 'next/font/local'
 import type { ReactNode } from 'react'
 import { PwaRuntime } from '@/components/pwa'
 import { Feedback } from '@/components/ui/feedback'
 import { APP_NAME, APP_SHORT_NAME } from '@/lib/config'
+import { I18N_SCRIPT, I18nProvider } from '@/lib/i18n/react'
 import { THEME_SCRIPT } from '@/lib/theme'
 import './globals.css'
 
@@ -13,6 +15,18 @@ const archivo = localFont({
   variable: '--font-archivo',
   display: 'swap',
   declarations: [{ prop: 'font-stretch', value: '62% 100%' }],
+})
+
+// Archivo non ha lettere russe: per il cirillico c'è Roboto Flex (Google, licenza OFL), che ha lo
+// stesso asse di larghezza, così titoli e liste restano stretti. Viene scaricato al momento della
+// pubblicazione e servito dall'app; il browser lo carica solo quando sulla pagina c'è testo in russo.
+const cyrillic = Roboto_Flex({
+  subsets: ['cyrillic'],
+  axes: ['wdth'],
+  variable: '--font-cyrillic',
+  display: 'swap',
+  preload: false,
+  adjustFontFallback: false,
 })
 
 export const metadata: Metadata = {
@@ -40,14 +54,17 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="it" data-theme="dark" className={archivo.variable} suppressHydrationWarning>
+    <html lang="it" data-theme="dark" className={`${archivo.variable} ${cyrillic.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: I18N_SCRIPT }} />
       </head>
       <body>
-        {children}
-        <Feedback />
-        <PwaRuntime />
+        <I18nProvider>
+          {children}
+          <Feedback />
+          <PwaRuntime />
+        </I18nProvider>
       </body>
     </html>
   )

@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button'
 import { TextField } from '@/components/ui/field'
 import { inviteErrorMessage, joinGroup } from '@/lib/actions'
 import { PENDING_INVITE_KEY } from '@/lib/config'
+import { fmt } from '@/lib/i18n/core'
+import { useI18n } from '@/lib/i18n/react'
 import { clearCache } from '@/lib/query'
 import { sb } from '@/lib/supabase/client'
 
@@ -15,12 +17,13 @@ type State = 'loading' | 'removed' | 'create' | 'invite'
 /** Ricava il codice da un link d'invito incollato (o dal codice stesso). */
 function extractCode(input: string): string {
   const v = input.trim()
-  const m = /\/invito\/([a-z0-9]+)/i.exec(v)
-  return (m ? m[1] : v).toLowerCase()
+  const match = /\/invito\/([a-z0-9]+)/i.exec(v)
+  return (match ? match[1] : v).toLowerCase()
 }
 
 export default function WelcomePage() {
   const router = useRouter()
+  const { m } = useI18n()
   const [state, setState] = useState<State>('loading')
   const [email, setEmail] = useState<string | null>(null)
   const [name, setName] = useState('')
@@ -70,7 +73,7 @@ export default function WelcomePage() {
     if (busy) return
     setError(null)
     if (!name.trim()) {
-      setError('Scrivi il tuo nome o nickname.')
+      setError(m.auth.nameRequired)
       return
     }
     setBusy(true)
@@ -105,29 +108,27 @@ export default function WelcomePage() {
   if (state === 'removed') {
     return (
       <AuthScreen>
-        <Notice tone="error">Il tuo accesso al gruppo è stato rimosso da un amministratore.</Notice>
+        <Notice tone="error">{m.errors.removed}</Notice>
         <Button variant="secondary" size="lg" className="mt-4 w-full" onClick={() => void logout()}>
-          Esci
+          {m.settings.logout}
         </Button>
       </AuthScreen>
     )
   }
 
   return (
-    <AuthScreen subtitle={email ? `Sei collegato come ${email}.` : undefined}>
+    <AuthScreen subtitle={email ? fmt(m.welcome.signedInAs, { email }) : undefined}>
       <div className="rounded-[16px] border border-line bg-elev p-5">
-        <h1 className="font-list text-[27px] font-extrabold leading-tight">{state === 'create' ? 'Crea il gruppo' : 'Ti serve un invito'}</h1>
+        <h1 className="font-list text-[27px] font-extrabold leading-tight">{state === 'create' ? m.auth.createTitle : m.welcome.needInvite}</h1>
         <p className="mt-1 text-[14px] text-muted">
-          {state === 'create'
-            ? 'Il gruppo è ancora vuoto: entri come amministratore e potrai invitare gli amici.'
-            : 'L’app è privata. Incolla qui il link d’invito che ti ha mandato un amico del gruppo.'}
+          {state === 'create' ? m.welcome.createBody : m.welcome.inviteBody}
         </p>
         <form onSubmit={submit} className="mt-5 space-y-3" noValidate>
-          <TextField id="nome" label="Nome o nickname" value={name} maxLength={40} onChange={(e) => setName(e.target.value)} />
+          <TextField id="nome" label={m.auth.name} value={name} maxLength={40} onChange={(e) => setName(e.target.value)} />
           {state === 'invite' ? (
             <TextField
               id="invito"
-              label="Link o codice d'invito"
+              label={m.welcome.inviteField}
               autoCapitalize="none"
               autoCorrect="off"
               placeholder="https://…/invito/…"
@@ -137,11 +138,11 @@ export default function WelcomePage() {
           ) : null}
           {error ? <Notice tone="error">{error}</Notice> : null}
           <Button type="submit" size="lg" className="w-full" loading={busy} disabled={state === 'invite' && !code.trim()}>
-            {state === 'create' ? 'Crea il gruppo' : 'Entra nel gruppo'}
+            {state === 'create' ? m.auth.create : m.invite.joinTitle}
           </Button>
         </form>
         <button type="button" onClick={() => void logout()} className="mt-4 w-full text-center text-[14px] text-muted underline-offset-4 hover:underline">
-          Esci da questo account
+          {m.welcome.logoutAccount}
         </button>
       </div>
     </AuthScreen>

@@ -8,6 +8,8 @@ import { TextField } from '@/components/ui/field'
 import { inviteErrorMessage, joinGroup } from '@/lib/actions'
 import { authErrorMessage, safeNext } from '@/lib/auth-errors'
 import { GOOGLE_AUTH, IS_CONFIGURED } from '@/lib/config'
+import { getLocale, msgs } from '@/lib/i18n/core'
+import { useI18n } from '@/lib/i18n/react'
 import { clearCache } from '@/lib/query'
 import { sb } from '@/lib/supabase/client'
 
@@ -15,6 +17,7 @@ type Mode = 'login' | 'reset' | 'create'
 
 export default function LoginPage() {
   const router = useRouter()
+  const { m } = useI18n()
   const [mode, setMode] = useState<Mode>('login')
   const [next, setNext] = useState('/')
   const [groupEmpty, setGroupEmpty] = useState(false)
@@ -29,8 +32,8 @@ export default function LoginPage() {
     const params = new URLSearchParams(window.location.search)
     const target = safeNext(params.get('next'))
     setNext(target)
-    if (params.get('errore') === 'link') setError('Il link è scaduto o è stato aperto in un altro browser. Accedi qui con email e password.')
-    if (params.get('errore') === 'oauth') setError('Accesso con Google non riuscito. Riprova.')
+    if (params.get('errore') === 'link') setError(msgs().auth.linkExpired)
+    if (params.get('errore') === 'oauth') setError(msgs().auth.googleFailed)
     if (!IS_CONFIGURED) return
     void sb()
       .auth.getSession()
@@ -47,8 +50,8 @@ export default function LoginPage() {
       })
   }, [router])
 
-  const switchMode = (m: Mode) => {
-    setMode(m)
+  const switchMode = (next: Mode) => {
+    setMode(next)
     setError(null)
     setNotice(null)
   }
@@ -72,23 +75,23 @@ export default function LoginPage() {
           redirectTo: `${window.location.origin}/auth/callback?next=/reimposta-password`,
         })
         if (err) throw err
-        setNotice('Fatto: ti abbiamo mandato un’email con il link per scegliere una nuova password.')
+        setNotice(m.auth.resetSent)
         return
       }
       // creazione del gruppo: il primo account diventa amministratore
       if (!name.trim()) {
-        setError('Scrivi il tuo nome o nickname.')
+        setError(m.auth.nameRequired)
         return
       }
       if (password.length < 8) {
-        setError('La password deve avere almeno 8 caratteri.')
+        setError(m.auth.passwordShort)
         return
       }
       const { data, error: err } = await sb().auth.signUp({
         email: email.trim(),
         password,
         options: {
-          data: { display_name: name.trim() },
+          data: { display_name: name.trim(), locale: getLocale() },
           emailRedirectTo: `${window.location.origin}/auth/callback?next=/benvenuto`,
         },
       })
@@ -103,7 +106,7 @@ export default function LoginPage() {
         clearCache()
         router.replace('/?benvenuto=1')
       } else {
-        setNotice('Controlla la posta: apri il link di conferma e il gruppo sarà pronto.')
+        setNotice(m.auth.confirmCreate)
       }
     } catch (err) {
       setError(authErrorMessage(err))
@@ -113,31 +116,29 @@ export default function LoginPage() {
   }
 
   const titles: Record<Mode, string> = {
-    login: 'Accedi',
-    reset: 'Recupera la password',
-    create: 'Crea il gruppo',
+    login: m.auth.loginTitle,
+    reset: m.auth.resetTitle,
+    create: m.auth.createTitle,
   }
 
   return (
-    <AuthScreen subtitle="Gli eventi del gruppo: cosa c’è in città e chi ci va.">
+    <AuthScreen subtitle={m.auth.tagline}>
       {!IS_CONFIGURED ? (
-        <Notice tone="error">
-          L&apos;app non è ancora collegata a Supabase: aggiungi le variabili d&apos;ambiente (vedi la guida) e pubblica di nuovo.
-        </Notice>
+        <Notice tone="error">{m.auth.notConfigured}</Notice>
       ) : (
         <div className="rounded-[16px] border border-line bg-elev p-5">
           <h1 className="font-list text-[27px] font-extrabold leading-tight">{titles[mode]}</h1>
           {mode === 'create' ? (
-            <p className="mt-1 text-[14px] text-muted">Sei il primo: il tuo account sarà l&apos;amministratore e potrai invitare gli amici.</p>
+            <p className="mt-1 text-[14px] text-muted">{m.auth.createIntro}</p>
           ) : null}
 
           <form onSubmit={submit} className="mt-5 space-y-3" noValidate>
             {mode === 'create' ? (
-              <TextField id="nome" label="Nome o nickname" autoComplete="nickname" value={name} maxLength={40} onChange={(e) => setName(e.target.value)} />
+              <TextField id="nome" label={m.auth.name} autoComplete="nickname" value={name} maxLength={40} onChange={(e) => setName(e.target.value)} />
             ) : null}
             <TextField
               id="email"
-              label="Email"
+              label={m.auth.email}
               type="email"
               inputMode="email"
               autoComplete="email"
@@ -148,18 +149,18 @@ export default function LoginPage() {
             {mode !== 'reset' ? (
               <TextField
                 id="password"
-                label="Password"
+                label={m.auth.password}
                 type="password"
                 autoComplete={mode === 'create' ? 'new-password' : 'current-password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                hint={mode === 'create' ? 'Almeno 8 caratteri.' : undefined}
+                hint={mode === 'create' ? m.auth.passwordHint : undefined}
               />
             ) : null}
             {error ? <Notice tone="error">{error}</Notice> : null}
             {notice ? <Notice tone="success">{notice}</Notice> : null}
             <Button type="submit" size="lg" className="w-full" loading={busy} disabled={!email.trim() || (mode !== 'reset' && !password)}>
-              {mode === 'login' ? 'Accedi' : mode === 'reset' ? 'Invia il link' : 'Crea il gruppo'}
+              {mode === 'login' ? m.auth.login : mode === 'reset' ? m.auth.sendLink : m.auth.create}
             </Button>
           </form>
 
@@ -173,11 +174,11 @@ export default function LoginPage() {
           <div className="mt-5 text-center text-[14px]">
             {mode === 'login' ? (
               <button type="button" onClick={() => switchMode('reset')} className="text-muted underline-offset-4 hover:underline">
-                Password dimenticata?
+                {m.auth.forgot}
               </button>
             ) : (
               <button type="button" onClick={() => switchMode('login')} className="text-muted underline-offset-4 hover:underline">
-                Ho già un account: accedi
+                {m.auth.haveAccount}
               </button>
             )}
           </div>
@@ -185,9 +186,7 @@ export default function LoginPage() {
       )}
 
       {IS_CONFIGURED && !groupEmpty ? (
-        <p className="mt-6 text-center text-[14px] text-muted">
-          Non hai un account? L&apos;app è privata: chiedi un link d&apos;invito a un amico del gruppo.
-        </p>
+        <p className="mt-6 text-center text-[14px] text-muted">{m.auth.noAccount}</p>
       ) : null}
     </AuthScreen>
   )
