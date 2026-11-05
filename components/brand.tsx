@@ -42,7 +42,7 @@ export function Wordmark({ className }: { className?: string }) {
 export function Credit({ className }: { className?: string }) {
   return (
     <p lang="en" className={cn('text-center text-[12px] text-faint', className)}>
-      designed by <span className="text-muted">L.Zolovkin</span>
+      designed by <span className="text-muted">L.&nbsp;Zolovkin</span>
     </p>
   )
 }
