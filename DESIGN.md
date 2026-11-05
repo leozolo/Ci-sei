@@ -255,7 +255,7 @@ A night palette of blues with chalk type, where the only saturated colours are t
 ## Typography
 
 **Display Font:** Archivo, variable width, self-hosted subset (with ui-sans-serif, system-ui)
-**Cyrillic Display Fallback:** Roboto Flex (wdth and wght axes, Cyrillic subset via next/font/google, not preloaded): Archivo has no Cyrillic, and Roboto Flex answers the same `font-stretch` values, so Russian titles stay narrow.
+**Cyrillic Display Fallback:** Roboto Flex (wdth and wght axes, Cyrillic subset via next/font/google, not preloaded): Archivo has no Cyrillic, and Roboto Flex answers the same `font-stretch` values, so Russian titles stay narrow. The stack is Archivo, then a metric-matched local fallback limited to Latin (`Archivo Fallback` in globals.css), then Roboto Flex: a fallback with Cyrillic (such as plain Arial) placed before Roboto Flex would take over every Russian title.
 **Body Font:** the platform's system face (ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto)
 
 **Character:** a compressed, heavy grotesk written in capitals, like names on a door list, against the phone's familiar reading face. Two widths of the same family set the hierarchy: 62% for titles and big numbers, 72% for names, row titles and interface headings. Tabular, lining figures throughout.

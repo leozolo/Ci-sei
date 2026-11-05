@@ -15,6 +15,9 @@ const archivo = localFont({
   variable: '--font-archivo',
   display: 'swap',
   declarations: [{ prop: 'font-stretch', value: '62% 100%' }],
+  // il carattere di riserva (solo lettere latine) è in globals.css: quello automatico, Arial,
+  // avrebbe anche il cirillico e prenderebbe il posto di Roboto Flex nei testi in russo
+  adjustFontFallback: false,
 })
 
 // Archivo non ha lettere russe: per il cirillico c'è Roboto Flex (Google, licenza OFL), che ha lo
