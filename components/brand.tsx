@@ -36,8 +36,9 @@ export function Wordmark({ className }: { className?: string }) {
 }
 
 /**
- * La firma di chi ha disegnato l'app, in fondo alla bacheca: nel carattere normale
- * del telefono e uguale in tutte le lingue, come una firma.
+ * La firma di chi ha disegnato l'app: in fondo alla bacheca, alle Impostazioni e alle
+ * schermate di accesso. Nel carattere normale del telefono e uguale in tutte le lingue,
+ * come una firma.
  */
 export function Credit({ className }: { className?: string }) {
   return (
