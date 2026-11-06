@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState, type ReactNode } from 'react'
 import { LuArchive, LuChevronRight, LuLogOut, LuShieldCheck, LuUsers } from 'react-icons/lu'
 import { useApp } from '@/components/app-context'
+import { Credit } from '@/components/brand'
 import { LanguageSelect } from '@/components/language-select'
 import { PageBody, PageHeader } from '@/components/page-header'
 import { InstallHint, PushToggle } from '@/components/pwa'
@@ -166,6 +167,7 @@ export default function SettingsPage() {
           <LuLogOut className="size-5" /> {m.settings.logout}
         </button>
         <p className="mt-6 text-center text-[12px] text-faint">{APP_NAME}</p>
+        <Credit className="mt-0.5" />
       </PageBody>
     </main>
   )

@@ -1,7 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { Mark, Wordmark } from '@/components/brand'
+import { Credit, Mark, Wordmark } from '@/components/brand'
 import { LanguageSelect } from '@/components/language-select'
 import { Button } from '@/components/ui/button'
 import { useI18n } from '@/lib/i18n/react'
@@ -10,17 +10,21 @@ import { sb } from '@/lib/supabase/client'
 /** Impaginazione comune delle schermate di accesso. */
 export function AuthScreen({ children, subtitle }: { children: ReactNode; subtitle?: ReactNode }) {
   return (
-    <main className="pt-safe pb-safe relative mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center px-5 py-10">
+    <main className="pt-safe pb-safe relative mx-auto flex min-h-dvh w-full max-w-md flex-col px-5">
       {/* la lingua si sceglie anche prima di avere un account */}
       <div className="absolute right-4 top-[calc(env(safe-area-inset-top)+12px)]">
         <LanguageSelect pending />
       </div>
-      <div className="mb-8 flex flex-col items-center text-center">
-        <Mark size={56} />
-        <Wordmark className="mt-3 text-[32px]" />
-        {subtitle ? <p className="mt-2 max-w-xs text-balance text-[15px] text-muted">{subtitle}</p> : null}
+      {/* il contenuto resta al centro; la firma chiude la schermata in basso */}
+      <div className="flex flex-1 flex-col justify-center py-10">
+        <div className="mb-8 flex flex-col items-center text-center">
+          <Mark size={56} />
+          <Wordmark className="mt-3 text-[32px]" />
+          {subtitle ? <p className="mt-2 max-w-xs text-balance text-[15px] text-muted">{subtitle}</p> : null}
+        </div>
+        {children}
       </div>
-      {children}
+      <Credit className="pb-[52px]" />
     </main>
   )
 }

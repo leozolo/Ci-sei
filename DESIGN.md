@@ -349,7 +349,7 @@ The tick, the circle and the cross are authored SVG strokes (24px grid, round ca
 Provisional: the green marker tick (`public/brand/mark.svg`), the single source of the symbol. In the app it is drawn as a silhouette in the theme's marker green (bright on night, deep on day paper); the PWA icons are rendered from the same file on night blue by `npm run icons`. Replacing that one file replaces the symbol everywhere. The wordmark is "CLUB DEI CLUBBERS" in the narrow grotesk at 62% width.
 
 ### Credit
-The designer's credit closes the board, under the "Eventi passati" link: "designed by L. Zolovkin" in the system face at 12px, Chalk Faint with the name in Chalk Muted, centred and identical in every language. It appears there only.
+"designed by L. Zolovkin" in Arial at 16px (line height 1.45, the `font-credit` token, used for nothing else), Chalk Faint with the name in Chalk Muted, centred and identical in every language. It appears in three places only: closing the board under the "Eventi passati" link, at the foot of Settings under the app name, and at the foot of the entry screens (sign-in, invite, welcome, password reset), 52px above the bottom safe area, with the content centred above it.
 
 ## Do's and Don'ts
 
