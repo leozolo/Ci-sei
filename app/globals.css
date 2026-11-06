@@ -94,6 +94,8 @@
   --color-scrim: var(--c-scrim);
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   --font-display: var(--font-archivo), "Archivo Fallback", var(--font-cyrillic, ui-sans-serif), ui-sans-serif, system-ui, sans-serif;
+  /* solo per la firma "designed by" */
+  --font-credit: Arial, sans-serif;
 }
 
 @theme {

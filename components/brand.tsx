@@ -37,12 +37,11 @@ export function Wordmark({ className }: { className?: string }) {
 
 /**
  * La firma di chi ha disegnato l'app: in fondo alla bacheca, alle Impostazioni e alle
- * schermate di accesso. Nel carattere normale del telefono e uguale in tutte le lingue,
- * come una firma.
+ * schermate di accesso. In Arial a 16 px e uguale in tutte le lingue, come una firma.
  */
 export function Credit({ className }: { className?: string }) {
   return (
-    <p lang="en" className={cn('text-center text-[12px] text-faint', className)}>
+    <p lang="en" className={cn('text-center font-credit text-[16px] leading-[1.45] text-faint', className)}>
       designed by <span className="text-muted">L.&nbsp;Zolovkin</span>
     </p>
   )

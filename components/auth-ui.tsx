@@ -24,7 +24,7 @@ export function AuthScreen({ children, subtitle }: { children: ReactNode; subtit
         </div>
         {children}
       </div>
-      <Credit className="pb-8" />
+      <Credit className="pb-[52px]" />
     </main>
   )
 }
