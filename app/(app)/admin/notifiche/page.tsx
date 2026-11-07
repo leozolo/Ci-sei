@@ -112,7 +112,7 @@ function Counter({ n }: { n: number }) {
 function NotificationPreview({ body }: { body: string }) {
   const { m } = useI18n()
   return (
-    <div className="flex gap-3 rounded-[16px] border border-line bg-elev-2 p-3" aria-live="polite">
+    <div className="flex gap-3 rounded-[16px] border border-line bg-elev-2 p-3">
       <img src="/icons/icon-192.png" alt="" className="size-10 shrink-0 rounded-[10px]" />
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline justify-between gap-2">
@@ -568,7 +568,7 @@ function BroadcastContent() {
           className="mt-5 w-full"
           size="lg"
           loading={busy}
-          disabled={!text || unavailable}
+          disabled={!text || unavailable || reach.isLoading}
           icon={later ? <LuCalendarClock className="size-5" /> : <LuSend className="size-5" />}
           onClick={() => void submit()}
         >
