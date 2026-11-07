@@ -782,3 +782,195 @@ begin
   end if;
 end;
 $$;
+
+-- ---------------------------------------------------------------------
+--  NOTIFICHE A TUTTI (solo amministratori)
+--  Frasi pronte e notifiche push a tutto il gruppo, subito o programmate.
+--  Per quelle programmate il database controlla ogni minuto (pg_cron) e,
+--  se una è all'orario, chiama l'app (pg_net), che la spedisce. Indirizzo
+--  e codice segreto della chiamata li salva l'app in app_secrets
+--  (chiave broadcast_cron) quando un amministratore apre la pagina.
+-- ---------------------------------------------------------------------
+
+create extension if not exists pg_cron with schema pg_catalog;
+create extension if not exists pg_net  with schema extensions;
+grant usage on schema cron to postgres;
+grant all privileges on all tables in schema cron to postgres;
+
+-- Frasi pronte (modificabili dagli amministratori)
+create table if not exists public.broadcast_templates (
+  id          uuid primary key default gen_random_uuid(),
+  category    text not null default 'weekend' check (category in ('weekend', 'social', 'events')),
+  body        text not null check (char_length(btrim(body)) between 1 and 180),
+  position    int  not null default 0,
+  created_at  timestamptz not null default now()
+);
+
+-- Notifiche a tutti: programmate, inviate, annullate
+create table if not exists public.broadcasts (
+  id            uuid primary key default gen_random_uuid(),
+  body          text not null check (char_length(btrim(body)) between 1 and 180),
+  status        text not null default 'scheduled'
+                check (status in ('scheduled', 'sending', 'sent', 'failed', 'cancelled')),
+  scheduled_at  timestamptz not null default now(),
+  sent_at       timestamptz,
+  people        int,   -- persone raggiunte
+  delivered     int,   -- telefoni raggiunti
+  attempted     int,   -- telefoni a cui è stata spedita
+  error         text,
+  created_by    uuid default auth.uid() references public.profiles (id) on delete set null,
+  created_at    timestamptz not null default now(),
+  updated_at    timestamptz not null default now()
+);
+create index if not exists broadcasts_due_idx        on public.broadcasts (scheduled_at) where status = 'scheduled';
+create index if not exists broadcasts_created_at_idx on public.broadcasts (created_at desc);
+create index if not exists broadcasts_created_by_idx on public.broadcasts (created_by);
+
+-- Chi usa l'app può solo programmare, modificare o annullare finché non è partita
+create or replace function public.broadcasts_before_write() returns trigger
+language plpgsql set search_path = '' as $$
+begin
+  new.body := btrim(new.body);
+  new.updated_at := now();
+  -- il server (chiave segreta) gestisce l'invio
+  if (select auth.uid()) is null then
+    return new;
+  end if;
+  if tg_op = 'INSERT' then
+    new.status := 'scheduled';
+    new.created_by := (select auth.uid());
+    new.created_at := now();
+  else
+    if old.status <> 'scheduled' then
+      raise exception 'Questa notifica è già partita' using errcode = '42501';
+    end if;
+    if new.status not in ('scheduled', 'cancelled') then
+      new.status := old.status;
+    end if;
+    new.created_by := old.created_by;
+    new.created_at := old.created_at;
+  end if;
+  new.sent_at := null;
+  new.people := null;
+  new.delivered := null;
+  new.attempted := null;
+  new.error := null;
+  if new.status = 'scheduled' and new.scheduled_at < now() - interval '5 minutes' then
+    raise exception 'L’orario scelto è già passato' using errcode = '22023';
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists broadcasts_before_write on public.broadcasts;
+create trigger broadcasts_before_write before insert or update on public.broadcasts
+  for each row execute function public.broadcasts_before_write();
+
+-- Prende in carico le notifiche arrivate all'orario: ognuna parte una volta sola (solo server)
+create or replace function public.claim_due_broadcasts(p_limit int default 5)
+returns setof public.broadcasts
+language plpgsql security definer set search_path = '' as $$
+begin
+  -- invii rimasti a metà o in ritardo di ore: non partono più
+  update public.broadcasts set status = 'failed', error = 'interrupted'
+   where status = 'sending' and updated_at < now() - interval '15 minutes';
+  update public.broadcasts set status = 'failed', error = 'expired'
+   where status = 'scheduled' and scheduled_at < now() - interval '2 hours';
+  return query
+    update public.broadcasts b
+       set status = 'sending'
+     where b.id in (
+       select id from public.broadcasts
+        where status = 'scheduled' and scheduled_at <= now()
+        order by scheduled_at
+        limit greatest(1, least(p_limit, 20))
+        for update skip locked
+     )
+    returning b.*;
+end;
+$$;
+
+-- Ogni minuto: se una notifica è all'orario, chiama l'app che la spedisce
+create or replace function public.ping_due_broadcasts() returns void
+language plpgsql security definer set search_path = '' as $$
+declare
+  v_conf jsonb;
+begin
+  if not exists (select 1 from public.broadcasts where status = 'scheduled' and scheduled_at <= now()) then
+    return;
+  end if;
+  select value::jsonb into v_conf from public.app_secrets where key = 'broadcast_cron';
+  if coalesce(v_conf ->> 'url', '') = '' or coalesce(v_conf ->> 'token', '') = '' then
+    return;
+  end if;
+  perform net.http_post(
+    url := v_conf ->> 'url',
+    body := '{}'::jsonb,
+    headers := jsonb_build_object('Content-Type', 'application/json', 'Authorization', 'Bearer ' || (v_conf ->> 'token')),
+    timeout_milliseconds := 25000
+  );
+end;
+$$;
+
+alter table public.broadcast_templates enable row level security;
+alter table public.broadcasts          enable row level security;
+
+drop policy if exists broadcast_templates_admin_select on public.broadcast_templates;
+create policy broadcast_templates_admin_select on public.broadcast_templates for select to authenticated
+  using ((select public.is_admin()));
+drop policy if exists broadcast_templates_admin_insert on public.broadcast_templates;
+create policy broadcast_templates_admin_insert on public.broadcast_templates for insert to authenticated
+  with check ((select public.is_admin()));
+drop policy if exists broadcast_templates_admin_update on public.broadcast_templates;
+create policy broadcast_templates_admin_update on public.broadcast_templates for update to authenticated
+  using ((select public.is_admin())) with check ((select public.is_admin()));
+drop policy if exists broadcast_templates_admin_delete on public.broadcast_templates;
+create policy broadcast_templates_admin_delete on public.broadcast_templates for delete to authenticated
+  using ((select public.is_admin()));
+
+drop policy if exists broadcasts_admin_select on public.broadcasts;
+create policy broadcasts_admin_select on public.broadcasts for select to authenticated
+  using ((select public.is_admin()));
+drop policy if exists broadcasts_admin_insert on public.broadcasts;
+create policy broadcasts_admin_insert on public.broadcasts for insert to authenticated
+  with check ((select public.is_admin()));
+drop policy if exists broadcasts_admin_update on public.broadcasts;
+create policy broadcasts_admin_update on public.broadcasts for update to authenticated
+  using ((select public.is_admin()) and status = 'scheduled')
+  with check ((select public.is_admin()));
+
+revoke execute on function public.broadcasts_before_write()  from public, anon, authenticated;
+revoke execute on function public.claim_due_broadcasts(int) from public, anon, authenticated;
+revoke execute on function public.ping_due_broadcasts()     from public, anon, authenticated;
+grant  execute on function public.claim_due_broadcasts(int) to service_role;
+
+-- Frasi pronte iniziali (solo se la raccolta è vuota)
+insert into public.broadcast_templates (category, body, position)
+select v.category, v.body, v.position
+  from (values
+    ('weekend', 'È quasi weekend, che farai?', 1),
+    ('weekend', 'I Clubbers hanno sempre una marcia in più!', 2),
+    ('weekend', 'Il weekend si avvicina. Avete già programmi?', 3),
+    ('weekend', 'La città non si vive dal divano!', 4),
+    ('weekend', 'È arrivato il momento di organizzarsi.', 5),
+    ('weekend', 'Il weekend chiama, i Clubbers rispondono.', 6),
+    ('weekend', 'Non lasciare che sia un altro weekend qualunque.', 7),
+    ('social',  'Una città, mille occasioni, una sola community!', 1),
+    ('social',  'I Clubbers non seguono la folla, creano il movimento.', 2),
+    ('social',  'Le serate migliori iniziano con un messaggio.', 3),
+    ('social',  'Dove ci sono Clubbers, succede sempre qualcosa.', 4),
+    ('social',  'La compagnia giusta cambia qualsiasi serata.', 5),
+    ('social',  'Un Clubber non resta mai senza programmi.', 6),
+    ('events',  'Avete già trovato il vostro prossimo evento?', 1),
+    ('events',  'Nuovi eventi, nuove occasioni. Date un’occhiata!', 2),
+    ('events',  'La città è piena di cose da fare. Non perdetevele.', 3),
+    ('events',  'Chi esce stasera?', 4),
+    ('events',  'È il momento di scoprire qualcosa di nuovo.', 5),
+    ('events',  'Il prossimo ricordo potrebbe iniziare stasera.', 6)
+  ) as v (category, body, position)
+ where not exists (select 1 from public.broadcast_templates);
+
+-- Controllo ogni minuto; pulizia notturna dello storico di pg_cron (orari UTC)
+select cron.schedule('notifiche-programmate', '* * * * *', 'select public.ping_due_broadcasts()');
+select cron.schedule('pulizia-storico-cron', '23 4 * * *',
+  $$delete from cron.job_run_details where end_time < now() - interval '3 days'$$);

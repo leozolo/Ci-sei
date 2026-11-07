@@ -3,7 +3,19 @@ import { removeImage, uploadImage } from '@/lib/storage'
 import { pingPush } from '@/lib/push-client'
 import { msgs } from '@/lib/i18n/core'
 import type { Locale } from '@/lib/i18n/locales'
-import type { CommentRow, EventInput, EventRow, InviteRow, NotifyPrefKey, Profile, Role, RsvpStatus } from '@/lib/types'
+import type {
+  BroadcastCategory,
+  BroadcastResult,
+  BroadcastRow,
+  CommentRow,
+  EventInput,
+  EventRow,
+  InviteRow,
+  NotifyPrefKey,
+  Profile,
+  Role,
+  RsvpStatus,
+} from '@/lib/types'
 
 /** Messaggio leggibile per gli errori più comuni. */
 export function errorMessage(err: unknown, fallback = msgs().errors.generic): string {
@@ -209,5 +221,51 @@ export async function setMemberStatus(id: string, status: 'active' | 'removed') 
 
 export async function setMemberRole(id: string, role: Role) {
   const { error } = await sb().from('profiles').update({ role }).eq('id', id)
+  if (error) throw error
+}
+
+// ---------------------------------------------------------------------------
+// Notifiche a tutti (solo amministratori: lo verificano anche database e server)
+
+/** scheduledAt null = subito (l'orario lo mette il database) */
+export async function createBroadcast(body: string, scheduledAt: Date | null): Promise<BroadcastRow> {
+  const row = scheduledAt ? { body: body.trim(), scheduled_at: scheduledAt.toISOString() } : { body: body.trim() }
+  const { data, error } = await sb().from('broadcasts').insert(row).select('*').single()
+  if (error) throw error
+  return data as BroadcastRow
+}
+
+/** Modifica o annulla una notifica programmata. false = nel frattempo è già partita. */
+export async function updateBroadcast(
+  id: string,
+  changes: { body: string; scheduled_at: string } | { status: 'cancelled' },
+): Promise<boolean> {
+  const { data, error } = await sb().from('broadcasts').update(changes).eq('id', id).eq('status', 'scheduled').select('id')
+  if (error) throw error
+  return (data ?? []).length > 0
+}
+
+/** Spedisce subito le notifiche all'orario. null = server non raggiungibile (partono comunque entro un minuto). */
+export async function sendDueBroadcasts(): Promise<BroadcastResult[] | null> {
+  try {
+    const res = await fetch('/api/push/broadcast', { method: 'POST' })
+    if (!res.ok) return null
+    const json = (await res.json()) as { results?: BroadcastResult[] }
+    return json.results ?? []
+  } catch {
+    return null
+  }
+}
+
+export async function saveBroadcastTemplate(t: { id?: string; category: BroadcastCategory; body: string; position: number }) {
+  const row = { category: t.category, body: t.body.trim() }
+  const { error } = t.id
+    ? await sb().from('broadcast_templates').update(row).eq('id', t.id)
+    : await sb().from('broadcast_templates').insert({ ...row, position: t.position })
+  if (error) throw error
+}
+
+export async function deleteBroadcastTemplate(id: string) {
+  const { error } = await sb().from('broadcast_templates').delete().eq('id', id)
   if (error) throw error
 }
