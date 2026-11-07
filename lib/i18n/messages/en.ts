@@ -297,6 +297,7 @@ export const en: Messages = {
       other: 'It reaches the phones of people who turned notifications on: {n} people out of {total} today.',
     }),
     reachUnknown: 'It reaches the phones of people who turned notifications on.',
+    unavailable: 'Notifications can’t be sent from this test version: try them from the live app.',
     message: 'Message',
     placeholder: 'Write a message or pick a ready-made line',
     count: '{n}/{max}',

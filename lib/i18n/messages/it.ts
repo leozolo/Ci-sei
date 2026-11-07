@@ -301,6 +301,7 @@ export const it = {
       other: 'Arriva sul telefono di chi ha attivato le notifiche: oggi {n} persone su {total}.',
     }),
     reachUnknown: 'Arriva sul telefono di chi ha attivato le notifiche.',
+    unavailable: 'Da questa versione di prova le notifiche non partono: provale dall’app pubblicata.',
     message: 'Messaggio',
     placeholder: 'Scrivi un messaggio o scegli una frase pronta',
     count: '{n}/{max}',

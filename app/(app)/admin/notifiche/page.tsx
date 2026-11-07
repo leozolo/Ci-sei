@@ -35,6 +35,9 @@ interface Reach {
   devices: number
 }
 
+/** unavailable: il server non può inviare (nelle anteprime manca la chiave segreta) */
+type ReachState = Reach | { unavailable: true }
+
 interface Draft {
   id?: string
   category: BroadcastCategory
@@ -74,8 +77,9 @@ async function fetchTemplates(): Promise<BroadcastTemplate[]> {
 }
 
 /** Quante persone hanno le notifiche attive: lo sa solo il server. */
-async function fetchReach(): Promise<Reach | null> {
+async function fetchReach(): Promise<ReachState | null> {
   const res = await fetch('/api/push/broadcast', { cache: 'no-store' })
+  if (res.status === 503) return { unavailable: true }
   if (!res.ok) return null
   const json = (await res.json()) as Partial<Reach>
   return typeof json.people === 'number' && typeof json.devices === 'number'
@@ -422,6 +426,8 @@ function BroadcastContent() {
 
   const text = body.trim()
   const total = members.filter((p) => p.status === 'active').length
+  const unavailable = !!reach.data && 'unavailable' in reach.data
+  const people = reach.data && 'people' in reach.data ? reach.data.people : null
   const rows = list.data
   const scheduled = useMemo(
     () =>
@@ -474,7 +480,7 @@ function BroadcastContent() {
     }
 
     const ok = await confirmDialog({
-      title: plural(t.sendTitle, reach.data?.people ?? 0),
+      title: plural(t.sendTitle, people ?? 0),
       message: text,
       confirmLabel: t.send,
     })
@@ -524,7 +530,7 @@ function BroadcastContent() {
           <LuMegaphone className="size-5" /> {t.composeTitle}
         </h2>
         <p className="mt-1 text-[14px] text-muted">
-          {reach.data ? plural(t.reach, reach.data.people, { total }) : t.reachUnknown}
+          {unavailable ? t.unavailable : people !== null ? plural(t.reach, people, { total }) : t.reachUnknown}
         </p>
 
         <TextArea
@@ -562,7 +568,7 @@ function BroadcastContent() {
           className="mt-5 w-full"
           size="lg"
           loading={busy}
-          disabled={!text}
+          disabled={!text || unavailable}
           icon={later ? <LuCalendarClock className="size-5" /> : <LuSend className="size-5" />}
           onClick={() => void submit()}
         >
