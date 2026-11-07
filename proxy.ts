@@ -6,7 +6,8 @@ import { createServerClient } from '@supabase/ssr'
  * fatto l'accesso. I dati restano comunque protetti dal database (RLS).
  */
 
-const PUBLIC_PATHS = ['/login', '/invito', '/auth', '/reimposta-password']
+// /api/cron: chiamate del database (notifiche programmate), protette da un codice segreto
+const PUBLIC_PATHS = ['/login', '/invito', '/auth', '/reimposta-password', '/api/cron']
 
 export async function proxy(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL

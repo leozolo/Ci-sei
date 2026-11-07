@@ -1,9 +1,11 @@
+import { randomBytes } from 'node:crypto'
 import webpush from 'web-push'
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { APP_NAME } from '@/lib/config'
 import { messagesFor } from '@/lib/i18n/core'
 import { DEFAULT_LOCALE, isLocale, type Locale } from '@/lib/i18n/locales'
 import { pushContent } from '@/lib/notifications'
-import type { NotificationRow } from '@/lib/types'
+import type { BroadcastResult, NotificationRow } from '@/lib/types'
 
 interface VapidKeys {
   publicKey: string
@@ -116,4 +118,109 @@ export async function dispatchPendingPush(admin: SupabaseClient, origin: string)
   )
   if (expired.length) await admin.from('push_subscriptions').delete().in('id', expired)
   return sent
+}
+
+// ---------------------------------------------------------------------------
+// Notifiche a tutti (solo amministratori)
+
+/** Telefoni iscritti alle notifiche dei membri attivi. */
+async function activeSubscriptions(admin: SupabaseClient): Promise<SubscriptionRow[]> {
+  const [subsRes, activeRes] = await Promise.all([
+    admin.from('push_subscriptions').select('id, user_id, endpoint, p256dh, auth'),
+    admin.from('profiles').select('id').eq('status', 'active'),
+  ])
+  if (subsRes.error) throw subsRes.error
+  if (activeRes.error) throw activeRes.error
+  const active = new Set(((activeRes.data ?? []) as { id: string }[]).map((p) => p.id))
+  return ((subsRes.data ?? []) as SubscriptionRow[]).filter((s) => active.has(s.user_id))
+}
+
+/** Quante persone e quanti telefoni riceverebbero adesso una notifica a tutti. */
+export async function broadcastReach(admin: SupabaseClient): Promise<{ people: number; devices: number }> {
+  const subs = await activeSubscriptions(admin)
+  return { people: new Set(subs.map((s) => s.user_id)).size, devices: subs.length }
+}
+
+/** Spedisce il messaggio a tutti i telefoni iscritti ed elimina quelli non più validi. */
+async function sendToAll(admin: SupabaseClient, origin: string, broadcast: { id: string; body: string }) {
+  const subs = await activeSubscriptions(admin)
+  if (subs.length === 0) return { people: 0, delivered: 0, attempted: 0 }
+  const keys = await getVapidKeys(admin)
+  webpush.setVapidDetails(vapidSubject(origin), keys.publicKey, keys.privateKey)
+  const payload = JSON.stringify({ title: APP_NAME, body: broadcast.body, url: '/', tag: `broadcast:${broadcast.id}` })
+
+  const expired: string[] = []
+  const reached = new Set<string>()
+  let delivered = 0
+  await Promise.all(
+    subs.map(async (s) => {
+      try {
+        await webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, payload, {
+          TTL: 6 * 60 * 60,
+          urgency: 'normal',
+          timeout: 10_000,
+        })
+        delivered++
+        reached.add(s.user_id)
+      } catch (err) {
+        const status = (err as { statusCode?: number }).statusCode
+        if (status === 404 || status === 410) expired.push(s.id)
+      }
+    }),
+  )
+  if (expired.length) await admin.from('push_subscriptions').delete().in('id', expired)
+  return { people: reached.size, delivered, attempted: subs.length }
+}
+
+/**
+ * Invia le notifiche a tutti arrivate all'orario (anche quelle con «Invia a tutti»).
+ * Ognuna parte una volta sola: il database la prende in carico prima dell'invio.
+ */
+export async function dispatchDueBroadcasts(admin: SupabaseClient, origin: string): Promise<BroadcastResult[]> {
+  const { data, error } = await admin.rpc('claim_due_broadcasts', { p_limit: 5 })
+  if (error) throw error
+  const results: BroadcastResult[] = []
+  for (const b of (data ?? []) as { id: string; body: string }[]) {
+    try {
+      const counts = await sendToAll(admin, origin, b)
+      await admin
+        .from('broadcasts')
+        .update({ status: 'sent', sent_at: new Date().toISOString(), ...counts })
+        .eq('id', b.id)
+      results.push({ id: b.id, ...counts })
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'send_failed'
+      await admin.from('broadcasts').update({ status: 'failed', error: message.slice(0, 300) }).eq('id', b.id)
+    }
+  }
+  return results
+}
+
+const CRON_KEY = 'broadcast_cron'
+
+/** Indirizzo e codice segreto con cui il database chiama l'app per le notifiche programmate. */
+export async function readCronConfig(admin: SupabaseClient): Promise<{ url: string; token: string } | null> {
+  const { data, error } = await admin.from('app_secrets').select('value').eq('key', CRON_KEY).maybeSingle()
+  if (error || !data) return null
+  try {
+    const parsed = JSON.parse((data as { value: string }).value) as { url?: string; token?: string }
+    return parsed.token ? { url: parsed.url ?? '', token: parsed.token } : null
+  } catch {
+    return null
+  }
+}
+
+/** Salva l'indirizzo che il database chiama ogni minuto (il codice segreto si crea una volta sola). */
+export async function ensureCronConfig(admin: SupabaseClient, url: string): Promise<void> {
+  const current = await readCronConfig(admin)
+  if (current?.url === url) return
+  const value = JSON.stringify({ url, token: current?.token ?? randomBytes(32).toString('hex') })
+  const { error } = await admin.from('app_secrets').upsert({ key: CRON_KEY, value }, { onConflict: 'key' })
+  if (error) throw error
+}
+
+/** Indirizzo pubblico dell'app: su Vercel quello di produzione, anche dalle anteprime. */
+export function productionOrigin(request: Request): string {
+  const host = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  return host ? `https://${host}` : new URL(request.url).origin
 }

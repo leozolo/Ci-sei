@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState, type ReactNode } from 'react'
-import { LuArchive, LuChevronRight, LuLogOut, LuShieldCheck, LuUsers } from 'react-icons/lu'
+import { LuArchive, LuChevronRight, LuLogOut, LuMegaphone, LuShieldCheck, LuUsers } from 'react-icons/lu'
 import { useApp } from '@/components/app-context'
 import { Credit } from '@/components/brand'
 import { LanguageSelect } from '@/components/language-select'
@@ -149,9 +149,14 @@ export default function SettingsPage() {
             {m.board.pastEvents}
           </LinkRow>
           {me.role === 'admin' ? (
-            <LinkRow href="/admin" icon={<LuShieldCheck className="size-5" />}>
-              {m.settings.adminLink}
-            </LinkRow>
+            <>
+              <LinkRow href="/admin" icon={<LuShieldCheck className="size-5" />}>
+                {m.settings.adminLink}
+              </LinkRow>
+              <LinkRow href="/admin/notifiche" icon={<LuMegaphone className="size-5" />}>
+                {m.broadcast.link}
+              </LinkRow>
+            </>
           ) : null}
         </Group>
 

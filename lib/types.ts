@@ -147,3 +147,39 @@ export interface LinkPreview {
   address?: string
   city?: string
 }
+
+// Notifiche a tutti (solo amministratori)
+export type BroadcastStatus = 'scheduled' | 'sending' | 'sent' | 'failed' | 'cancelled'
+export type BroadcastCategory = 'weekend' | 'social' | 'events'
+
+export interface BroadcastRow {
+  id: string
+  body: string
+  status: BroadcastStatus
+  scheduled_at: string
+  sent_at: string | null
+  /** persone e telefoni raggiunti, telefoni a cui è stata spedita */
+  people: number | null
+  delivered: number | null
+  attempted: number | null
+  /** 'expired' = in ritardo di ore, non è partita */
+  error: string | null
+  created_by: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface BroadcastTemplate {
+  id: string
+  category: BroadcastCategory
+  body: string
+  position: number
+  created_at: string
+}
+
+export interface BroadcastResult {
+  id: string
+  people: number
+  delivered: number
+  attempted: number
+}
