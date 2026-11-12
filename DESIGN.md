@@ -1,23 +1,23 @@
 ---
 name: Club dei clubbers
-description: The group's door list for nights out. Night-blue ground, chalk type, and marker inks for in, maybe and no.
+description: The group's door list for nights out. Blue-ink ground, chalk type, narrow counts against wide titles, ticket frames, and marker inks for in, maybe and no.
 colors:
-  night: "#0b1130"
-  night-raised: "#121a3c"
-  night-raised-2: "#1a2450"
-  night-raised-3: "#253064"
-  chalk: "#f3f1ec"
-  chalk-muted: "#aab3d6"
-  chalk-faint: "#7c87b3"
-  hairline: "rgba(214, 222, 255, 0.11)"
-  hairline-strong: "rgba(214, 222, 255, 0.22)"
+  night: "#05070f"
+  night-raised: "#0b0f1c"
+  night-raised-2: "#131a2e"
+  night-raised-3: "#1d2742"
+  chalk: "#eef0f4"
+  chalk-muted: "#9aa3c0"
+  chalk-faint: "#7a84a6"
+  hairline: "rgba(214, 222, 255, 0.13)"
+  hairline-strong: "rgba(214, 222, 255, 0.24)"
   marker-green: "#48e28b"
   marker-green-ink: "#06281a"
   marker-yellow: "#ffd34a"
   marker-yellow-ink: "#2c2100"
   marker-red: "#ff6a5f"
   marker-red-ink: "#2e0703"
-  scrim: "rgba(4, 7, 24, 0.68)"
+  scrim: "rgba(2, 3, 8, 0.72)"
   day-paper: "#eef0f6"
   day-raised: "#ffffff"
   day-raised-2: "#e2e6f1"
@@ -31,13 +31,62 @@ colors:
   day-yellow: "#8a6100"
   day-red: "#b8291f"
 typography:
-  display:
+  numeral:
     fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "40px"
+    fontSize: "96px"
     fontWeight: 800
-    lineHeight: 0.92
+    lineHeight: 0.8
     fontVariation: "\"wdth\" 62"
     fontFeature: "\"tnum\" 1, \"lnum\" 1"
+  numeral-md:
+    fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "56px"
+    fontWeight: 800
+    lineHeight: 0.8
+    fontVariation: "\"wdth\" 62"
+    fontFeature: "\"tnum\" 1, \"lnum\" 1"
+  numeral-row:
+    fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "44px"
+    fontWeight: 800
+    lineHeight: 0.8
+    fontVariation: "\"wdth\" 62"
+    fontFeature: "\"tnum\" 1, \"lnum\" 1"
+  title-wide-xl:
+    fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "36px"
+    fontWeight: 900
+    lineHeight: 0.95
+    letterSpacing: "-0.02em"
+    fontVariation: "\"wdth\" 125"
+  title-wide-lg:
+    fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "30px"
+    fontWeight: 900
+    lineHeight: 0.95
+    letterSpacing: "-0.02em"
+    fontVariation: "\"wdth\" 125"
+  title-wide:
+    fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "24px"
+    fontWeight: 900
+    lineHeight: 1
+    letterSpacing: "-0.02em"
+    fontVariation: "\"wdth\" 125"
+  title-wide-sm:
+    fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "18px"
+    fontWeight: 900
+    lineHeight: 1
+    letterSpacing: "-0.02em"
+    fontVariation: "\"wdth\" 125"
+  title-row:
+    fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "16px"
+    fontWeight: 900
+    lineHeight: 1.05
+    letterSpacing: "-0.02em"
+    fontVariation: "\"wdth\" 125"
   display-md:
     fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
     fontSize: "32px"
@@ -50,36 +99,17 @@ typography:
     fontWeight: 800
     lineHeight: 1.1
     fontVariation: "\"wdth\" 72"
-  numeral:
-    fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "56px"
-    fontWeight: 800
-    lineHeight: 0.8
-    fontVariation: "\"wdth\" 62"
-    fontFeature: "\"tnum\" 1, \"lnum\" 1"
   headline:
     fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
     fontSize: "23px"
     fontWeight: 800
     lineHeight: 1
     fontVariation: "\"wdth\" 72"
-  title-card:
+  count-label:
     fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "25px"
+    fontSize: "18px"
     fontWeight: 800
-    lineHeight: 0.98
-    fontVariation: "\"wdth\" 62"
-  title:
-    fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "19px"
-    fontWeight: 800
-    lineHeight: 1.02
-    fontVariation: "\"wdth\" 72"
-  title-compact:
-    fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "17px"
-    fontWeight: 800
-    lineHeight: 1.1
+    lineHeight: 1
     fontVariation: "\"wdth\" 72"
   name:
     fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
@@ -87,6 +117,24 @@ typography:
     fontWeight: 700
     lineHeight: 1.2
     fontVariation: "\"wdth\" 72"
+  mono-control:
+    fontFamily: "\"JetBrains Mono\", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    fontSize: "14px"
+    fontWeight: 700
+    lineHeight: 1.2
+    letterSpacing: "0.04em"
+  mono-label:
+    fontFamily: "\"JetBrains Mono\", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    fontSize: "13px"
+    fontWeight: 400
+    lineHeight: 1.35
+    letterSpacing: "0.05em"
+  mono-caption:
+    fontFamily: "\"JetBrains Mono\", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    fontSize: "11px"
+    fontWeight: 400
+    lineHeight: 1.35
+    letterSpacing: "0.06em"
   body:
     fontFamily: "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", sans-serif"
     fontSize: "15px"
@@ -118,13 +166,13 @@ typography:
     fontWeight: 600
     lineHeight: 1.2
 rounded:
-  tag: "6px"
-  thumb: "8px"
-  sm: "10px"
-  md: "12px"
-  lg: "14px"
-  panel: "18px"
-  sheet: "22px"
+  tag: "2px"
+  thumb: "2px"
+  sm: "2px"
+  md: "3px"
+  lg: "3px"
+  panel: "3px"
+  sheet: "6px"
   pill: "999px"
 spacing:
   chip-gap: "8px"
@@ -153,32 +201,36 @@ components:
   rsvp-in:
     backgroundColor: "{colors.chalk}"
     textColor: "{colors.night}"
+    typography: "{typography.mono-control}"
     rounded: "{rounded.lg}"
     height: "52px"
   rsvp-in-selected:
     backgroundColor: "{colors.marker-green}"
     textColor: "{colors.marker-green-ink}"
+    typography: "{typography.mono-control}"
     rounded: "{rounded.lg}"
     height: "52px"
   rsvp-maybe-selected:
     backgroundColor: "{colors.marker-yellow}"
     textColor: "{colors.marker-yellow-ink}"
+    typography: "{typography.mono-control}"
     rounded: "{rounded.lg}"
     height: "52px"
   rsvp-no-selected:
     backgroundColor: "{colors.marker-red}"
     textColor: "{colors.marker-red-ink}"
+    typography: "{typography.mono-control}"
     rounded: "{rounded.lg}"
     height: "52px"
   chip:
     textColor: "{colors.chalk}"
-    rounded: "{rounded.pill}"
+    rounded: "{rounded.sm}"
     height: "36px"
     padding: "0 14px"
   chip-active:
     backgroundColor: "{colors.chalk}"
     textColor: "{colors.night}"
-    rounded: "{rounded.pill}"
+    rounded: "{rounded.sm}"
     height: "36px"
     padding: "0 14px"
   input:
@@ -186,6 +238,21 @@ components:
     textColor: "{colors.chalk}"
     rounded: "{rounded.md}"
     padding: "0 16px"
+  ticket-frame:
+    backgroundColor: "{colors.night-raised}"
+    textColor: "{colors.chalk-faint}"
+    typography: "{typography.mono-caption}"
+    rounded: "{rounded.tag}"
+  ticket-row:
+    textColor: "{colors.chalk}"
+    typography: "{typography.title-row}"
+    padding: "12px 0"
+  membership-card:
+    backgroundColor: "{colors.night-raised}"
+    textColor: "{colors.chalk}"
+    typography: "{typography.title-wide-sm}"
+    rounded: "{rounded.tag}"
+    padding: "12px"
   guest-list:
     backgroundColor: "{colors.night-raised}"
     textColor: "{colors.chalk}"
@@ -207,27 +274,31 @@ components:
 
 # Design System: Club dei clubbers
 
+> **Status: version 2, target system.** Creative direction approved by Leonardo on 2026-11-12 (ten steps, logged in the project document `design-decisions.md`). The application code still implements version 1 ("In lista" on night blue); this file describes what the implementation must reach. Items marked **(pending)** are proposals that still need Leonardo's confirmation and are listed again at the end. `.impeccable/design.json` still reflects version 1 and is to be regenerated from the shipped interface once version 2 is implemented.
+
 ## Overview
 
 **Creative North Star: "The Door List"**
 
-Every event is the guest list at a club door, read at night. The friends who are in come first, ticked in marker with their +1, and the poster follows whole beneath. The board is a stack of those lists: who you are already down for, where the group is going this weekend, which nights have the longest list, what was just proposed, then the full programme by day.
+Every event is the guest list at a club door, read at night. Who is in comes with the event wherever it appears: a large count, the friends ticked in marker, their +1. The poster is shown whole, like a ticket pinned in a frame. The board opens on the featured nights at full height, then becomes a stack of ticket rows: one line per event, count first.
 
-The world is night blue, not black: the ground and every raised surface step through the same blue, and type is chalk white. Colour is reserved for the three marker inks, green for in, yellow for maybe, red for no, so a glance at any screen says who is going. Names, counts and titles speak in a narrow uppercase grotesk, the voice of a list written at the door; anything meant to be read as sentences stays in the phone's own face. The density is that of a well-kept list: rows and hairlines, few boxes, nothing decorative.
+Version 2 keeps that idea and tightens the voice with the rigour of a Berlin door: a near-black ground with a blue undertone, sharp corners, hairline rows, and a monospace stamp for dates, times and places. Type works on one family at two extremes: counts and names in narrow Archivo, event titles in wide Archivo. Colour is still reserved for the three marker inks, green for in, yellow for maybe, red for no, so a glance at any screen says who is going.
 
-Motion has one authored moment: putting yourself on the list. The marker tick draws itself on the button, your face slides into the list line and your name writes into the list. Everything else responds to touch and stays quiet.
+Motion is fluid: things rise and settle softly, states cross-fade, numbers slide to their new value. One moment is drawn by hand: putting yourself on the list, when the marker tick draws itself.
 
 **Key Characteristics:**
-- Night-blue ground and chalk type, with a full day theme for bright light.
+- Blue-ink ground (near-black, never neutral black) and chalk type, with a day theme for bright light.
 - Three marker inks with fixed meanings, each paired with a drawn mark and a word.
-- Narrow uppercase grotesk (self-hosted Archivo) for names, counts and titles; system face for reading.
-- Rows and 1px hairlines instead of cards; the guest list is the one framed object.
-- Posters always whole, never cropped under a gradient or overlaid with text.
-- One signature motion: the tick that draws itself when you join a list.
+- Narrow Archivo for counts and names, wide Archivo for event titles, a dedicated monospace for metadata, the system face for reading.
+- Ticket frames for posters and member cards; ticket rows and 1px hairlines for lists.
+- Posters always whole, in their own colours, never filtered, cropped under a gradient or overlaid with text.
+- Sharp corners throughout; only avatars, switches and badges are round.
+- Fluid motion, plus one signature: the tick that draws itself when you join a list.
+- Taps only: no hidden gestures.
 
 ## Colors
 
-A night palette of blues with chalk type, where the only saturated colours are the three inks of the list.
+A near-black palette with a blue undertone and chalk type, where the only saturated colours are the three inks of the list.
 
 ### Primary
 - **Marker Green** (in): the "in lista" ink. Ticks beside names, the selected "Sei in lista" button, the active tab marker, unread badges, the caret, text selection and focus rings. Its ink colour sits on it whenever it is a fill.
@@ -239,83 +310,106 @@ A night palette of blues with chalk type, where the only saturated colours are t
 - **Marker Red** (no): the "Non vengo" ink. The cross mark, struck-through names, the "Annullato" tag, destructive actions and error messages.
 
 ### Neutral
-- **Night** (ground): the page and the bars at the bottom of the screen.
-- **Night Raised, Raised 2, Raised 3**: sheets, the guest list panel and inputs; hover fills; avatar and switch tracks. Depth steps up in blue, never in grey.
-- **Chalk**: primary text, the primary button and the propose button.
-- **Chalk Muted**: secondary text, meta lines, icons in info rows.
-- **Chalk Faint**: inactive tab labels, timestamps, placeholders and optional hints (AA on the ground and on raised surfaces).
-- **Hairline / Hairline Strong**: row dividers and the borders of chips, outline buttons and inputs.
-- **Day Paper and the day set**: the light theme. The same roles, with the inks deepened (Day Green, Day Yellow, Day Red) so text and white labels on them pass AA.
+- **Night** (ground): the page and the bars at the bottom of the screen. A blue-tinted near-black.
+- **Night Raised, Raised 2, Raised 3**: ticket frames, sheets, the guest list panel and inputs; hover and selected fills; avatar and switch tracks. Depth steps up in blue, never in grey. The steps sit close together and must be checked on real phones, OLED included.
+- **Chalk**: primary text, the primary button and the propose button. Slightly cool.
+- **Chalk Muted**: secondary text and icons in info rows.
+- **Chalk Faint**: monospace metadata, inactive tab labels, timestamps, placeholders. It passes AA on Night, Raised and Raised 2 (5.4, 5.2 and 4.7 to 1); it must not carry text on Raised 3 (4.0 to 1), where Chalk Muted is used instead.
+- **Hairline / Hairline Strong**: row dividers; the borders of ticket frames, chips, outline buttons and inputs.
+- **Day Paper and the day set**: the light theme. The values are still those of version 1 **(pending)**: the day theme must be re-derived from the new palette, with the inks deepened so text and labels on them pass AA.
 
 ### Named Rules
 **The Three Inks Rule.** Green, yellow and red mean in, maybe and no, and nothing else. A status colour never decorates, and every ink travels with its mark (tick, circle, cross) and a word, so the meaning survives without colour.
 
-**The Night Ground Rule.** The ground is night blue, never neutral black; raised surfaces step up in the same blue, never in grey.
+**The Night Ground Rule.** The ground is a blue-tinted near-black, never neutral black; raised surfaces step up in the same blue, never in grey.
 
 ## Typography
 
-**Display Font:** Archivo, variable width, self-hosted subset (with ui-sans-serif, system-ui)
-**Cyrillic Display Fallback:** Roboto Flex (wdth and wght axes, Cyrillic subset via next/font/google, not preloaded): Archivo has no Cyrillic, and Roboto Flex answers the same `font-stretch` values, so Russian titles stay narrow. The stack is Archivo, then a metric-matched local fallback limited to Latin (`Archivo Fallback` in globals.css), then Roboto Flex: a fallback with Cyrillic (such as plain Arial) placed before Roboto Flex would take over every Russian title.
+**Display Font:** Archivo, variable on width and weight, self-hosted (with ui-sans-serif, system-ui). The file must cover `wdth` 62 to 125 and `wght` up to 900. The current `app/fonts/archivo-condensed.woff` covers only `wdth` 62 to 100 and has to be replaced or complemented.
+**Monospace Font:** a dedicated, self-hosted monospace with Latin and Cyrillic. JetBrains Mono is the working choice **(pending)**; the fallback stack is ui-monospace, SFMono-Regular, Menlo, Consolas.
+**Cyrillic Display Fallback:** Roboto Flex (wdth and wght axes, Cyrillic subset via next/font/google, not preloaded): Archivo has no Cyrillic, and Roboto Flex answers the same `font-stretch` values, narrow and wide, so Russian counts stay narrow and Russian titles stay wide. The stack is Archivo, then a metric-matched local fallback limited to Latin (`Archivo Fallback` in globals.css), then Roboto Flex: a fallback with Cyrillic (such as plain Arial) placed before Roboto Flex would take over every Russian title.
 **Body Font:** the platform's system face (ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto)
 
-**Character:** a compressed, heavy grotesk written in capitals, like names on a door list, against the phone's familiar reading face. Two widths of the same family set the hierarchy: 62% for titles and big numbers, 72% for names, row titles and interface headings. Tabular, lining figures throughout.
+**Character:** one family pulled to its two extremes. Counts and names are narrow and tall, like figures chalked on a door list; event titles are wide and black, like the headline of a flyer; dates, times and places are stamped in monospace; anything read as sentences stays in the phone's own face. Tabular, lining figures throughout.
 
 ### Hierarchy
-- **Display** (800, 40px, 0.92, 62% width, uppercase): the event title on the event screen.
-- **Numeral** (800, 56px, 0.8, 62% width): the count of the guest list; the ranking counts use the same face at 40px.
-- **Display MD** (800, 32px, 72% width): the name on a profile, profile stats and the wordmark on sign-in screens.
+- **Numeral** (800, 96px, 0.8, 62% width): the count of the guest list on the event screen.
+- **Numeral MD** (800, 56px, 0.8, 62% width): the count on a page of the opening pager; the two stats on a member card.
+- **Numeral Row** (800, 44px, 0.8, 62% width): the count at the start of a ticket row.
+- **Title Wide XL / LG / Wide** (900, 36 / 30 / 24px, 0.95 to 1, 125% width, uppercase, -0.02em): the event title on the event screen. The size steps down with length: up to 12 characters XL, up to 28 LG, longer Wide. The title is never truncated there.
+- **Title Wide** (900, 24px): also the event title on a page of the opening pager, two lines at most.
+- **Title Wide SM** (900, 18px, 125% width, uppercase): the member's name on the membership card.
+- **Title Row** (900, 16px, 1.05, 125% width, uppercase): event titles in ticket rows, two lines at most, then an ellipsis.
+- **Display MD** (800, 32px, 72% width): the wordmark on sign-in screens.
 - **Display SM** (800, 27px, 72% width): headings of sign-in, invite and welcome screens, and the splash wordmark.
-- **Headline** (800, 23px, 1, 72% width, sentence case): section headings such as "Sei in lista", "Questo weekend", "Messaggi"; page titles, sheet and dialog titles, and the wordmark in the board's top bar.
-- **Title Card** (800, 25px, 0.98, 62% width, uppercase): event titles on door cards.
-- **Title** (800, 19px, 1.02, 72% width, uppercase): event titles in list rows; the "in lista" word beside the guest-list count.
+- **Headline** (800, 23px, 1, 72% width, sentence case): section headings such as "Sei in lista", "In programma", "Messaggi"; page titles, sheet and dialog titles, and the wordmark in the board's top bar.
+- **Count Label** (800, 18px, 72% width, uppercase): the words "in lista" beside a count.
 - **Name** (700, 18px, 72% width, uppercase): member names on the guest list and in sheets.
-- **Title Compact** (800, 17px, 72% width): titles in the compact rows ("Sei in lista", ranking) and the count in the list line.
-- **Control LG** (600, 16px): inputs (16px so iOS does not zoom), large buttons, the main RSVP button.
+- **Mono Control** (700, 14px, 0.04em, uppercase): the labels of the RSVP controls ("Mettimi in lista", "Sei in lista", "Forse", "No").
+- **Mono Label** (400, 13px, 0.05em, uppercase): date, time and place lines; day headers; the pager index; "+1"; the member's own answer in a row.
+- **Mono Caption** (400, 11px, 0.06em, uppercase): the data strip of a ticket frame.
+- **Control LG** (600, 16px): inputs (16px so iOS does not zoom) and large buttons.
 - **Body** (400, 15px, 1.45): descriptions and messages, at most 65ch.
 - **Control** (600, 14px): chips, small and outline buttons, hints and secondary text.
-- **Meta** (400, 13px, 1.4): date, place and attendance lines, info-row subtitles.
-- **Caption** (500, 12px): timestamps, day headers, status labels, weekday initials.
+- **Meta** (400, 13px, 1.4): supporting sentences and info-row subtitles.
+- **Caption** (500, 12px): timestamps, status labels, weekday initials.
 - **Tab Label** (600, 11px): bottom navigation labels.
 
-### Named Rules
-**The Fifteen Steps Rule.** Every size comes from the ramp above (11, 12, 13, 14, 15, 16, 17, 18, 19, 23, 25, 27, 32, 40, 56px); no half pixels, no near-duplicates.
+The wide sizes above are starting values: they must be calibrated on a 360px-wide phone, in Italian, English and Russian, before they are frozen.
 
-**The Door Voice Rule.** Names, counts and event titles are set in the narrow uppercase grotesk; interface headings use the same face in sentence case; anything read as sentences uses the system face.
+### Named Rules
+**The Sixteen Steps Rule.** Every size comes from the ramp above (11, 12, 13, 14, 15, 16, 18, 23, 24, 27, 30, 32, 36, 44, 56, 96px); no half pixels, no near-duplicates.
+
+**The Door Voice Rule.** Counts and names are narrow; event titles are wide; dates, times, places and RSVP labels are monospace; interface headings use the narrow face in sentence case; anything read as sentences uses the system face. Wide and narrow never swap roles.
 
 ## Layout
 
-Mobile-first, one column with a 16px gutter, capped at 672px and centred on wider screens. Sections are separated by 40px with the heading closer to its content (16px) than to the section above. The board opens with a one-line summary, then "Sei in lista" rows, the "Questo weekend" rail of door cards, the "Dove vanno tutti" ranking, the "Appena proposti" rail, and "In programma" with its filters and sticky day headers. The event screen follows the door order: title, the list line (faces and "N in lista"), date, place and link rows, the poster whole, then the full guest list, actions, details and messages.
+Mobile-first, one column with a 16px gutter, capped at 672px and centred on wider screens **(pending for tablet and desktop: keeping the centred column is the proposed default)**. Sections are separated by 40px with the heading closer to its content (16px) than to the section above.
 
-Horizontal rails snap card by card and bleed to the screen edge; with a mouse or trackpad, back and forward controls appear beside the section count. From 640px, chip rows wrap instead of scrolling and sheets become centred dialogs. A fixed tab bar (64px plus the safe area) is present on every screen except the event screen, where the RSVP bar takes its place.
+**The board** opens with the opening pager at full height: one featured event per page, swiped horizontally. Below it, on vertical scroll, come the sections, each as a stack of ticket rows: "Sei in lista", "Dove vanno tutti", "Appena proposti", and "In programma" with its filters and sticky monospace day headers **(pending: which sections remain, their order, and which events are featured in the pager; these are display rules over existing data and must not change data logic without approval)**.
+
+**The event screen** follows the door order: wide title, the list line (faces and count), monospace date, place and link rows, the poster whole in its ticket frame, then the full guest list, actions, details and messages.
+
+From 640px, chip rows wrap instead of scrolling and sheets become centred dialogs. A fixed tab bar (64px plus the safe area) is present on every screen except the event screen, where the RSVP bar takes its place.
 
 ### Named Rules
-**The Count Comes First Rule.** On every event surface the faces and "N in lista" come before the poster: first on door cards, right under the title on the event screen.
+**The Count Comes First Rule.** The count never leaves the title. A ticket row starts with it; the event screen puts the list line right under the title, before the poster; on the opening pager, the one surface where the poster leads, the count sits directly beneath the frame, beside the title.
+
+**The Taps Only Rule.** Nothing depends on a hidden gesture. A tap on a row opens the event; answers are given only through visible RSVP controls. The one swipe is the native horizontal scroll of the opening pager. Every RSVP notifies the group, so an answer must never be triggered by accident.
 
 ## Elevation & Depth
 
-Flat by default. Surfaces separate by tone (night to raised night) and 1px hairlines. Shadows exist only for things that are lifted off the board, posters and the bars and sheets that float over content, and they are always offset and soft, tinted from the night.
+Flat by default. Surfaces separate by tone (night to raised night) and 1px hairlines. Posters no longer float on shadows: the ticket frame, with its raised fill and hairline border, is what lifts them off the ground **(pending: removal of the two poster shadows of version 1)**. Shadows remain only for bars and sheets that float over content, always offset and soft, tinted from the night.
 
 ### Shadow Vocabulary
-- **Poster lift** (`box-shadow: 0 18px 44px var(--c-shadow)`): the whole poster on the event screen.
-- **Card poster** (`box-shadow: 0 8px 24px var(--c-shadow)`): posters on door cards.
 - **Floating bar** (`box-shadow: 0 -10px 30px var(--c-shadow)`): the RSVP bar.
 - **Sheet** (`box-shadow: 0 -12px 40px var(--c-shadow)`): bottom sheets and dialogs.
 - **Propose** (`box-shadow: 0 6px 18px var(--c-shadow)`): the propose button in the tab bar.
 
 ### Named Rules
-**The Flat Board Rule.** Rows, sections and lists never cast shadows; only posters and floating bars and sheets do. No glass, no blur, no glow.
+**The Flat Board Rule.** Rows, sections, frames and lists never cast shadows; only floating bars and sheets do. No glass, no blur, no glow, no light cones.
 
 ## Shapes
 
-Gently rounded and graded by size: small tags 6px, poster thumbnails 8px, small buttons and card posters 10px, buttons, inputs and the event poster 12px, the RSVP buttons and the propose button 14px, the guest list panel 18px, sheets 22px. Chips and avatars are fully round. Borders are 1px hairlines; marks are drawn strokes with round caps and joins.
+Sharp. Ticket frames, thumbnails, tags and chips have 2px corners; buttons, inputs, the RSVP controls, the propose button and the guest list panel 3px; sheets 6px on their top corners. Only avatars, switches and count badges are fully round. Borders are 1px hairlines; marks are drawn strokes with round caps and joins, the one soft, hand-made shape against the hard grid.
 
 ### Named Rules
-**The Whole Poster Rule.** Posters are shown whole: filled only when their ratio is close to 4:5, otherwise contained on the night ground. Never cropped under a gradient, never overlaid with text.
+**The Whole Poster Rule.** Posters are shown whole and in their own colours, contained and centred in a ticket frame whatever their ratio. Never filtered, never cropped under a gradient, never overlaid with text, never blurred behind themselves.
 
 ## Components
 
+### Ticket frame (signature)
+The one container for images. Night Raised fill, 1px Hairline Strong border, 2px corners; the poster is contained and centred inside with even padding. A data strip may close the frame: a hairline, then one line in Mono Caption, Chalk Faint, with two facts set left and right (for example where the link came from and who proposed the event; only fields that already exist). The frame scales from a 48 by 60px thumbnail in a ticket row, without strip, to the full height of the opening pager.
+An event proposed without an image shows a generated typographic poster in the same frame: the title in wide Archivo on Night Raised 2 **(pending)**.
+
+### Ticket row
+One event per row, on the ground, divided by hairlines; the whole row is the tap target. Left to right: the count in Numeral Row; the title in Title Row with a Mono Label line under it (time and place, Chalk Faint); the poster thumbnail in its frame. When the member has answered, the Mono Label line starts with the mark and the word in the ink ("Sei in lista" with the tick in green, "Forse" with the circle in yellow), followed by the time. Press scales the row to 0.97.
+
+### Opening pager
+A horizontal, snapping pager at the top of the board, one featured event per page at full height. Each page: the ticket frame filling the available height with the poster whole; beneath it the count in Numeral MD beside the title in Title Wide and a Mono Label date line; then the RSVP control at full width. The top bar carries the wordmark and the index in Mono Label ("1 / 3"). Only the first poster loads eagerly. With no featured event, the board starts directly with the ticket rows **(pending)**.
+
 ### Buttons
-- **Shape:** gently rounded (10px small, 12px medium, 14px large), heights 36, 44 and 52px.
+- **Shape:** 3px corners, heights 36, 44 and 52px.
 - **Primary:** chalk fill with night text; the one strong action on a screen.
 - **Going:** marker green fill with its dark ink, for confirming you are in.
 - **Outline / Ghost / Secondary:** hairline-strong border, transparent or raised fills; hover steps to Raised 2.
@@ -323,30 +417,30 @@ Gently rounded and graded by size: small tags 6px, poster thumbnails 8px, small 
 - **Press / Focus:** every control scales to 0.97 on press (0.16s); focus is a 2px marker-green ring with 2px offset.
 
 ### Chips
-- **Style:** fully round, 36px, hairline-strong border, chalk text, drawn category icon at 16px.
+- **Style:** 2px corners, 36px, hairline-strong border, chalk text, drawn category icon at 16px.
 - **State:** the active chip inverts to a chalk fill with night text.
 
 ### Cards / Containers
-- **Door card:** not a box. A 72vw rail item (at most 284px): the list line, the title in Title Card, a meta line, then the poster at 4:5 with the card-poster shadow.
-- **Guest list panel:** Night Raised fill, hairline border, 18px corners, 20px top padding: the one framed object on the event screen.
+- **Membership card:** the member profile. A ticket frame holding the photo (or the initials on Night Raised 3 when there is none) beside the name in Title Wide SM and a Mono Label line, closed by a data strip. Under the card, the two stats in Numeral MD with Count Label words, then the member's upcoming nights as ticket rows. Only existing profile data is shown.
+- **Guest list panel:** Night Raised fill, hairline border, 3px corners, 20px top padding: the framed list on the event screen.
 - **Rows:** list rows sit on the ground and divide with hairlines.
 
 ### Inputs / Fields
-- **Style:** Night Raised fill, hairline border, 12px corners, 16px text (no zoom on iOS), faint placeholder.
+- **Style:** Night Raised fill, hairline border, 3px corners, 16px text (no zoom on iOS), faint placeholder.
 - **Focus:** the border turns marker green at 70%.
 - **Error:** a red hint line under the field.
 
 ### Navigation
-- **Tab bar:** solid night with a top hairline; five slots: Bacheca, Calendario, the chalk propose square, Attività, Profilo. Inactive items in Chalk Faint; the active item turns chalk with a 3px marker-green bar at the top edge. Unread counts sit in a green badge.
+- **Tab bar:** solid night with a top hairline, full width, square; five slots: Bacheca, Calendario, the chalk propose square, Attività, Profilo, each with icon and label. Inactive items in Chalk Faint; the active item turns chalk. A 3px marker-green bar sits on the top edge of the active item and slides to the newly chosen item (see Motion). Unread counts sit in a green badge.
 
 ### RSVP bar (signature)
-Fixed at the bottom of the event screen, solid night with the floating-bar shadow. Three radios: "Mettimi in lista" (wider, chalk fill; marker green with "Sei in lista" once in), "Forse" with the circle mark, "No" with the cross mark (accessible name "Non vengo"). Choosing "Mettimi in lista" draws the tick (0.42s, ease-out, `stroke-dashoffset` from 1 to 0), slides your face into the list line and writes your name into the guest list. Tapping the selected option again clears the answer.
+Fixed at the bottom of the event screen, solid night with the floating-bar shadow. Three radios with Mono Control labels: "Mettimi in lista" (wider, chalk fill; marker green with "Sei in lista" once in), "Forse" with the circle mark, "No" with the cross mark (accessible name "Non vengo"). Choosing "Mettimi in lista" draws the tick (0.42s, ease-out, `stroke-dashoffset` from 1 to 0), cross-fades the fill to green, slides the count to its new value, and brings your face into the list line and your name into the guest list. Tapping the selected option again clears the answer. The same control, full width, closes each page of the opening pager.
 
 ### Marker marks
-The tick, the circle and the cross are authored SVG strokes (24px grid, round caps, 2.4 to 3.4 stroke) drawn in the inks. They mark status everywhere: rows, cards, the guest list, the list sheet and the RSVP bar.
+The tick, the circle and the cross are authored SVG strokes (24px grid, round caps, 2.4 to 3.4 stroke) drawn in the inks. They mark status everywhere: rows, the guest list, the list sheet and the RSVP controls.
 
 ### Brand mark
-Provisional: the green marker tick (`public/brand/mark.svg`), the single source of the symbol. In the app it is drawn as a silhouette in the theme's marker green (bright on night, deep on day paper); the PWA icons are rendered from the same file on night blue by `npm run icons`. Replacing that one file replaces the symbol everywhere. The wordmark is "CLUB DEI CLUBBERS" in the narrow grotesk at 62% width.
+Provisional: the green marker tick (`public/brand/mark.svg`), the single source of the symbol. In the app it is drawn as a silhouette in the theme's marker green (bright on night, deep on day paper); the PWA icons are rendered from the same file on the night ground by `npm run icons`. Replacing that one file replaces the symbol everywhere. The wordmark is "CLUB DEI CLUBBERS" in narrow Archivo at 62% width.
 
 ### Credit
 "designed by L. Zolovkin" in Arial at 16px (line height 1.45, the `font-credit` token, used for nothing else), Chalk Faint with the name in Chalk Muted, centred and identical in every language. It appears in three places only: closing the board under the "Eventi passati" link, at the foot of Settings under the app name, and at the foot of the entry screens (sign-in, invite, welcome, password reset), 52px above the bottom safe area, with the content centred above it.
@@ -355,17 +449,58 @@ Provisional: the green marker tick (`public/brand/mark.svg`), the single source 
 
 ### Do:
 - **Do** pair every status ink with its mark and its word: tick and "Sei in lista", circle and "Forse", cross and "No".
-- **Do** put the faces and "N in lista" before the poster on every event surface.
+- **Do** keep the count beside the title on every event surface.
+- **Do** set counts and names in narrow Archivo, event titles uppercase in wide Archivo, and dates, times and places in monospace.
+- **Do** put every poster, whole and in its own colours, inside a ticket frame.
 - **Do** separate rows with 1px Hairline dividers instead of boxing each item.
-- **Do** set event titles uppercase in Archivo at 62% width and interface headings in sentence case at 72% width.
-- **Do** keep the poster whole: fill only near 4:5, otherwise contain it on the night ground.
-- **Do** keep the tick-draw for the moment someone joins a list; every other mark is static.
+- **Do** keep corners sharp: 2px for frames and chips, 3px for controls.
+- **Do** let things enter softly and in sequence, and keep the tick-draw for the moment someone joins a list.
 - **Do** theme the browser surfaces from the palette: green selection, caret and focus ring, raised-night scrollbars, tabular figures.
 
 ### Don't:
 - **Don't** use emoji or Unicode glyphs as icons in the interface; use drawn Lucide icons (1.8 to 2.2 stroke) or the marker marks.
-- **Don't** use glass, backdrop blur or coloured glows.
+- **Don't** use glass, backdrop blur, coloured glows or light cones.
+- **Don't** filter, tint, blur or crop a poster, or lay text over it.
 - **Don't** put a label above a heading: the category and the countdown sit beside the date or below the poster.
 - **Don't** use green, yellow or red for decoration, links or emphasis.
 - **Don't** use neutral black or grey grounds; raised surfaces step up in blue.
-- **Don't** crop posters under a gradient or lay text over them.
+- **Don't** set long reading text in monospace or in wide Archivo.
+- **Don't** hide an action behind a swipe or a long press.
+- **Don't** round frames, buttons or chips into pills.
+
+## Motion
+
+**Character: fluid.** Things rise and settle softly, states cross-fade, numbers slide. Nothing snaps, bounces hard or flashes.
+
+### Tokens
+- **Ease fluid:** `cubic-bezier(0.16, 1, 0.3, 1)`, the one easing for entrances, slides and the tab indicator.
+- **Enter:** 0.65s, from 24px lower, scale 0.96 and transparent, to rest.
+- **Stagger:** 0.08s between siblings entering together (rows of a section, parts of a pager page), capped so a group finishes within about 1s.
+- **State:** 0.35s cross-fade for fills, labels and marks changing state.
+- **Number:** 0.6s, ease fluid: a count slides vertically to its new value.
+- **Indicator:** 0.55s, ease fluid: the green bar of the tab bar sliding between items.
+- **Press:** 0.16s, scale to 0.97.
+- **Tick draw:** 0.42s, ease-out, `stroke-dashoffset` from 1 to 0. The one authored, hand-drawn moment.
+
+### Rules
+- Animate only `transform` and `opacity`; target 60 frames per second on mid-range phones.
+- Entrances play once, when content first comes into view; scrolling back does not replay them.
+- With reduced motion enabled, every animation becomes a 0.15s fade and the tick appears already drawn.
+- Motion never delays an action: controls respond on press, and the answer is saved without waiting for an animation to finish.
+
+### Implementation
+The `motion` package is approved as a dependency for the whole app. Load it lazily (`LazyMotion` with the slim `m` components) and pin the version. Animated components are client components: keep the animated wrapper small and leave data fetching and static parts on the server. Use the library's reduced-motion handling. Press states and simple colour changes stay in CSS.
+
+## Pending confirmation
+
+These points are proposals, not decisions. Each needs Leonardo's explicit approval before it is implemented.
+
+1. **Opening pager content:** which events are featured and in what order; what the board shows when none qualifies. If the rule needs a new database query, it goes to the engineering model first.
+2. **Monospace face:** JetBrains Mono is the working choice.
+3. **Typographic poster** for events without an image.
+4. **Day theme:** to be re-derived from the new palette; the values in the front matter are still those of version 1.
+5. **Board sections** below the pager: which remain and in what order.
+6. **Poster shadows:** removed in favour of the ticket frame.
+7. **Tablet and desktop:** keep the centred 672px column.
+8. **Wide title sizes and length thresholds:** to be calibrated on device.
+9. **New app icon:** already on the to-do list.
