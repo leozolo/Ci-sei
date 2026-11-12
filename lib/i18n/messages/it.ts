@@ -563,7 +563,7 @@ export const it = {
     pushServerMissing: 'Non ancora configurate sul server: vedi la guida, passaggio «chiave segreta».',
     pushHint: 'Ricevi gli avvisi anche quando l’app è chiusa.',
     inviteTitle: 'Attiva le notifiche',
-    inviteBody: 'Sapi subito chi si mette in lista e quando c’è una serata nuova, anche con l’app chiusa.',
+    inviteBody: 'Sappi subito chi si mette in lista e quando c’è una serata nuova, anche con l’app chiusa.',
     inviteYes: 'Attiva',
     inviteLater: 'Non ora',
   },
