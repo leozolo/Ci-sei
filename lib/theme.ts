@@ -2,7 +2,7 @@ export type ThemePref = 'dark' | 'light' | 'system'
 export const THEME_KEY = 'cisei:tema'
 
 const DARK_BG = '#05070f'
-const LIGHT_BG = '#eef0f6'
+const LIGHT_BG = '#eceef4'
 
 /** Eseguito prima del disegno della pagina: evita il "lampo" del tema sbagliato. */
 export const THEME_SCRIPT = `(function(){try{var p=localStorage.getItem('${THEME_KEY}')||'dark';var t=p==='system'?(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):p;document.documentElement.dataset.theme=t;}catch(e){}})();`

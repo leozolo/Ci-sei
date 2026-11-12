@@ -41,6 +41,48 @@ export function useRsvp(event: EventView) {
 }
 
 /**
+ * Il tasto "Mettimi in lista" / "Sei in lista": lo stesso nella barra dell'evento e in fondo
+ * a ogni pagina dell'apertura. La spunta si disegna quando ti metti in lista.
+ */
+export function InListButton({
+  status,
+  onToggle,
+  role,
+  className,
+}: {
+  status: RsvpStatus | null
+  onToggle: () => void
+  /** "radio" dentro la barra a tre scelte; altrove è un tasto a due stati */
+  role?: 'radio'
+  className?: string
+}) {
+  const { m } = useI18n()
+  const on = status === 'going'
+  return (
+    <button
+      type="button"
+      role={role}
+      aria-checked={role ? on : undefined}
+      aria-pressed={role ? undefined : on}
+      onClick={onToggle}
+      className={cn(
+        // non va mai a capo: nella barra, se lo spazio manca si stringono Forse e No
+        'press flex h-13 items-center justify-center gap-2 rounded-ctl px-3 font-mono text-[14px] font-bold uppercase tracking-[0.04em]',
+        on ? 'bg-going text-going-ink' : 'bg-fg text-bg',
+        className,
+      )}
+    >
+      <MarkerTick key={on ? 'in' : 'out'} draw={on} className="size-6" strokeWidth={3.4} />
+      {/* le due scritte occupano lo stesso spazio: il tasto non cambia larghezza quando rispondi */}
+      <span className="grid justify-items-center">
+        <span className={cn('col-start-1 row-start-1', on && 'invisible')}>{m.rsvp.putMe}</span>
+        <span className={cn('col-start-1 row-start-1', !on && 'invisible')}>{m.rsvp.inList}</span>
+      </span>
+    </button>
+  )
+}
+
+/**
  * La barra in fondo all'evento: Mettimi in lista / Forse / Non vengo.
  * Sempre a portata di pollice; la risposta si cambia quando vuoi.
  */
@@ -63,31 +105,14 @@ export function RsvpBar({
   return (
     <div className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg shadow-[0_-10px_30px_var(--c-shadow)]">
       <div className="mx-auto flex max-w-2xl gap-2 px-4 py-3" role="radiogroup" aria-label={m.rsvp.groupLabel}>
-        <button
-          type="button"
-          role="radio"
-          aria-checked={status === 'going'}
-          onClick={() => choose('going')}
-          className={cn(
-            // non va mai a capo: se lo spazio manca si stringono Forse e No
-            'press flex h-13 min-w-max flex-[1.6] items-center justify-center gap-2 rounded-ctl px-3 text-[16px] font-bold',
-            status === 'going' ? 'bg-going text-going-ink' : 'bg-fg text-bg',
-          )}
-        >
-          <MarkerTick key={status === 'going' ? 'in' : 'out'} draw={status === 'going'} className="size-6" strokeWidth={3.4} />
-          {/* le due scritte occupano lo stesso spazio: il pulsante non cambia larghezza quando rispondi */}
-          <span className="grid justify-items-center">
-            <span className={cn('col-start-1 row-start-1', status === 'going' && 'invisible')}>{m.rsvp.putMe}</span>
-            <span className={cn('col-start-1 row-start-1', status !== 'going' && 'invisible')}>{m.rsvp.inList}</span>
-          </span>
-        </button>
+        <InListButton status={status} onToggle={() => choose('going')} role="radio" className="min-w-max flex-[1.6]" />
         <button
           type="button"
           role="radio"
           aria-checked={status === 'maybe'}
           onClick={() => choose('maybe')}
           className={cn(
-            'press flex h-13 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-ctl border px-1 text-[15px] font-semibold',
+            'press flex h-13 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-ctl border px-1 font-mono text-[14px] font-bold uppercase tracking-[0.04em]',
             status === 'maybe' ? 'border-maybe bg-maybe text-maybe-ink' : 'border-line-strong text-fg',
           )}
         >
@@ -101,7 +126,7 @@ export function RsvpBar({
           aria-label={m.rsvp.notGoingAria}
           onClick={() => choose('not_going')}
           className={cn(
-            'press flex h-13 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-ctl border px-1 text-[15px] font-semibold',
+            'press flex h-13 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-ctl border px-1 font-mono text-[14px] font-bold uppercase tracking-[0.04em]',
             status === 'not_going' ? 'border-no bg-no text-no-ink' : 'border-line-strong text-fg',
           )}
         >

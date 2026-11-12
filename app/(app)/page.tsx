@@ -5,7 +5,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { LuArchive, LuSearch } from 'react-icons/lu'
 import { useApp } from '@/components/app-context'
 import { Credit, Wordmark } from '@/components/brand'
-import { DoorCard, EventRow, InListRow, Rail, RankRow, SectionTitle } from '@/components/event/cards'
+import { EventRow, SectionTitle } from '@/components/event/cards'
+import { OpeningPager } from '@/components/event/pager'
 import { CityChips, FilterBar } from '@/components/filters'
 import { EmptyState, ListSkeleton } from '@/components/page-header'
 import { InstallHint } from '@/components/pwa'
@@ -26,12 +27,12 @@ function DayList({ events, showCity }: { events: EventView[]; showCity?: boolean
     <div className="space-y-5">
       {groups.map((g) => (
         <section key={g.key} aria-label={g.date ? dayHeading(g.date) : m.board.ongoing}>
-          <h3 className="sticky top-[calc(env(safe-area-inset-top)+3.5rem)] z-10 -mx-4 border-b border-line bg-bg px-4 py-2 font-list text-[14px] font-bold uppercase tracking-[0.05em] text-muted">
+          <h3 className="sticky top-[calc(env(safe-area-inset-top)+3.5rem)] z-10 -mx-4 border-b border-line bg-bg px-4 py-2 font-mono text-[13px] uppercase tracking-[0.05em] text-faint">
             {g.date ? dayHeading(g.date) : m.board.ongoing}
           </h3>
-          <div className="mt-1">
-            {g.events.map((e) => (
-              <EventRow key={e.id} event={e} when={g.date ? 'time' : 'full'} showCity={showCity} />
+          <div>
+            {g.events.map((e, i) => (
+              <EventRow key={e.id} event={e} when={g.date ? 'time' : 'full'} showCity={showCity} index={i} />
             ))}
           </div>
         </section>
@@ -78,6 +79,15 @@ export default function HomePage() {
 
   const many = sections.all.length >= 4
   const showCity = multi && city === ALL_CITIES
+  // l'apertura a tutto schermo: le serate del weekend; senza serate non compare
+  const hasPager = !!events && sections.weekend.length > 0
+  const intro = (
+    <div className={hasPager ? 'mx-auto mt-2 max-w-2xl space-y-3 px-4' : 'mx-auto max-w-2xl space-y-3 px-4'}>
+      <InstallHint />
+      {hasPager ? null : <CityChips cities={cities} city={city} onCity={setCity} />}
+      {events ? <p className="pt-1 text-[15px] leading-snug text-muted">{summary(me.display_name, sections, city)}</p> : null}
+    </div>
+  )
 
   return (
     <main>
@@ -94,18 +104,11 @@ export default function HomePage() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-2xl space-y-3 px-4">
-        <InstallHint />
-        <CityChips cities={cities} city={city} onCity={setCity} />
-        {events ? <p className="pt-1 text-[15px] leading-snug text-muted">{summary(me.display_name, sections, city)}</p> : null}
-      </div>
+      {hasPager ? null : intro}
 
       {isLoading ? (
         <div className="mx-auto mt-8 max-w-2xl px-4" aria-busy>
-          <div className="no-scrollbar flex gap-4 overflow-hidden" aria-hidden>
-            <div className="skeleton aspect-[4/5] w-[72vw] max-w-[284px] shrink-0 rounded-frame" />
-            <div className="skeleton aspect-[4/5] w-[72vw] max-w-[284px] shrink-0 rounded-frame" />
-          </div>
+          <div className="skeleton h-[52dvh] rounded-frame" aria-hidden />
           <div className="mt-8">
             <ListSkeleton rows={3} />
           </div>
@@ -139,25 +142,29 @@ export default function HomePage() {
         </EmptyState>
       ) : (
         <>
+          {hasPager ? (
+            <>
+              {cities.length > 1 ? (
+                <div className="mx-auto max-w-2xl px-4 pb-3">
+                  <CityChips cities={cities} city={city} onCity={setCity} />
+                </div>
+              ) : null}
+              <OpeningPager events={sections.weekend} label={m.board.weekend} />
+              {intro}
+            </>
+          ) : null}
+
           {sections.mine.length ? (
             <section className="mx-auto mt-8 max-w-2xl px-4" aria-labelledby="sei-in-lista">
               <SectionTitle aside={sections.mine.length}>
                 <span id="sei-in-lista">{m.board.mine}</span>
               </SectionTitle>
-              <div className="mt-2 divide-y divide-line border-y border-line">
-                {sections.mine.map((e) => (
-                  <InListRow key={e.id} event={e} showCity={showCity} />
+              <div className="mt-3 border-t border-line">
+                {sections.mine.map((e, i) => (
+                  <EventRow key={e.id} event={e} when="full" showCity={showCity} index={i} />
                 ))}
               </div>
             </section>
-          ) : null}
-
-          {sections.weekend.length ? (
-            <Rail title={m.board.weekend} aside={sections.weekend.length}>
-              {sections.weekend.map((e) => (
-                <DoorCard key={e.id} event={e} showCity={showCity} />
-              ))}
-            </Rail>
           ) : null}
 
           {many && sections.popular.length >= 2 ? (
@@ -165,20 +172,25 @@ export default function HomePage() {
               <SectionTitle aside={m.board.popularAside}>
                 <span id="dove-vanno-tutti">{m.board.popular}</span>
               </SectionTitle>
-              <div className="mt-2 divide-y divide-line border-y border-line">
-                {sections.popular.slice(0, 5).map((e) => (
-                  <RankRow key={e.id} event={e} showCity={showCity} />
+              <div className="mt-3 border-t border-line">
+                {sections.popular.slice(0, 5).map((e, i) => (
+                  <EventRow key={e.id} event={e} when="full" showCity={showCity} index={i} />
                 ))}
               </div>
             </section>
           ) : null}
 
           {many && sections.recent.length ? (
-            <Rail title={m.board.recent} aside={sections.recent.length}>
-              {sections.recent.map((e) => (
-                <DoorCard key={e.id} event={e} showCity={showCity} />
-              ))}
-            </Rail>
+            <section className="mx-auto mt-10 max-w-2xl px-4" aria-labelledby="appena-proposti">
+              <SectionTitle aside={sections.recent.length}>
+                <span id="appena-proposti">{m.board.recent}</span>
+              </SectionTitle>
+              <div className="mt-3 border-t border-line">
+                {sections.recent.slice(0, 5).map((e, i) => (
+                  <EventRow key={e.id} event={e} when="full" showCity={showCity} index={i} />
+                ))}
+              </div>
+            </section>
           ) : null}
 
           <section className="mx-auto mt-10 max-w-2xl px-4" aria-labelledby="in-programma">

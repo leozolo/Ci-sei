@@ -7,11 +7,14 @@ import { LuPencil, LuSettings } from 'react-icons/lu'
 import { useApp } from '@/components/app-context'
 import { Avatar } from '@/components/avatar'
 import { EventRow } from '@/components/event/cards'
+import { FrameStrip } from '@/components/media'
+import { Rise } from '@/components/motion'
 import { EmptyState, ListSkeleton, PageBody, PageHeader } from '@/components/page-header'
 import { buttonClass } from '@/components/ui/button'
 import { cn } from '@/lib/cn'
+import { APP_NAME } from '@/lib/config'
 import { fetchCreatedBy, fetchGoingFor, fetchSaved, isUpcoming } from '@/lib/events'
-import { capitalize, sinceDate } from '@/lib/format'
+import { sinceDate } from '@/lib/format'
 import { fmt, plural } from '@/lib/i18n/core'
 import { useI18n } from '@/lib/i18n/react'
 import { useQuery } from '@/lib/query'
@@ -108,31 +111,37 @@ export default function ProfilePage() {
         }
       />
       <PageBody>
-        <div className="flex flex-col items-center pt-2 text-center">
-          <Avatar id={id} person={person} size={96} />
-          <h1 className="mt-4 font-list text-[32px] font-extrabold uppercase leading-none">{person?.display_name ?? '…'}</h1>
-          <p className="mt-1 text-[14px] text-muted">
-            {person
-              ? fmt(person.role === 'admin' ? m.profile.adminSince : m.profile.memberSince, { date: sinceDate(person.created_at) })
-              : ''}
-          </p>
-          {isMe ? (
-            <Link href="/profilo/modifica" className={cn(buttonClass('secondary', 'sm'), 'mt-4')}>
-              <LuPencil className="size-4" /> {m.profile.edit}
-            </Link>
-          ) : null}
-        </div>
+        {/* la tessera del club: foto e nome nella stessa cornice delle locandine */}
+        <Rise from={0.96} lift={24} className="mt-2 overflow-hidden rounded-frame border border-line-strong bg-elev">
+          <div className="flex items-center gap-4 p-4">
+            <Avatar id={id} person={person} size={80} />
+            <div className="min-w-0 flex-1">
+              <h1 className="font-wide text-[18px] font-black uppercase leading-none [overflow-wrap:anywhere]">{person?.display_name ?? '…'}</h1>
+              <p className="mt-2 font-mono text-[13px] uppercase leading-snug tracking-[0.05em] text-faint">
+                {person
+                  ? fmt(person.role === 'admin' ? m.profile.adminSince : m.profile.memberSince, { date: sinceDate(person.created_at) })
+                  : ''}
+              </p>
+            </div>
+          </div>
+          <FrameStrip left={APP_NAME} />
+        </Rise>
+        {isMe ? (
+          <Link href="/profilo/modifica" className={cn(buttonClass('secondary', 'sm'), 'mt-3')}>
+            <LuPencil className="size-4" /> {m.profile.edit}
+          </Link>
+        ) : null}
 
-        <dl className="mt-6 grid grid-cols-3 gap-2 text-center">
+        <dl className="mt-7 grid grid-cols-3 gap-3">
           {[
             { k: 'created', n: stats.created, l: plural(m.profile.statCreated, stats.created) },
             { k: 'going', n: stats.going, l: plural(m.profile.statGoing, stats.going) },
             { k: 'upcoming', n: stats.upcoming, l: m.profile.statUpcoming },
-          ].map((s) => (
-            <div key={s.k} className="rounded-ctl border border-line bg-elev px-2 py-3">
-              <dd className="font-poster text-[32px] font-extrabold leading-none tabular-nums">{s.n}</dd>
-              <dt className="mt-0.5 text-[12px] text-muted">{capitalize(s.l)}</dt>
-            </div>
+          ].map((s, i) => (
+            <Rise key={s.k} index={i + 1} className="flex flex-col-reverse">
+              <dt className="mt-2 font-list text-[14px] font-extrabold uppercase leading-tight">{s.l}</dt>
+              <dd className="font-poster text-[56px] font-extrabold leading-[0.8] tabular-nums">{s.n}</dd>
+            </Rise>
           ))}
         </dl>
 

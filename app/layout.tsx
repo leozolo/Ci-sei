@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Archivo, JetBrains_Mono, Roboto_Flex } from 'next/font/google'
 import type { ReactNode } from 'react'
 import { PwaRuntime } from '@/components/pwa'
+import { MotionProvider } from '@/components/motion'
 import { Feedback } from '@/components/ui/feedback'
 import { APP_NAME, APP_SHORT_NAME } from '@/lib/config'
 import { I18N_SCRIPT, I18nProvider } from '@/lib/i18n/react'
@@ -72,7 +73,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <I18nProvider>
-          {children}
+          <MotionProvider>{children}</MotionProvider>
           <Feedback />
           <PwaRuntime />
         </I18nProvider>

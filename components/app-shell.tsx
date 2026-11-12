@@ -214,14 +214,24 @@ function BottomNav() {
       active ? 'text-fg' : 'text-faint hover:text-muted',
     )
 
-  const activeMark = <span className="absolute top-0 h-[3px] w-6 bg-going" aria-hidden />
+  // la barretta verde: una sola, che scivola sotto la voce scelta (le voci sono cinque colonne uguali)
+  const slot = items[0].active ? 0 : items[1].active ? 1 : itemsRight[0].active ? 3 : profileActive ? 4 : -1
 
   return (
     <nav aria-label={m.nav.main} className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg">
-      <div className="mx-auto grid h-16 max-w-2xl grid-cols-5">
+      <div className="relative mx-auto grid h-16 max-w-2xl grid-cols-5">
+        <span
+          aria-hidden
+          className={cn(
+            'pointer-events-none absolute left-0 top-0 flex h-[3px] w-1/5 justify-center transition-[transform,opacity] duration-[550ms] ease-[cubic-bezier(0.16,1,0.3,1)]',
+            slot < 0 && 'opacity-0',
+          )}
+          style={{ transform: `translateX(${Math.max(slot, 0) * 100}%)` }}
+        >
+          <span className="h-full w-6 bg-going" />
+        </span>
         {items.map(({ href, label, icon: Icon, active }) => (
           <Link key={href} href={href} className={linkClass(active)} aria-current={active ? 'page' : undefined}>
-            {active ? activeMark : null}
             <Icon className="size-6" strokeWidth={active ? 2.2 : 1.8} />
             {label}
           </Link>
@@ -237,7 +247,6 @@ function BottomNav() {
         </div>
         {itemsRight.map(({ href, label, icon: Icon, active }) => (
           <Link key={href} href={href} className={linkClass(active)} aria-current={active ? 'page' : undefined}>
-            {active ? activeMark : null}
             <span className="relative">
               <Icon className="size-6" strokeWidth={active ? 2.2 : 1.8} />
               {unread > 0 ? (
@@ -250,7 +259,6 @@ function BottomNav() {
           </Link>
         ))}
         <Link href={`/u/${me.id}`} className={linkClass(profileActive)} aria-current={profileActive ? 'page' : undefined}>
-          {profileActive ? activeMark : null}
           <span className={cn('rounded-full ring-2', profileActive ? 'ring-fg' : 'ring-transparent')}>
             <Avatar person={me} size={24} className="block" />
           </span>

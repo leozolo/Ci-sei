@@ -11,9 +11,10 @@ import { attendanceText, CategoryTag, ListCount } from '@/components/event/cards
 import { Comments, Linkify } from '@/components/event/comments'
 import { EventActions, OwnerMenu } from '@/components/event/event-actions'
 import { RsvpBar, useRsvp } from '@/components/event/rsvp'
-import { Poster, useImageUrl } from '@/components/media'
+import { FrameStrip, Poster, useImageUrl } from '@/components/media'
 import { EmptyState, PageHeader } from '@/components/page-header'
 import { Button, IconButton } from '@/components/ui/button'
+import { categoryById } from '@/lib/categories'
 import { cn } from '@/lib/cn'
 import { cityLabel } from '@/lib/city'
 import { fetchEvent } from '@/lib/events'
@@ -53,8 +54,8 @@ function InfoRow({
     <>
       <Icon className="mt-0.5 size-5 shrink-0 text-muted" />
       <span className="min-w-0 flex-1">
-        <span className="block text-[15px] font-semibold leading-snug">{title}</span>
-        {subtitle ? <span className="mt-0.5 block text-[13px] text-muted">{subtitle}</span> : null}
+        <span className="block font-mono text-[14px] font-bold uppercase leading-snug tracking-[0.04em] [overflow-wrap:anywhere]">{title}</span>
+        {subtitle ? <span className="mt-1 block font-mono text-[13px] uppercase leading-snug tracking-[0.05em] text-faint">{subtitle}</span> : null}
       </span>
       {action ? (
         <span className="inline-flex shrink-0 items-center gap-1 self-center rounded-frame border border-line-strong px-3 py-1.5 text-[13px] font-semibold">
@@ -98,8 +99,10 @@ function TopBar({ onMenu }: { onMenu?: () => void }) {
 }
 
 /** La locandina intera, sotto la lista; si apre a tutto schermo. */
-function PosterBlock({ event }: { event: EventView }) {
+function PosterBlock({ event, author }: { event: EventView; author: string }) {
   const { m } = useI18n()
+  // la riga dati della cornice: da dove arriva e chi l'ha proposta
+  const source = event.external_url ? hostname(event.external_url) : categoryById(event.category).one
   const url = useImageUrl('event-images', event.image_path)
   const [viewer, setViewer] = useState(false)
 
@@ -117,20 +120,23 @@ function PosterBlock({ event }: { event: EventView }) {
           type="button"
           onClick={() => url && setViewer(true)}
           aria-label={m.event.openPoster}
-          className="press mx-auto block w-full max-w-[420px]"
+          className="press mx-auto block w-full max-w-[420px] overflow-hidden rounded-frame border border-line-strong bg-elev text-left"
         >
-          {url ? (
-            <img
-              src={url}
-              alt={fmt(m.event.posterAlt, { title: event.title })}
-              className="mx-auto max-h-[64dvh] w-auto max-w-full rounded-ctl object-contain shadow-[0_18px_44px_var(--c-shadow)]"
-            />
-          ) : (
-            <span className="skeleton mx-auto block aspect-[4/5] w-full rounded-ctl" />
-          )}
+          <span className="block p-3.5">
+            {url ? (
+              <img
+                src={url}
+                alt={fmt(m.event.posterAlt, { title: event.title })}
+                className="mx-auto max-h-[60dvh] w-auto max-w-full object-contain"
+              />
+            ) : (
+              <span className="skeleton block aspect-[4/5] w-full" />
+            )}
+          </span>
+          <FrameStrip left={source} right={author} />
         </button>
       ) : (
-        <Poster event={event} className="mx-auto aspect-[4/5] w-full max-w-[300px] rounded-ctl shadow-[0_18px_44px_var(--c-shadow)]" eager />
+        <Poster event={event} strip={[source, author]} className="mx-auto aspect-[4/5] w-full max-w-[320px]" eager />
       )}
 
       {viewer && url ? (
@@ -216,7 +222,9 @@ function EventScreen({ event }: { event: EventView }) {
         <div>
           <h1
             className={cn(
-              'font-poster text-[40px] font-extrabold uppercase leading-[0.92] text-balance [overflow-wrap:anywhere]',
+              // titolo largo: più è lungo, più scende di misura; qui non si tronca mai
+              'font-wide font-black uppercase leading-[0.95] text-balance [overflow-wrap:anywhere]',
+              event.title.length <= 12 ? 'text-[36px]' : event.title.length <= 28 ? 'text-[30px]' : 'text-[24px]',
               event.is_cancelled && 'text-muted line-through decoration-no decoration-[3px]',
             )}
           >
@@ -247,7 +255,7 @@ function EventScreen({ event }: { event: EventView }) {
           </ul>
 
           <div className="mt-6">
-            <PosterBlock event={event} />
+            <PosterBlock event={event} author={author} />
           </div>
 
           <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">

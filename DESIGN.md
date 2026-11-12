@@ -18,15 +18,15 @@ colors:
   marker-red: "#ff6a5f"
   marker-red-ink: "#2e0703"
   scrim: "rgba(2, 3, 8, 0.72)"
-  day-paper: "#eef0f6"
+  day-paper: "#eceef4"
   day-raised: "#ffffff"
-  day-raised-2: "#e2e6f1"
-  day-raised-3: "#d2d8ea"
-  day-ink: "#0b1130"
-  day-muted: "#48517a"
-  day-faint: "#5a6390"
-  day-hairline: "rgba(11, 17, 48, 0.1)"
-  day-hairline-strong: "rgba(11, 17, 48, 0.22)"
+  day-raised-2: "#dfe3ee"
+  day-raised-3: "#cdd3e4"
+  day-ink: "#05070f"
+  day-muted: "#434b68"
+  day-faint: "#586080"
+  day-hairline: "rgba(5, 7, 15, 0.12)"
+  day-hairline-strong: "rgba(5, 7, 15, 0.26)"
   day-green: "#0a7343"
   day-yellow: "#8a6100"
   day-red: "#b8291f"
@@ -274,7 +274,7 @@ components:
 
 # Design System: Club dei clubbers
 
-> **Status: version 2, target system.** Creative direction approved by Leonardo on 2026-11-12 (ten steps, logged in the project document `design-decisions.md`). The application code still implements version 1 ("In lista" on night blue); this file describes what the implementation must reach. Items marked **(pending)** are proposals that still need Leonardo's confirmation and are listed again at the end. `.impeccable/design.json` still reflects version 1 and is to be regenerated from the shipped interface once version 2 is implemented.
+> **Status: version 2.** Creative direction approved by Leonardo on 2026-11-12 (logged in the project document `design-decisions.md`) and implemented in the application code on the same day. Items marked **(pending)** were implemented from the proposed default and still need Leonardo's explicit confirmation; they are listed again at the end. `.impeccable/design.json` still reflects version 1 and is to be regenerated from the shipped interface.
 
 ## Overview
 
@@ -316,7 +316,7 @@ A near-black palette with a blue undertone and chalk type, where the only satura
 - **Chalk Muted**: secondary text and icons in info rows.
 - **Chalk Faint**: monospace metadata, inactive tab labels, timestamps, placeholders. It passes AA on Night, Raised and Raised 2 (5.4, 5.2 and 4.7 to 1); it must not carry text on Raised 3 (4.0 to 1), where Chalk Muted is used instead.
 - **Hairline / Hairline Strong**: row dividers; the borders of ticket frames, chips, outline buttons and inputs.
-- **Day Paper and the day set**: the light theme. The values are still those of version 1 **(pending)**: the day theme must be re-derived from the new palette, with the inks deepened so text and labels on them pass AA.
+- **Day Paper and the day set**: the light theme, re-derived from the new palette **(pending)**: cool paper ground, white raised surfaces, blue-ink text, and the inks deepened so text and white labels on them pass AA.
 
 ### Named Rules
 **The Three Inks Rule.** Green, yellow and red mean in, maybe and no, and nothing else. A status colour never decorates, and every ink travels with its mark (tick, circle, cross) and a word, so the meaning survives without colour.
@@ -490,7 +490,7 @@ The wrist stamp (`public/brand/mark.svg`, approved), the single source of the sy
 - Motion never delays an action: controls respond on press, and the answer is saved without waiting for an animation to finish.
 
 ### Implementation
-The `motion` package is approved as a dependency for the whole app. Load it lazily (`LazyMotion` with the slim `m` components) and pin the version. Animated components are client components: keep the animated wrapper small and leave data fetching and static parts on the server. Use the library's reduced-motion handling. Press states and simple colour changes stay in CSS.
+The `motion` package is the motion engine for the whole app, loaded through `LazyMotion` with the slim `m` components (`components/motion.tsx`: `MotionProvider`, `Rise` for entrances, `SlideNumber` for counts). The tab indicator and press states are CSS. Animated components are client components: keep the animated wrapper small and leave data fetching and static parts on the server. Use the library's reduced-motion handling. Press states and simple colour changes stay in CSS.
 
 ## Pending confirmation
 
@@ -498,8 +498,8 @@ These points are proposals, not decisions. Each needs Leonardo's explicit approv
 
 1. **Opening pager:** the cap of five pages. (The rule itself is approved: the coming weekend's events, in date order, no pager when there are none.)
 2. **Typographic poster** for events without an image.
-3. **Day theme:** to be re-derived from the new palette; the values in the front matter are still those of version 1.
-4. **Board sections** below the pager: which remain and in what order.
+3. **Day theme:** re-derived from the new palette and implemented; values to be confirmed on a real phone in daylight.
+4. **Board sections** below the pager: implemented as "Sei in lista", "Dove vanno tutti" (top five), "Appena proposti" (latest five) and "In programma"; the weekend section became the pager. The same event can appear in more than one section.
 5. **Poster shadows:** removed in favour of the ticket frame.
 6. **Tablet and desktop:** keep the centred 672px column.
 7. **Wide title sizes and length thresholds:** to be calibrated on device.

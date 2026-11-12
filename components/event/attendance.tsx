@@ -7,6 +7,7 @@ import { useApp } from '@/components/app-context'
 import { Avatar } from '@/components/avatar'
 import { MarkerCircle, MarkerCross, MarkerTick } from '@/components/marker'
 import { Sheet } from '@/components/ui/sheet'
+import { SlideNumber } from '@/components/motion'
 import { cn } from '@/lib/cn'
 import { fmt, plural } from '@/lib/i18n/core'
 import { useI18n } from '@/lib/i18n/react'
@@ -54,8 +55,10 @@ export function GuestList({
     <section id="lista" aria-labelledby="lista-titolo" className="scroll-mt-4 rounded-ctl border border-line bg-elev px-4 pb-4 pt-5">
       <div className="flex items-end justify-between gap-4">
         <h2 id="lista-titolo" className="flex items-baseline gap-2">
-          <span className="font-poster text-[56px] font-extrabold leading-[0.8] tabular-nums">{event.people}</span>
-          <span className="font-list text-[19px] font-extrabold uppercase leading-none">{m.guest.inList}</span>
+          <span className="font-poster text-[96px] font-extrabold leading-[0.8] tabular-nums">
+            <SlideNumber value={event.people} />
+          </span>
+          <span className="font-list text-[18px] font-extrabold uppercase leading-none">{m.guest.inList}</span>
         </h2>
         {event.guests > 0 ? (
           <p className="pb-0.5 text-right text-[13px] leading-snug text-muted">
