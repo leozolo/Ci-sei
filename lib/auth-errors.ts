@@ -16,6 +16,16 @@ export function authErrorMessage(err: unknown): string {
   return errorMessage(err)
 }
 
+/**
+ * Accetta solo percorsi interni all'app. Blocca anche `/\evil.com` e `/<tab>/evil.com`,
+ * che il browser interpreta come indirizzi esterni.
+ */
 export function safeNext(value: string | null | undefined, fallback = '/'): string {
-  return value && value.startsWith('/') && !value.startsWith('//') ? value : fallback
+  if (!value || !/^\/(?![\/\\])/.test(value) || /[\u0000-\u001f\u007f\\]/.test(value)) return fallback
+  try {
+    const u = new URL(value, 'https://x.invalid')
+    return u.origin === 'https://x.invalid' ? u.pathname + u.search + u.hash : fallback
+  } catch {
+    return fallback
+  }
 }

@@ -291,7 +291,9 @@ begin
   if not public.is_member() then
     raise exception 'not_member' using errcode = '42501';
   end if;
-  if p_endpoint !~* '^https://' or char_length(p_endpoint) > 2000 then
+  -- solo i servizi push dei browser (Chrome/Android, Firefox, Safari, Edge): niente indirizzi a scelta
+  if char_length(p_endpoint) > 2000
+     or p_endpoint !~* '^https://(fcm\.googleapis\.com|updates\.push\.services\.mozilla\.com|[a-z0-9.-]+\.push\.apple\.com|[a-z0-9.-]+\.notify\.windows\.com)(:443)?/' then
     raise exception 'invalid_endpoint' using errcode = '22023';
   end if;
   insert into public.push_subscriptions (user_id, endpoint, p256dh, auth, user_agent)
