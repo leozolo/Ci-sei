@@ -4,11 +4,11 @@ import { cn } from '@/lib/cn'
 
 /*
  * Il simbolo dell'app viene da un solo file: public/brand/mark.svg
- * (per ora PROVVISORIO: la spunta del pennarello sulla lista).
+ * (il timbro al polso: anello, scritta e la spunta del pennarello).
  * Per cambiarlo sostituisci quel file e lancia `npm run icons`, che rigenera
- * le icone dell'app. Qui il simbolo è usato come sagoma e prende il verde
- * del tema (chiaro o scuro); se il simbolo definitivo è a più colori,
- * sostituisci lo span con <img src="/brand/mark.svg" alt="" />.
+ * le icone dell'app. Nel file il timbro è a due colori (gesso e verde), come
+ * nelle icone; qui è usato come sagoma e prende un solo inchiostro, il verde
+ * del tema (chiaro o scuro), come un timbro vero.
  */
 const MARK_URL = '/brand/mark.svg'
 

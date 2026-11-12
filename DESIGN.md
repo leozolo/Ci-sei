@@ -441,7 +441,7 @@ Fixed at the bottom of the event screen, solid night with the floating-bar shado
 The tick, the circle and the cross are authored SVG strokes (24px grid, round caps, 2.4 to 3.4 stroke) drawn in the inks. They mark status everywhere: rows, the guest list, the list sheet and the RSVP controls.
 
 ### Brand mark
-Provisional: the green marker tick (`public/brand/mark.svg`), the single source of the symbol. In the app it is drawn as a silhouette in the theme's marker green (bright on night, deep on day paper); the PWA icons are rendered from the same file on the night ground by `npm run icons`. Replacing that one file replaces the symbol everywhere. The wordmark is "CLUB DEI CLUBBERS" in narrow Archivo at 62% width.
+The wrist stamp (`public/brand/mark.svg`, approved), the single source of the symbol: a heavy ring, the words "CLUB DEI CLUBBERS • ROMA • IN LISTA •" set around it in narrow Archivo (as outlines), a thin inner ring and the marker tick at the centre, the whole turned 10 degrees like a stamp pressed by hand. In the file the ring and lettering are chalk and the tick is marker green; the PWA icons are rendered from it on the night ground by `npm run icons`. In the app it is drawn as a silhouette in a single ink, the theme's marker green (bright on night, deep on day paper), the way a real stamp prints. Below about 64px the lettering reads as texture and the ring and tick carry the symbol. Replacing that one file replaces the symbol everywhere. The wordmark is "CLUB DEI CLUBBERS" in narrow Archivo at 62% width.
 
 ### Credit
 "designed by L. Zolovkin" in Arial at 16px (line height 1.45, the `font-credit` token, used for nothing else), Chalk Faint with the name in Chalk Muted, centred and identical in every language. It appears in three places only: closing the board under the "Eventi passati" link, at the foot of Settings under the app name, and at the foot of the entry screens (sign-in, invite, welcome, password reset), 52px above the bottom safe area, with the content centred above it.
@@ -503,4 +503,3 @@ These points are proposals, not decisions. Each needs Leonardo's explicit approv
 5. **Poster shadows:** removed in favour of the ticket frame.
 6. **Tablet and desktop:** keep the centred 672px column.
 7. **Wide title sizes and length thresholds:** to be calibrated on device.
-8. **New app icon:** already on the to-do list.

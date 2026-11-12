@@ -6,7 +6,7 @@
  *
  * Per cambiare simbolo: sostituisci public/brand/mark.svg con il nuovo disegno
  * (un SVG quadrato con viewBox, su fondo trasparente) e rilancia il comando.
- * Il fondo delle icone è il blu notte dell'app. Ogni PNG porta scritta dentro
+ * Il fondo delle icone è il fondo scuro dell'app. Ogni PNG porta scritta dentro
  * la propria origine (chunk tEXt "impeccable:prompt"), così si sa sempre da
  * dove viene.
  */
@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const SOURCE = 'public/brand/mark.svg'
-const NIGHT = '#0b1130' // il fondo dell'app (--c-bg in app/globals.css)
+const NIGHT = '#05070f' // il fondo dell'app (--c-bg in app/globals.css)
 
 let sharp
 try {
