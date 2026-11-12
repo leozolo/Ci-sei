@@ -84,7 +84,7 @@ export function Feedback() {
           <div
             key={t.id}
             className={cn(
-              'pointer-events-auto flex w-full max-w-sm animate-toast-in items-center gap-3 rounded-[14px] px-4 py-3 text-[14px] font-medium shadow-[0_10px_30px_var(--c-shadow)]',
+              'pointer-events-auto flex w-full max-w-sm animate-toast-in items-center gap-3 rounded-ctl px-4 py-3 text-[14px] font-medium shadow-[0_10px_30px_var(--c-shadow)]',
               t.tone === 'error' ? 'bg-no text-no-ink' : 'bg-invert text-invert-fg',
             )}
             role={t.tone === 'error' ? 'alert' : 'status'}

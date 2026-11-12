@@ -3,7 +3,7 @@ import { cn } from '@/lib/cn'
 import { msgs } from '@/lib/i18n/core'
 
 export const inputClass =
-  'w-full rounded-[12px] border border-line bg-elev px-4 text-[16px] text-fg outline-none transition-colors placeholder:text-faint focus:border-going/70 disabled:opacity-60'
+  'w-full rounded-ctl border border-line bg-elev px-4 text-[16px] text-fg outline-none transition-colors placeholder:text-faint focus:border-going/70 disabled:opacity-60'
 
 export function FieldLabel({ htmlFor, children, optional }: { htmlFor?: string; children: ReactNode; optional?: boolean }) {
   return (

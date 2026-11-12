@@ -51,7 +51,7 @@ export function GuestList({
   const past = new Date(event.effective_end) < new Date()
 
   return (
-    <section id="lista" aria-labelledby="lista-titolo" className="scroll-mt-4 rounded-[18px] border border-line bg-elev px-4 pb-4 pt-5">
+    <section id="lista" aria-labelledby="lista-titolo" className="scroll-mt-4 rounded-ctl border border-line bg-elev px-4 pb-4 pt-5">
       <div className="flex items-end justify-between gap-4">
         <h2 id="lista-titolo" className="flex items-baseline gap-2">
           <span className="font-poster text-[56px] font-extrabold leading-[0.8] tabular-nums">{event.people}</span>
@@ -107,7 +107,7 @@ export function GuestList({
               aria-label={m.guest.lessOne}
               disabled={event.myGuests === 0 || saving}
               onClick={() => onGuests(Math.max(0, event.myGuests - 1))}
-              className="press inline-flex size-9 items-center justify-center rounded-full border border-line-strong disabled:opacity-35"
+              className="press inline-flex size-9 items-center justify-center rounded-ctl border border-line-strong disabled:opacity-35"
             >
               <LuMinus className="size-4" />
             </button>
@@ -117,7 +117,7 @@ export function GuestList({
               aria-label={m.guest.moreOne}
               disabled={event.myGuests >= 10 || saving}
               onClick={() => onGuests(Math.min(10, event.myGuests + 1))}
-              className="press inline-flex size-9 items-center justify-center rounded-full border border-line-strong disabled:opacity-35"
+              className="press inline-flex size-9 items-center justify-center rounded-ctl border border-line-strong disabled:opacity-35"
             >
               <LuPlus className="size-4" />
             </button>
@@ -137,7 +137,7 @@ export function GuestList({
       <button
         type="button"
         onClick={() => setTab(hidden > 0 || event.going.length === 0 ? 'going' : event.maybe.length ? 'maybe' : 'none')}
-        className="press mt-4 w-full rounded-[12px] border border-line-strong py-2.5 text-[14px] font-semibold"
+        className="press mt-4 w-full rounded-ctl border border-line-strong py-2.5 text-[14px] font-semibold"
       >
         {hidden > 0 ? fmt(m.guest.seeAll, { n: hidden }) : m.guest.seeAnswers}
       </button>
@@ -172,7 +172,7 @@ function ListSheet({ event, tab, onTab }: { event: EventView; tab: Tab | null; o
             aria-selected={current === t}
             onClick={() => onTab(t)}
             className={cn(
-              'press inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-[13px] font-semibold',
+              'press inline-flex shrink-0 items-center gap-1.5 rounded-frame border px-3.5 py-1.5 text-[13px] font-semibold',
               current === t ? 'border-fg bg-fg text-bg' : 'border-line-strong text-fg',
             )}
           >

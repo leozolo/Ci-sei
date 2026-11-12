@@ -70,7 +70,7 @@ export function Sheet({
         aria-modal="true"
         tabIndex={-1}
         className={cn(
-          'relative flex max-h-[88dvh] w-full flex-col rounded-t-[22px] border-t border-line bg-elev pb-safe shadow-[0_-12px_40px_var(--c-shadow)] outline-none transition-transform duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)] sm:mx-4 sm:max-w-md sm:rounded-[22px] sm:border sm:pb-0',
+          'relative flex max-h-[88dvh] w-full flex-col rounded-t-sheet border-t border-line bg-elev pb-safe shadow-[0_-12px_40px_var(--c-shadow)] outline-none transition-transform duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)] sm:mx-4 sm:max-w-md sm:rounded-sheet sm:border sm:pb-0',
           visible ? 'translate-y-0' : 'translate-y-full sm:translate-y-8 sm:opacity-0',
           className,
         )}
@@ -83,7 +83,7 @@ export function Sheet({
               type="button"
               onClick={onClose}
               aria-label={msgs().common.close}
-              className="press -mr-2 inline-flex size-9 items-center justify-center rounded-full text-muted hover:bg-elev-2"
+              className="press -mr-2 inline-flex size-9 items-center justify-center rounded-ctl text-muted hover:bg-elev-2"
             >
               <LuX className="size-5" />
             </button>

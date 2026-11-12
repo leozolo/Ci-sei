@@ -131,7 +131,7 @@ function AdminContent() {
 
   return (
     <PageBody>
-      <section className="rounded-[16px] border border-line bg-elev p-4">
+      <section className="rounded-ctl border border-line bg-elev p-4">
         <h2 className="flex items-center gap-2 font-list text-[23px] font-extrabold leading-none">
           <LuUserPlus className="size-5" /> {t.admin.inviteTitle}
         </h2>
@@ -158,7 +158,7 @@ function AdminContent() {
         </Button>
 
         {justCreated ? (
-          <div className="mt-4 rounded-[12px] border border-line-strong p-3.5">
+          <div className="mt-4 rounded-ctl border border-line-strong p-3.5">
             <p className="text-[13px] font-semibold text-going">{t.admin.ready}</p>
             <p className="mt-1 select-all break-all font-mono text-[13px]">{inviteLink(justCreated.code)}</p>
             <InviteActions code={justCreated.code} />
@@ -171,11 +171,11 @@ function AdminContent() {
         {invites.isLoading ? (
           <ListSkeleton rows={1} />
         ) : active.length === 0 ? (
-          <p className="rounded-[16px] border border-line bg-elev px-4 py-4 text-[14px] text-muted">{t.admin.noLinks}</p>
+          <p className="rounded-ctl border border-line bg-elev px-4 py-4 text-[14px] text-muted">{t.admin.noLinks}</p>
         ) : (
           <ul className="space-y-2">
             {active.map((i) => (
-              <li key={i.id} className="rounded-[16px] border border-line bg-elev p-4">
+              <li key={i.id} className="rounded-ctl border border-line bg-elev p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="truncate font-mono text-[13px]">…/invito/{i.code}</p>
@@ -204,7 +204,7 @@ function AdminContent() {
         {members.isLoading ? (
           <ListSkeleton rows={3} />
         ) : (
-          <ul className="divide-y divide-line rounded-[16px] border border-line bg-elev px-4">
+          <ul className="divide-y divide-line rounded-ctl border border-line bg-elev px-4">
             {people.map((m) => (
               <li key={m.id}>
                 <button type="button" onClick={() => setSelected(m)} className="flex w-full items-center gap-3 py-3 text-left">

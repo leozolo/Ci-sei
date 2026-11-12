@@ -52,7 +52,7 @@ export default function ResetPasswordPage() {
   if (hasSession === null) {
     return (
       <AuthScreen>
-        <div className="skeleton h-48 rounded-[28px]" />
+        <div className="skeleton h-48 rounded-ctl" />
       </AuthScreen>
     )
   }
@@ -70,7 +70,7 @@ export default function ResetPasswordPage() {
 
   return (
     <AuthScreen>
-      <div className="rounded-[16px] border border-line bg-elev p-5">
+      <div className="rounded-ctl border border-line bg-elev p-5">
         <h1 className="font-list text-[27px] font-extrabold leading-tight">{t.title}</h1>
         <form onSubmit={submit} className="mt-5 space-y-3" noValidate>
           <TextField id="nuova" label={t.field} type="password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} />

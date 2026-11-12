@@ -131,7 +131,7 @@ export function Comments({ eventId }: { eventId: string }) {
           <Avatar id={c.user_id} size={nested ? 28 : 34} />
         </Link>
         <div className="min-w-0 flex-1">
-          <div className="inline-block max-w-full rounded-[14px] rounded-tl-[4px] border border-line bg-elev px-3.5 py-2.5">
+          <div className="inline-block max-w-full rounded-ctl border border-line bg-elev px-3.5 py-2.5">
             <p className="font-list text-[14px] font-bold uppercase tracking-[0.01em]">{name}</p>
             <p className="whitespace-pre-wrap break-words text-[15px] leading-snug">
               <Linkify text={c.body} />
@@ -165,8 +165,8 @@ export function Comments({ eventId }: { eventId: string }) {
 
       {isLoading ? (
         <div className="mt-4 space-y-3" aria-hidden>
-          <div className="skeleton h-14 w-3/4 rounded-2xl" />
-          <div className="skeleton h-14 w-2/3 rounded-2xl" />
+          <div className="skeleton h-14 w-3/4 rounded-ctl" />
+          <div className="skeleton h-14 w-2/3 rounded-ctl" />
         </div>
       ) : threads.length ? (
         <ul className="mt-4 space-y-4">
@@ -179,7 +179,7 @@ export function Comments({ eventId }: { eventId: string }) {
         </ul>
       ) : null}
 
-      <div className="mt-4 rounded-[16px] border border-line bg-elev p-1.5">
+      <div className="mt-4 rounded-ctl border border-line bg-elev p-1.5">
         {replyTo ? (
           <div className="flex items-center justify-between gap-2 px-3 pb-1 pt-1.5 text-[13px] text-muted">
             <span className="truncate">
@@ -212,7 +212,7 @@ export function Comments({ eventId }: { eventId: string }) {
             onClick={() => void send()}
             disabled={!text.trim() || sending}
             aria-label={m.comments.send}
-            className="press mb-0.5 mr-0.5 inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-fg text-bg disabled:opacity-30"
+            className="press mb-0.5 mr-0.5 inline-flex size-10 shrink-0 items-center justify-center rounded-ctl bg-fg text-bg disabled:opacity-30"
           >
             <LuArrowUp className="size-5" strokeWidth={2.6} />
           </button>
@@ -232,7 +232,7 @@ export function Comments({ eventId }: { eventId: string }) {
                   input.current?.focus()
                 })
               }}
-              className="press shrink-0 rounded-full border border-line-strong px-3.5 py-1.5 text-[13px] text-muted hover:border-fg hover:text-fg"
+              className="press shrink-0 rounded-frame border border-line-strong px-3.5 py-1.5 text-[13px] text-muted hover:border-fg hover:text-fg"
             >
               {s}
             </button>

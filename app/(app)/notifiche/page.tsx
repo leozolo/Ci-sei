@@ -54,7 +54,7 @@ export default function NotificationsPage() {
     <main>
       <PageHeader title={m.nav.activity} />
       <PageBody>
-        <div className="rounded-[16px] border border-line bg-elev px-4">
+        <div className="rounded-ctl border border-line bg-elev px-4">
           <PushToggle />
         </div>
 
@@ -76,7 +76,7 @@ export default function NotificationsPage() {
                 const fresh = freshIds.has(n.id)
                 return (
                   <li key={n.id}>
-                    <Link href={href} className={cn('press -mx-2 flex gap-3 rounded-[20px] p-2.5', fresh ? 'bg-elev' : 'hover:bg-elev')}>
+                    <Link href={href} className={cn('press -mx-2 flex gap-3 rounded-ctl p-2.5', fresh ? 'bg-elev' : 'hover:bg-elev')}>
                       <span className="relative shrink-0">
                         <Avatar id={n.actor_id} size={42} />
                         {fresh ? <span className="absolute -left-0.5 -top-0.5 size-3 rounded-full bg-going ring-2 ring-bg" aria-label={m.activity.fresh} /> : null}
@@ -87,7 +87,7 @@ export default function NotificationsPage() {
                         <span className="mt-1 block text-[12px] text-faint">{relativeTime(n.created_at)}</span>
                       </span>
                       {n.event ? (
-                        <Poster event={n.event} className="aspect-[4/5] w-11 shrink-0 self-start rounded-[10px]" />
+                        <Poster event={n.event} className="aspect-[4/5] w-11 shrink-0 self-start rounded-frame" />
                       ) : null}
                     </Link>
                   </li>

@@ -214,7 +214,7 @@ function BottomNav() {
       active ? 'text-fg' : 'text-faint hover:text-muted',
     )
 
-  const activeMark = <span className="absolute top-0 h-[3px] w-6 rounded-b-full bg-going" aria-hidden />
+  const activeMark = <span className="absolute top-0 h-[3px] w-6 bg-going" aria-hidden />
 
   return (
     <nav aria-label={m.nav.main} className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg">
@@ -230,7 +230,7 @@ function BottomNav() {
           <Link
             href="/eventi/nuovo"
             aria-label={m.nav.propose}
-            className="press flex size-12 items-center justify-center rounded-[14px] bg-fg text-bg shadow-[0_6px_18px_var(--c-shadow)]"
+            className="press flex size-12 items-center justify-center rounded-ctl bg-fg text-bg shadow-[0_6px_18px_var(--c-shadow)]"
           >
             <LuPlus className="size-6" strokeWidth={2.6} />
           </Link>

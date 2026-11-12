@@ -29,7 +29,7 @@ export function Chip({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        'press inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3.5 text-[14px] font-semibold',
+        'press inline-flex h-9 shrink-0 items-center gap-1.5 rounded-frame border px-3.5 text-[14px] font-semibold',
         active ? 'border-fg bg-fg text-bg' : 'border-line-strong text-fg hover:border-fg/60',
         className,
       )}
@@ -113,7 +113,7 @@ export function FilterBar({
                 setOpen(false)
               }}
               className={cn(
-                'press flex items-center justify-between rounded-[12px] border px-4 py-3.5 text-left text-[15px] font-semibold',
+                'press flex items-center justify-between rounded-ctl border px-4 py-3.5 text-left text-[15px] font-semibold',
                 when === o ? 'border-fg bg-fg text-bg' : 'border-line-strong',
               )}
             >

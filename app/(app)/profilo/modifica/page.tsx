@@ -68,7 +68,7 @@ export default function EditProfilePage() {
               ) : (
                 <Avatar person={me} size={112} />
               )}
-              <span className="absolute bottom-0 right-0 inline-flex size-9 items-center justify-center rounded-full bg-invert text-invert-fg ring-4 ring-bg">
+              <span className="absolute bottom-0 right-0 inline-flex size-9 items-center justify-center rounded-ctl bg-invert text-invert-fg ring-4 ring-bg">
                 <LuCamera className="size-[18px]" />
               </span>
             </button>

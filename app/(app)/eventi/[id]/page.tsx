@@ -57,7 +57,7 @@ function InfoRow({
         {subtitle ? <span className="mt-0.5 block text-[13px] text-muted">{subtitle}</span> : null}
       </span>
       {action ? (
-        <span className="inline-flex shrink-0 items-center gap-1 self-center rounded-full border border-line-strong px-3 py-1.5 text-[13px] font-semibold">
+        <span className="inline-flex shrink-0 items-center gap-1 self-center rounded-frame border border-line-strong px-3 py-1.5 text-[13px] font-semibold">
           {action}
           <LuExternalLink className="size-3.5" />
         </span>
@@ -123,14 +123,14 @@ function PosterBlock({ event }: { event: EventView }) {
             <img
               src={url}
               alt={fmt(m.event.posterAlt, { title: event.title })}
-              className="mx-auto max-h-[64dvh] w-auto max-w-full rounded-[12px] object-contain shadow-[0_18px_44px_var(--c-shadow)]"
+              className="mx-auto max-h-[64dvh] w-auto max-w-full rounded-ctl object-contain shadow-[0_18px_44px_var(--c-shadow)]"
             />
           ) : (
-            <span className="skeleton mx-auto block aspect-[4/5] w-full rounded-[12px]" />
+            <span className="skeleton mx-auto block aspect-[4/5] w-full rounded-ctl" />
           )}
         </button>
       ) : (
-        <Poster event={event} className="mx-auto aspect-[4/5] w-full max-w-[300px] rounded-[12px] shadow-[0_18px_44px_var(--c-shadow)]" eager />
+        <Poster event={event} className="mx-auto aspect-[4/5] w-full max-w-[300px] rounded-ctl shadow-[0_18px_44px_var(--c-shadow)]" eager />
       )}
 
       {viewer && url ? (
@@ -223,7 +223,7 @@ function EventScreen({ event }: { event: EventView }) {
             {event.title}
           </h1>
           {event.is_cancelled ? (
-            <p className="mt-4 rounded-[12px] bg-no/10 px-4 py-3 text-[14px] font-semibold text-no">{m.event.cancelledNotice}</p>
+            <p className="mt-4 rounded-ctl bg-no/10 px-4 py-3 text-[14px] font-semibold text-no">{m.event.cancelledNotice}</p>
           ) : (
             <button
               type="button"
@@ -284,10 +284,10 @@ export default function EventPage() {
       <main aria-busy>
         <div className="pt-safe h-14" />
         <div className="mx-auto max-w-2xl space-y-4 px-4 pt-1">
-          <div className="skeleton h-10 w-3/4 rounded-[8px]" />
-          <div className="skeleton h-7 w-44 rounded-full" />
-          <div className="skeleton h-36 w-full rounded-[12px]" />
-          <div className="skeleton mx-auto aspect-[4/5] w-full max-w-[360px] rounded-[12px]" />
+          <div className="skeleton h-10 w-3/4 rounded-frame" />
+          <div className="skeleton h-7 w-44 rounded-frame" />
+          <div className="skeleton h-36 w-full rounded-ctl" />
+          <div className="skeleton mx-auto aspect-[4/5] w-full max-w-[360px] rounded-ctl" />
         </div>
       </main>
     )

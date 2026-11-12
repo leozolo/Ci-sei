@@ -15,9 +15,9 @@ const VARIANTS: Record<ButtonVariant, string> = {
 }
 
 const SIZES: Record<ButtonSize, string> = {
-  sm: 'h-9 gap-1.5 rounded-[10px] px-3.5 text-[14px]',
-  md: 'h-11 gap-2 rounded-[12px] px-4 text-[15px]',
-  lg: 'h-13 gap-2 rounded-[14px] px-5 text-[16px]',
+  sm: 'h-9 gap-1.5 rounded-frame px-3.5 text-[14px]',
+  md: 'h-11 gap-2 rounded-ctl px-4 text-[15px]',
+  lg: 'h-13 gap-2 rounded-ctl px-5 text-[16px]',
 }
 
 export function buttonClass(variant: ButtonVariant = 'primary', size: ButtonSize = 'md', className?: string) {
@@ -69,7 +69,7 @@ export function IconButton({ label, overlay, className, children, type, ...rest 
       aria-label={label}
       title={label}
       className={cn(
-        'press inline-flex size-10 shrink-0 items-center justify-center rounded-full disabled:opacity-40',
+        'press inline-flex size-10 shrink-0 items-center justify-center rounded-ctl disabled:opacity-40',
         overlay ? 'bg-bg/75 text-fg shadow-[0_2px_10px_var(--c-shadow)] hover:bg-bg/90' : 'text-fg hover:bg-elev-2',
         className,
       )}

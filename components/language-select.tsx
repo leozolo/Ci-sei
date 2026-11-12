@@ -24,7 +24,7 @@ export function LanguageSelect({
   return (
     <label
       className={cn(
-        'relative inline-flex h-9 items-center gap-1.5 rounded-full border border-line-strong pl-3 pr-2 text-[14px] font-semibold text-fg hover:border-fg/60 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-going',
+        'relative inline-flex h-9 items-center gap-1.5 rounded-frame border border-line-strong pl-3 pr-2 text-[14px] font-semibold text-fg hover:border-fg/60 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-going',
         className,
       )}
     >

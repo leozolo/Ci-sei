@@ -100,7 +100,7 @@ export default function WelcomePage() {
   if (state === 'loading') {
     return (
       <AuthScreen>
-        <div className="skeleton h-56 rounded-[28px]" />
+        <div className="skeleton h-56 rounded-ctl" />
       </AuthScreen>
     )
   }
@@ -118,7 +118,7 @@ export default function WelcomePage() {
 
   return (
     <AuthScreen subtitle={email ? fmt(m.welcome.signedInAs, { email }) : undefined}>
-      <div className="rounded-[16px] border border-line bg-elev p-5">
+      <div className="rounded-ctl border border-line bg-elev p-5">
         <h1 className="font-list text-[27px] font-extrabold leading-tight">{state === 'create' ? m.auth.createTitle : m.welcome.needInvite}</h1>
         <p className="mt-1 text-[14px] text-muted">
           {state === 'create' ? m.welcome.createBody : m.welcome.inviteBody}

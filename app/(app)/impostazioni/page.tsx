@@ -27,7 +27,7 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="mt-7">
       <h2 className="mb-2 px-1 text-[13px] font-semibold text-muted">{title}</h2>
-      <div className="rounded-[16px] border border-line bg-elev px-4">{children}</div>
+      <div className="rounded-ctl border border-line bg-elev px-4">{children}</div>
     </section>
   )
 }
@@ -131,7 +131,7 @@ export default function SettingsPage() {
                   applyTheme(value)
                 }}
                 className={cn(
-                  'press h-10 flex-1 rounded-full text-[13px] font-semibold',
+                  'press h-10 flex-1 rounded-ctl text-[13px] font-semibold',
                   theme === value ? 'bg-invert text-invert-fg' : 'bg-elev-2 text-fg',
                 )}
               >
@@ -167,7 +167,7 @@ export default function SettingsPage() {
         <button
           type="button"
           onClick={() => void logout()}
-          className="press mt-7 flex w-full items-center justify-center gap-2 rounded-[16px] border border-line bg-elev py-3.5 text-[15px] font-semibold text-no"
+          className="press mt-7 flex w-full items-center justify-center gap-2 rounded-ctl border border-line bg-elev py-3.5 text-[15px] font-semibold text-no"
         >
           <LuLogOut className="size-5" /> {m.settings.logout}
         </button>

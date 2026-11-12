@@ -87,7 +87,7 @@ export function InstallHint() {
   }
 
   return (
-    <div className="relative flex items-start gap-3 rounded-[16px] border border-line bg-elev p-4 pr-11">
+    <div className="relative flex items-start gap-3 rounded-ctl border border-line bg-elev p-4 pr-11">
       <LuSmartphone className="mt-0.5 size-5 shrink-0 text-muted" />
       <div className="min-w-0 text-[14px]">
         <p className="font-semibold">{m.pwa.installTitle}</p>
@@ -108,7 +108,7 @@ export function InstallHint() {
         type="button"
         onClick={dismiss}
         aria-label={m.pwa.hide}
-        className="press absolute right-2 top-2 inline-flex size-8 items-center justify-center rounded-full text-faint hover:bg-elev-2"
+        className="press absolute right-2 top-2 inline-flex size-8 items-center justify-center rounded-ctl text-faint hover:bg-elev-2"
       >
         <LuX className="size-4" />
       </button>

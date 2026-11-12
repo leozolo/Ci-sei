@@ -126,7 +126,7 @@ export default function LoginPage() {
       {!IS_CONFIGURED ? (
         <Notice tone="error">{m.auth.notConfigured}</Notice>
       ) : (
-        <div className="rounded-[16px] border border-line bg-elev p-5">
+        <div className="rounded-ctl border border-line bg-elev p-5">
           <h1 className="font-list text-[27px] font-extrabold leading-tight">{titles[mode]}</h1>
           {mode === 'create' ? (
             <p className="mt-1 text-[14px] text-muted">{m.auth.createIntro}</p>

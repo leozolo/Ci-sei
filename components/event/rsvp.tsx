@@ -70,7 +70,7 @@ export function RsvpBar({
           onClick={() => choose('going')}
           className={cn(
             // non va mai a capo: se lo spazio manca si stringono Forse e No
-            'press flex h-13 min-w-max flex-[1.6] items-center justify-center gap-2 rounded-[14px] px-3 text-[16px] font-bold',
+            'press flex h-13 min-w-max flex-[1.6] items-center justify-center gap-2 rounded-ctl px-3 text-[16px] font-bold',
             status === 'going' ? 'bg-going text-going-ink' : 'bg-fg text-bg',
           )}
         >
@@ -87,7 +87,7 @@ export function RsvpBar({
           aria-checked={status === 'maybe'}
           onClick={() => choose('maybe')}
           className={cn(
-            'press flex h-13 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-[14px] border px-1 text-[15px] font-semibold',
+            'press flex h-13 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-ctl border px-1 text-[15px] font-semibold',
             status === 'maybe' ? 'border-maybe bg-maybe text-maybe-ink' : 'border-line-strong text-fg',
           )}
         >
@@ -101,7 +101,7 @@ export function RsvpBar({
           aria-label={m.rsvp.notGoingAria}
           onClick={() => choose('not_going')}
           className={cn(
-            'press flex h-13 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-[14px] border px-1 text-[15px] font-semibold',
+            'press flex h-13 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-ctl border px-1 text-[15px] font-semibold',
             status === 'not_going' ? 'border-no bg-no text-no-ink' : 'border-line-strong text-fg',
           )}
         >

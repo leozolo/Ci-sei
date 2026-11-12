@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Roboto_Flex } from 'next/font/google'
-import localFont from 'next/font/local'
+import { Archivo, JetBrains_Mono, Roboto_Flex } from 'next/font/google'
 import type { ReactNode } from 'react'
 import { PwaRuntime } from '@/components/pwa'
 import { Feedback } from '@/components/ui/feedback'
@@ -9,12 +8,13 @@ import { I18N_SCRIPT, I18nProvider } from '@/lib/i18n/react'
 import { THEME_SCRIPT } from '@/lib/theme'
 import './globals.css'
 
-// Archivo (Omnibus-Type, licenza OFL), ridotto a larghezze 62–100 e pesi 500–900.
-const archivo = localFont({
-  src: [{ path: './fonts/archivo-condensed.woff', weight: '500 900', style: 'normal' }],
+// Archivo (Omnibus-Type, licenza OFL) con l'asse di larghezza intero, da 62 (numeri e nomi) a 125
+// (titoli degli eventi). Viene scaricato al momento della pubblicazione e servito dall'app.
+const archivo = Archivo({
+  subsets: ['latin'],
+  axes: ['wdth'],
   variable: '--font-archivo',
   display: 'swap',
-  declarations: [{ prop: 'font-stretch', value: '62% 100%' }],
   // il carattere di riserva (solo lettere latine) è in globals.css: quello automatico, Arial,
   // avrebbe anche il cirillico e prenderebbe il posto di Roboto Flex nei testi in russo
   adjustFontFallback: false,
@@ -30,6 +30,14 @@ const cyrillic = Roboto_Flex({
   display: 'swap',
   preload: false,
   adjustFontFallback: false,
+})
+
+// JetBrains Mono (licenza OFL) per date, orari, luoghi e tasti di risposta. Ha anche il cirillico,
+// che il browser scarica solo quando sulla pagina c'è testo in russo.
+const mono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jbmono',
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -52,12 +60,12 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#0b1130',
+  themeColor: '#05070f',
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="it" data-theme="dark" className={`${archivo.variable} ${cyrillic.variable}`} suppressHydrationWarning>
+    <html lang="it" data-theme="dark" className={`${archivo.variable} ${cyrillic.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: I18N_SCRIPT }} />

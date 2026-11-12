@@ -1,7 +1,7 @@
 export type ThemePref = 'dark' | 'light' | 'system'
 export const THEME_KEY = 'cisei:tema'
 
-const DARK_BG = '#0b1130'
+const DARK_BG = '#05070f'
 const LIGHT_BG = '#eef0f6'
 
 /** Eseguito prima del disegno della pagina: evita il "lampo" del tema sbagliato. */

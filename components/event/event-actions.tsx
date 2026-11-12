@@ -40,7 +40,7 @@ function ActionButton({
   href?: string
 }) {
   const cls = cn(
-    'press flex min-w-0 flex-1 flex-col items-center justify-center gap-1.5 rounded-[12px] px-0.5 py-2.5 text-[12px] font-semibold hover:bg-elev',
+    'press flex min-w-0 flex-1 flex-col items-center justify-center gap-1.5 rounded-ctl px-0.5 py-2.5 text-[12px] font-semibold hover:bg-elev',
     active ? 'text-fg' : 'text-muted hover:text-fg',
   )
   if (href) {
@@ -131,7 +131,7 @@ export function EventActions({ event }: { event: EventView }) {
         <div className="grid gap-2 pt-1">
           <a
             href={`/api/eventi/${event.id}/ics?lang=${locale}`}
-            className="press flex items-center justify-between rounded-[12px] border border-line-strong px-4 py-3.5 font-semibold"
+            className="press flex items-center justify-between rounded-ctl border border-line-strong px-4 py-3.5 font-semibold"
             onClick={() => setCalendarOpen(false)}
           >
             iPhone, Mac, Outlook
@@ -141,7 +141,7 @@ export function EventActions({ event }: { event: EventView }) {
             href={link ? googleCalendarUrl(event, link) : '#'}
             target="_blank"
             rel="noopener noreferrer"
-            className="press flex items-center justify-between rounded-[12px] border border-line-strong px-4 py-3.5 font-semibold"
+            className="press flex items-center justify-between rounded-ctl border border-line-strong px-4 py-3.5 font-semibold"
             onClick={() => setCalendarOpen(false)}
           >
             Google Calendar
@@ -208,7 +208,7 @@ export function OwnerMenu({ event, open, onClose }: { event: EventView; open: bo
     }
   }
 
-  const item = 'press flex w-full items-center gap-3 rounded-[12px] border border-line-strong px-4 py-3.5 text-left font-semibold disabled:opacity-50'
+  const item = 'press flex w-full items-center gap-3 rounded-ctl border border-line-strong px-4 py-3.5 text-left font-semibold disabled:opacity-50'
 
   return (
     <Sheet open={open} onClose={onClose} title={m.owner.title}>

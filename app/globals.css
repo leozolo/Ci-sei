@@ -4,33 +4,33 @@
 @source not "../.impeccable";
 
 /*
- * Club dei clubbers — "In lista"
- * Il mondo è la lista all'ingresso del club, di notte: fondo blu notte,
+ * Club dei clubbers — "In lista", versione 2 (vedi DESIGN.md)
+ * Il mondo è la lista all'ingresso del club, di notte: fondo nero bluastro,
  * scrittura color gesso, inchiostri da pennarello per In lista / Forse / No.
- * Nomi, numeri e titoli in un grottesco stretto maiuscolo (Archivo);
- * il testo da leggere usa il carattere del telefono.
+ * Numeri e nomi in Archivo stretto, titoli degli eventi in Archivo largo,
+ * date, orari e luoghi in monospace; il testo da leggere usa il carattere del telefono.
  */
 
 :root {
-  --c-bg: #0b1130;
-  --c-elev: #121a3c;
-  --c-elev-2: #1a2450;
-  --c-elev-3: #253064;
-  --c-line: rgba(214, 222, 255, 0.11);
-  --c-line-strong: rgba(214, 222, 255, 0.22);
-  --c-fg: #f3f1ec;
-  --c-muted: #aab3d6;
-  --c-faint: #7c87b3;
-  --c-invert: #f3f1ec;
-  --c-invert-fg: #0b1130;
+  --c-bg: #05070f;
+  --c-elev: #0b0f1c;
+  --c-elev-2: #131a2e;
+  --c-elev-3: #1d2742;
+  --c-line: rgba(214, 222, 255, 0.13);
+  --c-line-strong: rgba(214, 222, 255, 0.24);
+  --c-fg: #eef0f4;
+  --c-muted: #9aa3c0;
+  --c-faint: #7a84a6;
+  --c-invert: #eef0f4;
+  --c-invert-fg: #05070f;
   --c-going: #48e28b;
   --c-going-ink: #06281a;
   --c-maybe: #ffd34a;
   --c-maybe-ink: #2c2100;
   --c-no: #ff6a5f;
   --c-no-ink: #2e0703;
-  --c-scrim: rgba(4, 7, 24, 0.68);
-  --c-shadow: rgba(2, 4, 16, 0.55);
+  --c-scrim: rgba(2, 3, 8, 0.72);
+  --c-shadow: rgba(0, 1, 6, 0.6);
   color-scheme: dark;
 }
 
@@ -94,11 +94,18 @@
   --color-scrim: var(--c-scrim);
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   --font-display: var(--font-archivo), "Archivo Fallback", var(--font-cyrillic, ui-sans-serif), ui-sans-serif, system-ui, sans-serif;
+  /* date, orari, luoghi e tasti di risposta */
+  --font-mono: var(--font-jbmono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   /* solo per la firma "designed by" */
   --font-credit: Arial, sans-serif;
 }
 
 @theme {
+  /* Spigoli netti: cornici, miniature, etichette e chip; controlli e pannelli; fogli. */
+  --radius-frame: 2px;
+  --radius-ctl: 3px;
+  --radius-sheet: 6px;
+
   --animate-sheet-in: sheet-in 0.32s cubic-bezier(0.16, 1, 0.3, 1);
   --animate-fade-in: fade-in 0.2s ease-out;
   --animate-toast-in: toast-in 0.26s cubic-bezier(0.16, 1, 0.3, 1);
@@ -190,6 +197,13 @@
   font-family: var(--font-display);
   font-stretch: 62%;
   font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+/* Titoli degli eventi: larghi e neri. */
+@utility font-wide {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  letter-spacing: -0.02em;
 }
 
 @utility no-scrollbar {

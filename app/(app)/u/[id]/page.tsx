@@ -101,7 +101,7 @@ export default function ProfilePage() {
         title={isMe ? m.profile.yours : ''}
         actions={
           isMe ? (
-            <Link href="/impostazioni" aria-label={m.settings.title} className="press inline-flex size-10 items-center justify-center rounded-full hover:bg-elev-2">
+            <Link href="/impostazioni" aria-label={m.settings.title} className="press inline-flex size-10 items-center justify-center rounded-ctl hover:bg-elev-2">
               <LuSettings className="size-[22px]" />
             </Link>
           ) : null
@@ -129,14 +129,14 @@ export default function ProfilePage() {
             { k: 'going', n: stats.going, l: plural(m.profile.statGoing, stats.going) },
             { k: 'upcoming', n: stats.upcoming, l: m.profile.statUpcoming },
           ].map((s) => (
-            <div key={s.k} className="rounded-[14px] border border-line bg-elev px-2 py-3">
+            <div key={s.k} className="rounded-ctl border border-line bg-elev px-2 py-3">
               <dd className="font-poster text-[32px] font-extrabold leading-none tabular-nums">{s.n}</dd>
               <dt className="mt-0.5 text-[12px] text-muted">{capitalize(s.l)}</dt>
             </div>
           ))}
         </dl>
 
-        <div className="mt-6 flex gap-1 rounded-full border border-line bg-elev p-1" role="tablist">
+        <div className="mt-6 flex gap-1 rounded-ctl border border-line bg-elev p-1" role="tablist">
           {tabs.map((t) => (
             <button
               key={t.id}
@@ -145,7 +145,7 @@ export default function ProfilePage() {
               aria-selected={current === t.id}
               onClick={() => setTab(t.id)}
               className={cn(
-                'press h-9 flex-1 rounded-full text-[14px] font-semibold',
+                'press h-9 flex-1 rounded-ctl text-[14px] font-semibold',
                 current === t.id ? 'bg-invert text-invert-fg' : 'text-muted hover:text-fg',
               )}
             >

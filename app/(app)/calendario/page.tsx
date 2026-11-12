@@ -97,7 +97,7 @@ export default function CalendarPage() {
                 setMonth(new Date(today.getFullYear(), today.getMonth(), 1))
                 setSelected(today)
               }}
-              className="press rounded-full px-3 py-1.5 text-[13px] font-semibold hover:bg-elev-2"
+              className="press rounded-frame px-3 py-1.5 text-[13px] font-semibold hover:bg-elev-2"
             >
               {m.dates.today}
             </button>
@@ -136,7 +136,7 @@ export default function CalendarPage() {
               >
                 <span
                   className={cn(
-                    'flex size-10 items-center justify-center rounded-full text-[15px] tabular-nums transition-colors',
+                    'flex size-10 items-center justify-center rounded-ctl text-[15px] tabular-nums transition-colors',
                     isSelected ? 'bg-invert font-bold text-invert-fg' : isToday ? 'font-bold ring-1 ring-fg' : '',
                     !inMonth && !isSelected && 'text-faint',
                   )}

@@ -282,9 +282,9 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
         {preview || hasExistingPoster ? (
           <div className="relative w-full max-w-[260px]">
             {preview ? (
-              <img src={preview} alt={t.posterPreview} className="aspect-[4/5] w-full rounded-[12px] bg-elev-2 object-cover" />
+              <img src={preview} alt={t.posterPreview} className="aspect-[4/5] w-full rounded-ctl bg-elev-2 object-cover" />
             ) : event ? (
-              <Poster event={event} className="aspect-[4/5] w-full rounded-[12px]" />
+              <Poster event={event} className="aspect-[4/5] w-full rounded-ctl" />
             ) : null}
             <div className="absolute inset-x-3 bottom-3 flex gap-2">
               <Button size="sm" variant="primary" onClick={() => fileInput.current?.click()}>
@@ -299,7 +299,7 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
           <button
             type="button"
             onClick={() => fileInput.current?.click()}
-            className="press flex aspect-[4/5] w-full max-w-[260px] flex-col items-center justify-center gap-2 rounded-[12px] border-2 border-dashed border-line-strong text-muted hover:border-fg/60 hover:text-fg"
+            className="press flex aspect-[4/5] w-full max-w-[260px] flex-col items-center justify-center gap-2 rounded-ctl border-2 border-dashed border-line-strong text-muted hover:border-fg/60 hover:text-fg"
           >
             <LuImagePlus className="size-8" />
             <span className="text-[14px] font-semibold">{t.addPoster}</span>
@@ -332,7 +332,7 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
               onClick={() => setCategory(c.id)}
               aria-pressed={category === c.id}
               className={cn(
-                'press inline-flex h-10 items-center gap-1.5 rounded-full border px-4 text-[14px] font-semibold',
+                'press inline-flex h-10 items-center gap-1.5 rounded-frame border px-4 text-[14px] font-semibold',
                 category === c.id ? 'border-fg bg-fg text-bg' : 'border-line-strong text-fg hover:border-fg/60',
               )}
             >
@@ -366,7 +366,7 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
 
         <div id="campo-end" className="mt-2">
           {hasEnd ? (
-            <div className="rounded-[14px] border border-line bg-elev p-3">
+            <div className="rounded-ctl border border-line bg-elev p-3">
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-[14px] font-semibold">{t.end}</span>
                 <button
@@ -457,7 +457,7 @@ export function EventForm({ event, defaultDate }: { event?: EventView; defaultDa
       />
 
       {!editing ? (
-        <div className="rounded-[14px] border border-line bg-elev px-4">
+        <div className="rounded-ctl border border-line bg-elev px-4">
           <Switch checked={alsoGoing} onChange={setAlsoGoing} label={m.rsvp.putMe} description={t.alsoGoingHint} />
         </div>
       ) : null}

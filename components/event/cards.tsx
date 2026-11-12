@@ -51,7 +51,7 @@ export function CategoryTag({ category, className }: { category: string; classNa
 export function CancelledTag() {
   const { m } = useI18n()
   return (
-    <span className="inline-flex items-center rounded-[6px] bg-no/10 px-1.5 py-0.5 font-list text-[12px] font-bold uppercase tracking-[0.04em] text-no">
+    <span className="inline-flex items-center rounded-frame bg-no/10 px-1.5 py-0.5 font-list text-[12px] font-bold uppercase tracking-[0.04em] text-no">
       {m.list.cancelled}
     </span>
   )
@@ -129,7 +129,7 @@ export function DoorCard({ event, showCity }: { event: EventView; showCity?: boo
           {place ? ` · ${place}` : ''}
         </p>
       </div>
-      <Poster event={event} className="mt-2 aspect-[4/5] w-full rounded-[10px] shadow-[0_8px_24px_var(--c-shadow)]" />
+      <Poster event={event} className="mt-2 aspect-[4/5] w-full rounded-frame shadow-[0_8px_24px_var(--c-shadow)]" />
     </Link>
   )
 }
@@ -146,8 +146,8 @@ export function EventRow({ event, when, showCity }: { event: EventView; when?: '
       ? timeOf(event.starts_at)
       : whenShort(event.starts_at)
   return (
-    <Link href={`/eventi/${event.id}`} className="press -mx-2 flex gap-3.5 rounded-[12px] px-2 py-2.5 hover:bg-elev">
-      <Poster event={event} compact className="aspect-[4/5] w-[60px] shrink-0 rounded-[8px]" />
+    <Link href={`/eventi/${event.id}`} className="press -mx-2 flex gap-3.5 rounded-ctl px-2 py-2.5 hover:bg-elev">
+      <Poster event={event} compact className="aspect-[4/5] w-[60px] shrink-0 rounded-frame" />
       <div className="min-w-0 flex-1">
         <p className="flex items-center gap-2 text-[13px] text-muted">
           <span className="font-list text-[15px] font-bold tabular-nums text-fg">{time}</span>
@@ -234,7 +234,7 @@ export function SectionTitle({ children, aside, controls }: { children: ReactNod
 }
 
 const railButton =
-  'press inline-flex size-8 items-center justify-center rounded-full border border-line-strong text-fg hover:border-fg/60 disabled:opacity-30 disabled:hover:border-line-strong'
+  'press inline-flex size-8 items-center justify-center rounded-ctl border border-line-strong text-fg hover:border-fg/60 disabled:opacity-30 disabled:hover:border-line-strong'
 
 /**
  * Fila orizzontale di card. Col dito si scorre; con mouse e trackpad compaiono

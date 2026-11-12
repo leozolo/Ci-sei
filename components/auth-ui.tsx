@@ -33,7 +33,7 @@ export function Notice({ children, tone = 'info' }: { children: ReactNode; tone?
   const cls =
     tone === 'error' ? 'bg-no/10 text-no' : tone === 'success' ? 'bg-going/10 text-going' : 'border border-line bg-elev text-fg'
   return (
-    <p role={tone === 'error' ? 'alert' : 'status'} className={`rounded-[12px] px-4 py-3 text-[14px] font-medium ${cls}`}>
+    <p role={tone === 'error' ? 'alert' : 'status'} className={`rounded-ctl px-4 py-3 text-[14px] font-medium ${cls}`}>
       {children}
     </p>
   )

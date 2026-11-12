@@ -326,7 +326,7 @@ A near-black palette with a blue undertone and chalk type, where the only satura
 ## Typography
 
 **Display Font:** Archivo, variable on width and weight, self-hosted (with ui-sans-serif, system-ui). The file must cover `wdth` 62 to 125 and `wght` up to 900. The current `app/fonts/archivo-condensed.woff` covers only `wdth` 62 to 100 and has to be replaced or complemented.
-**Monospace Font:** a dedicated, self-hosted monospace with Latin and Cyrillic. JetBrains Mono is the working choice **(pending)**; the fallback stack is ui-monospace, SFMono-Regular, Menlo, Consolas.
+**Monospace Font:** a dedicated, self-hosted monospace with Latin and Cyrillic. JetBrains Mono (approved), self-hosted through next/font; the fallback stack is ui-monospace, SFMono-Regular, Menlo, Consolas.
 **Cyrillic Display Fallback:** Roboto Flex (wdth and wght axes, Cyrillic subset via next/font/google, not preloaded): Archivo has no Cyrillic, and Roboto Flex answers the same `font-stretch` values, narrow and wide, so Russian counts stay narrow and Russian titles stay wide. The stack is Archivo, then a metric-matched local fallback limited to Latin (`Archivo Fallback` in globals.css), then Roboto Flex: a fallback with Cyrillic (such as plain Arial) placed before Roboto Flex would take over every Russian title.
 **Body Font:** the platform's system face (ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto)
 
@@ -366,7 +366,7 @@ The wide sizes above are starting values: they must be calibrated on a 360px-wid
 
 Mobile-first, one column with a 16px gutter, capped at 672px and centred on wider screens **(pending for tablet and desktop: keeping the centred column is the proposed default)**. Sections are separated by 40px with the heading closer to its content (16px) than to the section above.
 
-**The board** opens with the opening pager at full height: one featured event per page, swiped horizontally. Below it, on vertical scroll, come the sections, each as a stack of ticket rows: "Sei in lista", "Dove vanno tutti", "Appena proposti", and "In programma" with its filters and sticky monospace day headers **(pending: which sections remain, their order, and which events are featured in the pager; these are display rules over existing data and must not change data logic without approval)**.
+**The board** opens with the opening pager at full height: one featured event per page, swiped horizontally. Below it, on vertical scroll, come the sections, each as a stack of ticket rows: "Sei in lista", "Dove vanno tutti", "Appena proposti", and "In programma" with its filters and sticky monospace day headers **(pending: which sections remain and in what order; this is a display rule over existing data and must not change data logic without approval)**.
 
 **The event screen** follows the door order: wide title, the list line (faces and count), monospace date, place and link rows, the poster whole in its ticket frame, then the full guest list, actions, details and messages.
 
@@ -406,7 +406,8 @@ An event proposed without an image shows a generated typographic poster in the s
 One event per row, on the ground, divided by hairlines; the whole row is the tap target. Left to right: the count in Numeral Row; the title in Title Row with a Mono Label line under it (time and place, Chalk Faint); the poster thumbnail in its frame. When the member has answered, the Mono Label line starts with the mark and the word in the ink ("Sei in lista" with the tick in green, "Forse" with the circle in yellow), followed by the time. Press scales the row to 0.97.
 
 ### Opening pager
-A horizontal, snapping pager at the top of the board, one featured event per page at full height. Each page: the ticket frame filling the available height with the poster whole; beneath it the count in Numeral MD beside the title in Title Wide and a Mono Label date line; then the RSVP control at full width. The top bar carries the wordmark and the index in Mono Label ("1 / 3"). Only the first poster loads eagerly. With no featured event, the board starts directly with the ticket rows **(pending)**.
+A horizontal, snapping pager at the top of the board, one featured event per page at full height. Each page: the ticket frame filling the available height with the poster whole; beneath it the count in Numeral MD beside the title in Title Wide and a Mono Label date line; then the RSVP control at full width. The top bar carries the wordmark and the index in Mono Label ("1 / 3"). Only the first poster loads eagerly.
+Featured events are those of the coming weekend (the board's existing weekend group), in date order, five pages at most **(the cap of five is a proposal)**. When the weekend has no event, the pager is not shown and the board starts directly with the ticket rows.
 
 ### Buttons
 - **Shape:** 3px corners, heights 36, 44 and 52px.
@@ -495,12 +496,11 @@ The `motion` package is approved as a dependency for the whole app. Load it lazi
 
 These points are proposals, not decisions. Each needs Leonardo's explicit approval before it is implemented.
 
-1. **Opening pager content:** which events are featured and in what order; what the board shows when none qualifies. If the rule needs a new database query, it goes to the engineering model first.
-2. **Monospace face:** JetBrains Mono is the working choice.
-3. **Typographic poster** for events without an image.
-4. **Day theme:** to be re-derived from the new palette; the values in the front matter are still those of version 1.
-5. **Board sections** below the pager: which remain and in what order.
-6. **Poster shadows:** removed in favour of the ticket frame.
-7. **Tablet and desktop:** keep the centred 672px column.
-8. **Wide title sizes and length thresholds:** to be calibrated on device.
-9. **New app icon:** already on the to-do list.
+1. **Opening pager:** the cap of five pages. (The rule itself is approved: the coming weekend's events, in date order, no pager when there are none.)
+2. **Typographic poster** for events without an image.
+3. **Day theme:** to be re-derived from the new palette; the values in the front matter are still those of version 1.
+4. **Board sections** below the pager: which remain and in what order.
+5. **Poster shadows:** removed in favour of the ticket frame.
+6. **Tablet and desktop:** keep the centred 672px column.
+7. **Wide title sizes and length thresholds:** to be calibrated on device.
+8. **New app icon:** already on the to-do list.

@@ -72,7 +72,7 @@ export function ListSkeleton({ rows = 4 }: { rows?: number }) {
     <div className="space-y-4" aria-hidden>
       {Array.from({ length: rows }).map((_, i) => (
         <div key={i} className="flex gap-3.5">
-          <div className="skeleton aspect-[4/5] w-[60px] rounded-[8px]" />
+          <div className="skeleton aspect-[4/5] w-[60px] rounded-frame" />
           <div className="flex-1 space-y-2 pt-1">
             <div className="skeleton h-3 w-24 rounded" />
             <div className="skeleton h-4 w-4/5 rounded" />

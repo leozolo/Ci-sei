@@ -62,7 +62,7 @@ export default function SearchPage() {
                 input.current?.focus()
               }}
               aria-label={m.search.clear}
-              className="absolute right-2 top-1/2 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-full text-muted hover:bg-elev-3"
+              className="absolute right-2 top-1/2 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-ctl text-muted hover:bg-elev-3"
             >
               <LuX className="size-4" />
             </button>

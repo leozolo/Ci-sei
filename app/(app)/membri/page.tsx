@@ -17,7 +17,7 @@ export default function MembersPage() {
     <main>
       <PageHeader back title={fmt(t.members.title, { n: active.length })} />
       <PageBody>
-        <ul className="divide-y divide-line rounded-[16px] border border-line bg-elev px-4">
+        <ul className="divide-y divide-line rounded-ctl border border-line bg-elev px-4">
           {active.map((m) => (
             <li key={m.id}>
               <Link href={`/u/${m.id}`} className="flex items-center gap-3 py-3">

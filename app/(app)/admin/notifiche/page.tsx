@@ -112,8 +112,8 @@ function Counter({ n }: { n: number }) {
 function NotificationPreview({ body }: { body: string }) {
   const { m } = useI18n()
   return (
-    <div className="flex gap-3 rounded-[16px] border border-line bg-elev-2 p-3">
-      <img src="/icons/icon-192.png" alt="" className="size-10 shrink-0 rounded-[10px]" />
+    <div className="flex gap-3 rounded-ctl border border-line bg-elev-2 p-3">
+      <img src="/icons/icon-192.png" alt="" className="size-10 shrink-0 rounded-frame" />
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline justify-between gap-2">
           <p className="truncate text-[15px] font-semibold">{APP_NAME}</p>
@@ -145,7 +145,7 @@ function WhenPicker({ later, onChange }: { later: boolean; onChange: (later: boo
           aria-checked={later === value}
           onClick={() => onChange(value)}
           className={cn(
-            'press h-10 flex-1 rounded-full text-[13px] font-semibold',
+            'press h-10 flex-1 rounded-ctl text-[13px] font-semibold',
             later === value ? 'bg-invert text-invert-fg' : 'bg-elev-2 text-fg',
           )}
         >
@@ -525,7 +525,7 @@ function BroadcastContent() {
 
   return (
     <PageBody>
-      <section className="rounded-[16px] border border-line bg-elev p-4">
+      <section className="rounded-ctl border border-line bg-elev p-4">
         <h2 className="flex items-center gap-2 font-list text-[23px] font-extrabold leading-none">
           <LuMegaphone className="size-5" /> {t.composeTitle}
         </h2>
@@ -581,9 +581,9 @@ function BroadcastContent() {
         {list.isLoading ? (
           <ListSkeleton rows={1} />
         ) : scheduled.length === 0 ? (
-          <p className="rounded-[16px] border border-line bg-elev px-4 py-4 text-[14px] text-muted">{t.noScheduled}</p>
+          <p className="rounded-ctl border border-line bg-elev px-4 py-4 text-[14px] text-muted">{t.noScheduled}</p>
         ) : (
-          <ul className="divide-y divide-line rounded-[16px] border border-line bg-elev px-4">
+          <ul className="divide-y divide-line rounded-ctl border border-line bg-elev px-4">
             {scheduled.map((b) => {
               const leaving = b.status === 'sending' || ms(b.scheduled_at) <= Date.now()
               return (
@@ -614,9 +614,9 @@ function BroadcastContent() {
         {list.isLoading ? (
           <ListSkeleton rows={1} />
         ) : history.length === 0 ? (
-          <p className="rounded-[16px] border border-line bg-elev px-4 py-4 text-[14px] text-muted">{t.noHistory}</p>
+          <p className="rounded-ctl border border-line bg-elev px-4 py-4 text-[14px] text-muted">{t.noHistory}</p>
         ) : (
-          <ul className="divide-y divide-line rounded-[16px] border border-line bg-elev px-4">
+          <ul className="divide-y divide-line rounded-ctl border border-line bg-elev px-4">
             {history.map((b) => (
               <li key={b.id} className="py-3.5">
                 <p className="text-[13px] text-muted">{capitalize(whenShort(b.sent_at ?? b.scheduled_at))}</p>

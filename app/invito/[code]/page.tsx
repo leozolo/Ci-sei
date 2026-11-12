@@ -120,7 +120,7 @@ export default function InvitePage() {
   if (!info || session === undefined) {
     return (
       <AuthScreen>
-        <div className="skeleton h-64 rounded-[28px]" />
+        <div className="skeleton h-64 rounded-ctl" />
       </AuthScreen>
     )
   }
@@ -144,7 +144,7 @@ export default function InvitePage() {
   if (session) {
     return (
       <AuthScreen subtitle={invitedBy}>
-        <div className="rounded-[16px] border border-line bg-elev p-5">
+        <div className="rounded-ctl border border-line bg-elev p-5">
           <h1 className="font-list text-[27px] font-extrabold leading-tight">{m.invite.joinTitle}</h1>
           <p className="mt-1 text-[14px] text-muted">{fmt(m.invite.withAccount, { email: session.user.email ?? '' })}</p>
           <form
@@ -174,8 +174,8 @@ export default function InvitePage() {
 
   return (
     <AuthScreen subtitle={invitedBy}>
-      <div className="rounded-[16px] border border-line bg-elev p-5">
-        <div className="flex gap-1 rounded-full bg-elev-2 p-1" role="tablist">
+      <div className="rounded-ctl border border-line bg-elev p-5">
+        <div className="flex gap-1 rounded-ctl bg-elev-2 p-1" role="tablist">
           {(
             [
               ['signup', m.invite.tabNew],
@@ -191,7 +191,7 @@ export default function InvitePage() {
                 setMode(tab)
                 setError(null)
               }}
-              className={`press h-9 flex-1 rounded-full text-[14px] font-semibold ${mode === tab ? 'bg-invert text-invert-fg' : 'text-muted'}`}
+              className={`press h-9 flex-1 rounded-ctl text-[14px] font-semibold ${mode === tab ? 'bg-invert text-invert-fg' : 'text-muted'}`}
             >
               {label}
             </button>

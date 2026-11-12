@@ -87,7 +87,7 @@ export default function HomePage() {
           <Link
             href="/cerca"
             aria-label={m.board.searchAria}
-            className="press inline-flex size-10 items-center justify-center rounded-full hover:bg-elev"
+            className="press inline-flex size-10 items-center justify-center rounded-ctl hover:bg-elev"
           >
             <LuSearch className="size-[22px]" />
           </Link>
@@ -103,8 +103,8 @@ export default function HomePage() {
       {isLoading ? (
         <div className="mx-auto mt-8 max-w-2xl px-4" aria-busy>
           <div className="no-scrollbar flex gap-4 overflow-hidden" aria-hidden>
-            <div className="skeleton aspect-[4/5] w-[72vw] max-w-[284px] shrink-0 rounded-[10px]" />
-            <div className="skeleton aspect-[4/5] w-[72vw] max-w-[284px] shrink-0 rounded-[10px]" />
+            <div className="skeleton aspect-[4/5] w-[72vw] max-w-[284px] shrink-0 rounded-frame" />
+            <div className="skeleton aspect-[4/5] w-[72vw] max-w-[284px] shrink-0 rounded-frame" />
           </div>
           <div className="mt-8">
             <ListSkeleton rows={3} />
@@ -210,7 +210,7 @@ export default function HomePage() {
             </div>
             <Link
               href="/archivio"
-              className="press mt-8 flex items-center justify-center gap-2 rounded-[12px] border border-line py-3 text-[14px] font-semibold text-muted hover:text-fg"
+              className="press mt-8 flex items-center justify-center gap-2 rounded-ctl border border-line py-3 text-[14px] font-semibold text-muted hover:text-fg"
             >
               <LuArchive className="size-4" /> {m.board.pastEvents}
             </Link>
