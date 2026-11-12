@@ -107,6 +107,7 @@ export async function dispatchPendingPush(admin: SupabaseClient, origin: string)
             await webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, payload, {
               TTL: 6 * 60 * 60,
               urgency: 'normal',
+              timeout: 10_000,
             })
             sent++
           } catch (err) {
