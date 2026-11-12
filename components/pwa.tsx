@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { LuShare, LuSmartphone, LuX } from 'react-icons/lu'
+import { LuBell, LuShare, LuSmartphone, LuX } from 'react-icons/lu'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/field'
 import { toast } from '@/components/ui/feedback'
@@ -195,6 +195,84 @@ export function PushToggle() {
               : m.pwa.pushHint
         }
       />
+    </div>
+  )
+}
+
+/* ---------------- Invito ad attivare le notifiche ---------------- */
+
+const INVITE_KEY = 'cisei:invito-notifiche'
+
+/** Compare a ogni nuovo accesso (nuova sessione) finché le notifiche non sono attive su questo telefono. */
+export function PushInvite() {
+  const { m } = useI18n()
+  const [publicKey, setPublicKey] = useState<string | null>(null)
+  const [busy, setBusy] = useState(false)
+
+  useEffect(() => {
+    let alive = true
+    try {
+      if (sessionStorage.getItem(INVITE_KEY)) return
+    } catch {
+      // ignora
+    }
+    if (pushSupport() !== 'ok' || Notification.permission === 'denied') return
+    void (async () => {
+      if (await currentSubscription()) return
+      const key = await fetchPushKey()
+      if (alive && key) setTimeout(() => alive && setPublicKey(key), 1500)
+    })()
+    return () => {
+      alive = false
+    }
+  }, [])
+
+  if (!publicKey) return null
+
+  const close = () => {
+    try {
+      sessionStorage.setItem(INVITE_KEY, '1')
+    } catch {
+      // ignora
+    }
+    setPublicKey(null)
+  }
+
+  const turnOn = async () => {
+    if (busy || !publicKey) return
+    setBusy(true)
+    try {
+      const result = await enablePush(publicKey)
+      if (result === 'denied') toast.error(m.pwa.pushDenied)
+      else toast.success(m.pwa.pushOn)
+      close()
+    } catch {
+      toast.error(m.pwa.pushError)
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div
+      role="dialog"
+      aria-label={m.pwa.inviteTitle}
+      className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+4.75rem)] z-50 mx-auto max-w-2xl px-3"
+    >
+      <div className="flex items-start gap-3 rounded-sheet border border-line-strong bg-elev-2 p-4">
+        <LuBell className="mt-0.5 size-5 shrink-0 text-going" aria-hidden="true" />
+        <div className="min-w-0 flex-1 text-[14px]">
+          <p className="font-semibold">{m.pwa.inviteTitle}</p>
+          <p className="mt-0.5 text-muted">{m.pwa.inviteBody}</p>
+          <div className="mt-3 flex gap-2">
+            <Button size="sm" onClick={turnOn} disabled={busy}>
+              {m.pwa.inviteYes}
+            </Button>
+            <Button size="sm" variant="ghost" onClick={close} disabled={busy}>
+              {m.pwa.inviteLater}
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

@@ -9,6 +9,7 @@ import { Avatar } from '@/components/avatar'
 import { Mark, Wordmark } from '@/components/brand'
 import { TICK_PATH } from '@/components/marker'
 import { Button } from '@/components/ui/button'
+import { PushInvite } from '@/components/pwa'
 import { toast } from '@/components/ui/feedback'
 import { updateLocale } from '@/lib/actions'
 import { cn } from '@/lib/cn'
@@ -192,6 +193,7 @@ function MemberApp({
       <div className={cn('min-h-dvh', eventDetail ? 'pb-[calc(env(safe-area-inset-bottom)+6rem)]' : 'pb-[calc(env(safe-area-inset-bottom)+5.5rem)]')}>
         {children}
       </div>
+      {eventDetail ? null : <PushInvite />}
       {eventDetail ? null : <BottomNav />}
     </AppContext.Provider>
   )

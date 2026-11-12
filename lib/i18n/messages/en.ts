@@ -558,6 +558,10 @@ export const en: Messages = {
     pushBlocked: 'Blocked: turn them back on for this app in your phone’s settings.',
     pushServerMissing: 'Not set up on the server yet: see the guide, “secret key” step.',
     pushHint: 'Get alerts even when the app is closed.',
+    inviteTitle: 'Turn on notifications',
+    inviteBody: 'Know right away who joins the list and when a new night is posted, even with the app closed.',
+    inviteYes: 'Turn on',
+    inviteLater: 'Not now',
   },
 
   dates: {
